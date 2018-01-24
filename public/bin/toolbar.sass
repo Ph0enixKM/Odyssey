@@ -1,0 +1,86 @@
+@import "variables.sass"
+
+.toolbar
+  background-color: #333
+  color: white
+  padding-top: 20px
+  padding-bottom: 20px
+
+  div#logo
+    display: inline-block
+    background-image: url("../arts/logo.png")
+    background-position: center
+    background-size: contain
+    width: 50px
+    height: 50px
+    vertical-align: middle
+    border-right: 2px dashed #444
+    margin-right: 5px
+    div
+      width: 100%
+      height: 100%
+      background-image: url("../arts/logoh.png")
+      background-position: center
+      background-size: cover
+      opacity: 0
+      transition: 300ms
+      cursor: pointer
+      &:hover
+        opacity: 1
+
+
+
+  span
+    margin: 10px
+    padding: 10px
+    border: 1px solid $border
+    cursor: pointer
+    transition: 300ms
+    vertical-align: middle
+
+    &:hover
+      background-color: #555
+
+  select
+    padding: 10px
+    background-color: #333
+    color: white
+    border: 1px solid $border
+    transition: 300ms
+    cursor: pointer
+    &:hover
+      background-color: #555
+
+  option
+    // padding-top: 20px
+    // line-height: 100px
+    // height: 100px
+
+    &[a]
+      font-family: Arial, sans-serif
+    &[b]
+      font-family: "Arial Black", sans-serif
+    &[c]
+      font-family: Courier, sans-serif
+    &[d]
+      font-family: "Comic Sans MS",sans-serif
+    &[e]
+      font-family: Impact, sans-serif
+    &[f]
+      font-family: "Lucida Sans Unicode", Lucida, sans-serif
+    &[g]
+      font-family: Tahoma, sans-serif
+    &[h]
+      font-family: "Times New Roman", sans-serif
+    &[i]
+      font-family: Georgia, sans-serif
+    &[j]
+      font-family: Helvetica, sans-serif
+    &[k]
+      font-family: Verdana, sans-serif
+    &[l]
+      font-family: Lato, sans-serif
+
+@font-face
+  font-family: Lato
+  src: url("../arts/lato.ttf")

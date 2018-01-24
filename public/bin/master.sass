@@ -1,0 +1,79 @@
+@import "variables.sass"
+
+body
+  margin: 0
+  width: 100vw
+  height: 100vh
+  background: radial-gradient(#2a2a2a,#222)
+  overflow-x: hidden
+  text-align: center
+
+
+iframe
+  padding: 70px
+  //The following are double decreased:
+  width: 620px
+  height: 877px
+  overflow: hidden
+
+  box-shadow: 0 0 100px black
+  margin: 100px 0 70px 0
+  background-color: #444
+  color: #aaa
+  border: 0
+
+#overflow
+  width: 300px
+  margin-bottom: 100px
+  background-color: #333
+  border: 2px $overflow solid
+  color: $overflow
+  display: inline-block
+  font-family: Lato
+  border-radius: 10px
+  padding-bottom: 10px
+  opacity: 0
+  transform: translate(0,50px)
+  transition: 500ms
+  h1
+    font-size: 30px
+    width: 100%
+    background-color: #222
+    margin-top: 0
+    padding-top: 10px
+    padding-bottom: 10px
+    border-bottom: 2px dashed $overflow
+    border-radius: 10px
+  .btn
+    display: inline-block
+    background-color: $overflow
+    font-weight: 900
+    border-radius: 5px
+    color: #333
+    padding: 10px
+    cursor: pointer
+    font-size: 20px
+    transition: 300ms
+  .btn.add
+    background-color: $overflow - 50
+    &:hover
+      background-color: $overflow
+  .btn.delete
+    background-color: $overflow -   100
+    &:hover
+      background-color: $overflow - 25
+
+
+
+.caret
+  animation: caret 1s infinite
+  transform: translate(-10px,0) scale(0)
+
+
+@keyframes caret
+  0%
+    opacity: 1
+  50%
+    opacity: 0.5
+  100%
+    opacity: 1
