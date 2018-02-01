@@ -1,0 +1,30 @@
+{
+  "name": "odyssey",
+  "version": "1.0.0",
+  "description": "Rich Text Editor designed for writers novelists and poets.",
+  "main": "app.js",
+  "scripts": {
+    "start":"electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ph0enixKM/Odyssey.git"
+  },
+  "keywords": [
+    "odyssey",
+    "text",
+    "editor",
+    "writers",
+    "novelists",
+    "poets"
+  ],
+  "author": "Paweł Karaś (Phoenix)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Ph0enixKM/Odyssey/issues"
+  },
+  "homepage": "https://github.com/Ph0enixKM/Odyssey#readme",
+  "dependencies": {
+    "electron": "^1.7.12"
+  }
+}

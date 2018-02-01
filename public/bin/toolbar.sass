@@ -1,10 +1,81 @@
 @import "variables.sass"
 
+.menubar
+  height: 30px
+  z-index: 10
+  background-color: #333
+  display: flex
+  & .bar
+    display: inline-block
+    flex: 1
+    height: 30px
+    background-color: #333
+    -webkit-app-region: drag
+
+  & .minimize
+    display: inline-block
+    float: right
+    height: 30px
+    width: 50px
+    transition: 200ms
+    cursor: pointer
+    background-image: url("../arts/minimize.png")
+    background-position: center
+    background-size: contain
+    background-repeat: no-repeat
+    filter: brightness(1)
+    background-color: #333
+    &:hover
+      background-color: #444
+      filter: brightness(1.1)
+
+  & .maximize
+    display: inline-block
+    float: right
+    height: 30px
+    width: 50px
+    color: #aaa
+    transition: 200ms
+    cursor: pointer
+    background-image: url("../arts/maximize.png")
+    background-position: center
+    background-size: contain
+    background-repeat: no-repeat
+    filter: brightness(1)
+    background-color: #333
+    &:hover
+      background-color: #444
+      filter: brightness(1.1)
+
+  & .exit
+    display: inline-block
+    float: right
+    height: 30px
+    width: 50px
+    color: #aaa
+    transition: 200ms
+    cursor: pointer
+    background-image: url("../arts/exit.png")
+    background-position: center
+    background-size: contain
+    background-repeat: no-repeat
+    filter: brightness(1)
+    background-color: #333
+    &:hover
+      background-color: red
+      filter: brightness(1.1)
+
+
 .toolbar
+  position: fixed
+  width: 100vw
+  top: 30px
   background-color: #333
   color: white
   padding-top: 20px
   padding-bottom: 20px
+  box-shadow: 0 10px 20px #222
+  z-index: 9
 
   div#logo
     display: inline-block

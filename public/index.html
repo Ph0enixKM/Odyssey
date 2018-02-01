@@ -7,12 +7,18 @@
     <link href="bin/toolbar.css" rel="stylesheet">
   </head>
   <body>
+    <div class="menubar">
+        <div class="bar"></div>
+        <div class="minimize"></div>
+        <div class="maximize"></div>
+        <div class="exit"></div>
+    </div>
     <div class="toolbar">
       <div id="logo"><div></div></div>
-      <span id="bold" onclick="command('bold')"><b>B</b></span>
-      <span id="italic" onclick="command('italic')"><i>I</i></span>
-      <span id="underline" onclick="command('underline')"><u>U</u></span>
-      <select onchange="font()">
+      <span id="bold"><b>B</b></span>
+      <span id="italic"><i>I</i></span>
+      <span id="underline"><u>U</u></span>
+      <select>
         <option a>Arial</option>
         <option b>Arial Black</option>
         <option c>Courier</option>
@@ -27,33 +33,28 @@
         <option disabled>───────────────</option>
         <option l selected>Lato</option>
       </select>
-      <select onchange="fontSize()">
-        <option value="1">8px</option>
-        <option value="2">10px</option>
-        <option value="3" selected>12px</option>
-        <option value="4">14px</option>
-        <option value="5">18px</option>
-        <option value="6">24px</option>
-        <option value="7">72px</option>
+      <select>
+        <option value="1">12px</option>
+        <option value="2">16px</option>
+        <option value="3" selected>18px</option>
+        <option value="4">22px</option>
+        <option value="5">29px</option>
+        <option value="6">39px</option>
+        <option value="7">57px</option>
       </select>
 
     </div>
 
+    <div class="iframe">
 
-
+    <div class="move left">
+      <span><</span>
+    </div>
     <iframe name="textField" width="" height="">
-      <style>*{background-color: #222;color:#aaa}</style>
     </iframe>
-    <br>
-    <div id="overflow">
-      <h1>Page Overflow</h1>
-      <i><p>Lorem ipsum bla bla bla...</p></i>
-      <div class="btn add">
-        Add to next page
-      </div>
-      <div class="btn delete">
-        Remove
-      </div>
+    <div class="move right">
+      <span>></span>
+    </div>
     </div>
 
     <script src="script.js"></script>

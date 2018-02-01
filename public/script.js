@@ -1,6 +1,6 @@
 //Global Variables:
-var fonts, fontSizes, iStyle, iStyleVal, textField, textHtml, overflow, overstyle,
-str, rest, pages;
+var fonts, fontSizes, iStyle, iStyleVal, textField, textHtml,
+str, rest, pages, left, right, space;
 var keys = {
   enter: false,
   backsp: false,
@@ -10,6 +10,11 @@ var keys = {
   right: false
 };
 var prev = false;
+var curPage = 0;
+var autosave = true;
+
+var prevCheck = false, restOf="";
+
 
 
 function command(com){
@@ -26,6 +31,83 @@ function fontSize(){
   textField.contentDocument.execCommand("fontSize",false,parseInt(this.fontSizeVal))
 }
 
+function turnLeft() {
+  if (textField.style.opacity == 1) { //Has the page turned on?
+    if(curPage <= 0){
+      textField.style.transform = "translate(-30px)"
+      setTimeout(function () {
+        textField.style.transform = "translate(20px)"
+        setTimeout(function () {
+          textField.style.transform = "translate(-10px)"
+          setTimeout(function () {
+            textField.style.transform = "translate(0px)"
+          },100);
+        },100);
+      },100);
+      curPage = 0;
+    } else {
+
+
+    // console.log("left");
+
+    //Animation
+    textField.style.transform = "translate(150%) scale(0.5)";
+    textField.style.opacity = 0
+    setTimeout(function () {
+      textField.style.transform = "translate(-150%) scale(0.5)";
+
+      //Logic Section
+
+      curPage--;
+      textField.contentDocument.body.innerHTML = (pages[curPage] == undefined) ? "" : pages[curPage];
+
+
+      //Logic Section
+
+      setTimeout(function () {
+        textField.style.transform = "translate(0) scale(1)";
+        textField.style.opacity = 1;
+      },300)
+    },300);
+    }
+  }
+}
+
+function turnRight(){
+  if (textField.style.opacity == 1) { //Has the page turned on?
+
+    // console.log("right");
+
+    //Animation
+    textField.style.transform = "translate(-150%) scale(0.5)";
+    textField.style.opacity = 0
+    setTimeout(function () {
+      textField.style.transform = "translate(150%) scale(0.5)";
+
+      //Logic Section
+
+      curPage++;
+      textField.contentDocument.body.innerHTML = (pages[curPage] == undefined) ? "" : pages[curPage];
+
+      //Logic Section
+
+      setTimeout(function () {
+        textField.style.transform = "translate(0) scale(1)";
+        textField.style.opacity = 1;
+      },300)
+    },300);
+  }
+}
+
+function autosaveF(e){
+    setTimeout(function () {
+
+      pages[curPage] = textField.contentDocument.body.innerHTML;
+      console.log("autosave executed");
+
+    },10)
+}
+
 
 
 
@@ -37,13 +119,20 @@ fonts = document.getElementsByTagName('select')[0]
 fontSizes = document.getElementsByTagName('select')[1]
 textField = document.getElementsByTagName('iframe')[0]
 
+//Left/right buttons
+left = document.getElementsByClassName('move left')[0]
+right = document.getElementsByClassName('move right')[0]
+
+
+left.addEventListener("click",turnLeft);
+right.addEventListener("click",turnRight);
 
 var caretLoc = { x: 0, y: 0 };
 var caret = textField.contentDocument.createElement("div");
 caret.className = "caret";
 var cs = caret.style;
 
-var space = 18;
+space = 19;
 
 //Caret Key Mapping
 function mapKeys(dock){
@@ -75,24 +164,74 @@ textField.contentWindow.addEventListener("keydown",function(e){
   }
 });
 
-textField.contentDocument.body.addEventListener("focus",function () {
-  cs.transform = "translate(0,0) scale(1)";
-})
-textField.contentDocument.body.addEventListener("focusout",function () {
-  cs.transform = "translate(-10px,0) scale(0)";
-})
+with(textField.contentDocument.getElementsByTagName('body')[0]){
+  addEventListener("focus",function () {
+    cs.transform = "translate(0,0) scale(1)";
+  })
+  addEventListener("focusout",function () {
+    cs.transform = "translate(-10px,0) scale(0)";
+  })
+}
+
+
+//ManuBar
+function menuBar() {
+
+    const { remote } = require("electron");
+    var win = remote.getCurrentWindow();
+
+    var cl = document.getElementsByClassName.bind(document);
+
+    cl("minimize")[0].addEventListener("click",()=>{
+      win.minimize();
+    });
+    cl("maximize")[0].addEventListener("click",()=>{
+      if (win.isMaximized()) win.unmaximize();
+      else win.maximize();
+    });
+    cl("exit")[0].addEventListener("click",()=>{
+      win.close();
+    })
+
+}
+
 
 
 //Initial Commands
 init();
 function init(){
   textField.contentDocument.designMode = "On";
+
+  //Toolbar bindings:
+  (function(){
+    var id = document.getElementById.bind(document);
+    var tag = document.getElementsByTagName.bind(document);
+
+    id("bold").addEventListener("click", ()=> command("bold"))
+    id("italic").addEventListener("click",()=> command("italic"))
+    id("underline").addEventListener("click",()=> command("underline"))
+    tag("select")[0].addEventListener("change",()=> font())
+    tag("select")[1].addEventListener("change",()=> fontSize())
+
+
+  })();
+
+
+  menuBar() // Run menu bar options
+
   var iStyle = textField.contentDocument.createElement("style");
   textField.contentDocument.head.appendChild(iStyle);
   var iStyleVal = document.createTextNode(`
-    body::selection,font::selection,div::selection{
+    *::selection{
       background-color: rgba(0,0,0,0.3);
       color: #eee;
+    }
+    *:not(font){
+      color: #ccc;
+      font-family: Lato;
+    }
+    @page {
+      size: auto;
     }
     html{
       overflow: hidden;
@@ -110,23 +249,30 @@ function init(){
 
     pages = [];
 
-    textField.contentDocument.body.style.color = "#ccc";
-    textField.contentDocument.body.style.fontFamily = "Lato";
-    textField.contentDocument.body.style.margin = 0;
-    textField.contentDocument.body.style.caretColor = "transparent";
-    textField.contentDocument.body.style.width = "100%";
+    with (textField.contentDocument.body.style){
 
+      color = "#ccc";
+      fontFamily = "Lato";
+      margin = 0;
+      caretColor = "transparent";
+      width = "100%";
+      wordWrap = "break-word";
+
+    }
+
+
+    textField.style.position = "relative";
+    textField.style.opacity = 1;
 
     textField.contentDocument.body.innerHTML = "&zwnj;"
     textField.contentDocument.body.style.display = "inline-block";
 
 
-    //overflow
-    overflow = document.getElementById('overflow');
-    overstyle = overflow.style;
-    window.addEventListener("click",()=>{overstyle.transform = "translate(0,0)";overstyle.opacity = 1;})
 
     rest = "";
+
+    //On change of body
+    textField.contentWindow.addEventListener("keydown",autosaveF);
 
     //TextField's text
     var textHtml = textField.contentDocument.body.innerHTML;
@@ -149,6 +295,7 @@ function caretInit(){
 function caretUpdate(){
   cs.top = caretLoc.y + textField.offsetTop + 70;
   cs.left = caretLoc.x + textField.offsetLeft + 70;
+  cs.height = space;
 }
 
 
@@ -161,8 +308,26 @@ function negateKeys(){
 
 setInterval(function () {
 
+  //Body bug fix
+  var bodies = textField.contentDocument.getElementsByTagName("body");
+  var whileIter = bodies.length-1; //While loop iterator
+  if (bodies.length > 1) {
+    content = "";
+    for (var i = 1; i < bodies.length; i++) {
+      content += bodies[i].innerHTML;
+    }
+
+    bodies[0].innerHTML += content;
+
+    while (bodies.length > 1) {
+      bodies[whileIter].remove();
+      whileIter--;
+    }
+  }
+
   caretLoc.x = getSelectionCoords(textField).x;
   caretLoc.y = getSelectionCoords(textField).y;
+  caretSize();
   stickIntoBorders(cs.top);
   restrictions();
 
@@ -199,6 +364,7 @@ function getSelectionCoords(iframe) {
                     prev = true;
                 }
                 else{
+
                   //It's a value of CSS property (without CSS type)
                   var csNum = cs.top.replace(cs.top.match(/px/),"");
 
@@ -233,36 +399,122 @@ function stickIntoBorders(location){
   if(parseInt(cs.top)<260){
     cs.top = 260
   }
+
+  if (parseInt(cs.top) > textField.contentDocument.body.offsetHeight + textField.offsetTop + 70 - 18) {
+    cs.top = (parseInt(cs.top) - 18)+"px";
+  }
 }
+
+function restrictionsOptimal (wordSize){
+  //Sprawdź, czy skończył poprawiać
+  prevCheck = true;
+  restOf = str.slice(str.length-wordSize,str.length) + restOf;
+  // textField.contentDocument.body.innerHTML = str.slice(0,-1); //TMP
+  if(textField.contentDocument.body.lastChild.textContent == ""){
+    //If the div is empty - delete it
+    textField.contentDocument.body.lastChild.remove();
+    console.log("deleted");
+  } else {
+    //Otherwise delete the last character
+    textField.contentDocument.body.lastChild.textContent =
+    textField.contentDocument.body.lastChild.textContent.slice(0,-wordSize);
+    console.log("removed");
+  }
+  //textContent
+}
+
 
 function restrictions() {
-  checkTheRestrictions();
-  if (textField.contentDocument.body.offsetHeight > 877) {
-    console.warn("enough!");
-    //Do the code here!
+  str = textField.contentDocument.body.textContent;
 
+  // 3 słowa na 1 pixel przypadają
+  if (textField.contentDocument.body.offsetHeight > 5000) {
+    restrictionsOptimal(5000-877);
+  } else if (textField.contentDocument.body.offsetHeight > 3000) {
+    restrictionsOptimal(3000-877);
+  } else if (textField.contentDocument.body.offsetHeight > 2000) {
+    restrictionsOptimal(2000-877);
+  } else if (textField.contentDocument.body.offsetHeight > 1500) {
+    restrictionsOptimal(1500-877);
+  } else if (textField.contentDocument.body.offsetHeight > 1000) {
+    restrictionsOptimal(1000-877);
+  } else if (textField.contentDocument.body.offsetHeight > 900) {
+    restrictionsOptimal(2);
+  } else if (textField.contentDocument.body.offsetHeight > 877) {
+    restrictionsOptimal(1);
+  }
+  else if(prevCheck) {
+    prevCheck = false;
+    autosaveF();
+    setTimeout(()=>{
+
+      pages[curPage+1] = (pages[curPage+1] == undefined) ? restOf : restOf + pages[curPage+1];
+      turnRight();
+    },100)
 
 
   }
 }
+
+
+
+function caretSize() {
+  try {
+    //The following variable can be null.
+    var selEl = textField.contentWindow.getSelection().anchorNode.parentElement;
+
+    //TagNames must be CAPITAL
+    if (selEl.tagName == "FONT") {
+      switch (selEl.size) {
+        case '7':
+        space = 57
+        fontSizes.value = 7;
+        break;
+        case '6':
+        space = 39
+        fontSizes.value = 6;
+        break;
+        case '5':
+        space = 29
+        fontSizes.value = 5;
+        break;
+        case '4':
+        space = 22
+        fontSizes.value = 4;
+        break;
+        case '3':
+        space = 18
+        fontSizes.value = 3;
+        break;
+        case '2':
+        space = 16
+        fontSizes.value = 2;
+        break;
+        case '1':
+        space = 12
+        fontSizes.value = 1;
+        break;
+      }
+    } else {
+      space = 18
+      fontSizes.value = 3;
+    }
+  } catch (e) {
+    //Do not do anything
+  }
+}
+
+
+//Pasting text
+with (textField){
+  contentWindow.addEventListener("paste",(e)=>{
+    //Prevent from default pasting text
+    e.preventDefault();
+    //Take text from clipboard and execute command to paste the text
+    var normalizedText = contentWindow.event.clipboardData.getData("text/plain");
+    contentDocument.execCommand("insertHTML",false,normalizedText);
+  })
+}
+
 
 });
-
-
-
-function checkTheRestrictions() {
-  str = textField.contentDocument.body.innerText;
-
-    // console.log(str);
-  if (textField.contentDocument.body.offsetHeight > 877) {
-    rest += str[str.length-1];
-    // str = str.slice(0,-1);
-    // var res = str.match(rest);
-    textField.contentDocument.body.innerText = str.slice(0,-1);
-    
-
-    console.log("str: "+str);
-    console.log("rest: "+rest);
-
-  }
-}
