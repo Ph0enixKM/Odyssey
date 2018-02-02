@@ -1,6 +1,12 @@
 //Global Variables:
 var fonts, fontSizes, iStyle, iStyleVal, textField, textHtml,
 str, rest, pages, left, right, space;
+
+//Require Electron
+const { remote } = require('electron');
+
+var sbPages, sbWords, sbLetters;
+
 var keys = {
   enter: false,
   backsp: false,
@@ -127,6 +133,15 @@ right = document.getElementsByClassName('move right')[0]
 left.addEventListener("click",turnLeft);
 right.addEventListener("click",turnRight);
 
+
+with(document){
+  sbPages = getElementsByClassName("pages")[0]
+  sbWords = getElementsByClassName("words")[0]
+  sbLetters = getElementsByClassName("letters")[0]
+}
+
+
+
 var caretLoc = { x: 0, y: 0 };
 var caret = textField.contentDocument.createElement("div");
 caret.className = "caret";
@@ -138,8 +153,8 @@ space = 19;
 function mapKeys(dock){
   Object.keys(keys).map(function(key,index){
     keys[key] = false;
-  })
-  eval("keys."+dock+" = true");
+  });
+  keys[dock] = true;
 }
 textField.contentWindow.addEventListener("keydown",function(e){
   switch (e.keyCode) {
@@ -161,28 +176,34 @@ textField.contentWindow.addEventListener("keydown",function(e){
     case 39: //Right
       mapKeys("right");
       break;
+    // case 123:
+    //   var win = remote.getCurrentWindow()
+    //   win.toggleDevTools()
   }
 });
 
-with(textField.contentDocument.getElementsByTagName('body')[0]){
-  addEventListener("focus",function () {
-    cs.transform = "translate(0,0) scale(1)";
-  })
-  addEventListener("focusout",function () {
-    cs.transform = "translate(-10px,0) scale(0)";
-  })
-}
+
+
+  with(textField.contentDocument.getElementsByTagName('body')[0]){
+    addEventListener("focus",function () {
+      cs.transform = "translate(0,0) scale(1)";
+    })
+    addEventListener("focusout",function () {
+      cs.transform = "translate(-10px,0) scale(0)";
+    })
+  }
+
+
 
 
 //ManuBar
 function menuBar() {
 
-    const { remote } = require("electron");
+    var cl = document.getElementsByClassName.bind(document);
     var win = remote.getCurrentWindow();
 
-    var cl = document.getElementsByClassName.bind(document);
-
     cl("minimize")[0].addEventListener("click",()=>{
+      console.log(win);
       win.minimize();
     });
     cl("maximize")[0].addEventListener("click",()=>{
@@ -191,33 +212,14 @@ function menuBar() {
     });
     cl("exit")[0].addEventListener("click",()=>{
       win.close();
+      if (process.platform != "darwin") {
+        app.quit();
+      }
     })
 
 }
 
-
-
-//Initial Commands
-init();
-function init(){
-  textField.contentDocument.designMode = "On";
-
-  //Toolbar bindings:
-  (function(){
-    var id = document.getElementById.bind(document);
-    var tag = document.getElementsByTagName.bind(document);
-
-    id("bold").addEventListener("click", ()=> command("bold"))
-    id("italic").addEventListener("click",()=> command("italic"))
-    id("underline").addEventListener("click",()=> command("underline"))
-    tag("select")[0].addEventListener("change",()=> font())
-    tag("select")[1].addEventListener("change",()=> fontSize())
-
-
-  })();
-
-
-  menuBar() // Run menu bar options
+function addStyle() {
 
   var iStyle = textField.contentDocument.createElement("style");
   textField.contentDocument.head.appendChild(iStyle);
@@ -246,6 +248,32 @@ function init(){
 
     `);
     iStyle.appendChild(iStyleVal);
+  }
+
+//Initial Commands
+init();
+function init(){
+  textField.contentDocument.designMode = "On";
+
+  //Toolbar bindings:
+  (function(){
+    var id = document.getElementById.bind(document);
+    var tag = document.getElementsByTagName.bind(document);
+
+    id("bold").addEventListener("click", ()=> command("bold"))
+    id("italic").addEventListener("click",()=> command("italic"))
+    id("underline").addEventListener("click",()=> command("underline"))
+    tag("select")[0].addEventListener("change",()=> font())
+    tag("select")[1].addEventListener("change",()=> fontSize())
+
+
+  })();
+
+
+  menuBar() // Run menu bar options
+
+
+    addStyle();
 
     pages = [];
 
@@ -306,8 +334,7 @@ function negateKeys(){
   })
 }
 
-setInterval(function () {
-
+function bodyBugFix(){
   //Body bug fix
   var bodies = textField.contentDocument.getElementsByTagName("body");
   var whileIter = bodies.length-1; //While loop iterator
@@ -323,7 +350,30 @@ setInterval(function () {
       bodies[whileIter].remove();
       whileIter--;
     }
+    with(bodies[0]){
+      addEventListener("focus",function () {
+        cs.transform = "translate(0,0) scale(1)";
+      })
+      addEventListener("focusout",function () {
+        cs.transform = "translate(-10px,0) scale(0)";
+      })
+    }
+    addStyle();
   }
+}
+
+function updateSidebar(){
+  sbPages.innerHTML = curPage + 1;
+
+  sbWords.innerHTML = (textField.contentDocument.body.textContent.length == 1) ? 0 :
+    textField.contentDocument.body.textContent.split(" ").length;
+
+  sbLetters.innerHTML = textField.contentDocument.body.textContent.length -1;
+}
+
+setInterval(function () {
+
+  bodyBugFix();
 
   caretLoc.x = getSelectionCoords(textField).x;
   caretLoc.y = getSelectionCoords(textField).y;
@@ -331,17 +381,35 @@ setInterval(function () {
   stickIntoBorders(cs.top);
   restrictions();
 
+  // with(textField.contentDocument.getElementsByTagName('body')[0]){
+  //   addEventListener("focus",function () {
+  //     cs.transform = "translate(0,0) scale(1)";
+  //   })
+  //   addEventListener("focusout",function () {
+  //     cs.transform = "translate(-10px,0) scale(0)";
+  //   })
+  //   removeEventListener("focus", function () {
+  //     cs.transform = "translate(0,0) scale(1)";
+  //   })
+  //   removeEventListener("focusout", function () {
+  //     cs.transform = "translate(-10px,0) scale(0)";
+  //   })
+  //
+  // }
+
   //Debugger - if nothing is being placed
   //Just to show the wae to WYSIWYG editor
 
-  if (textField.contentDocument.body.innerHTML == "") {
+  if (textField.contentDocument.body.textContent == "") {
     textField.contentDocument.body.innerHTML = "&zwnj;"
   }
+  cs.top = (parseInt(cs.top) <= 284) ? 284 : cs.top;
 
 
+  updateSidebar();
 
   caretUpdate();
-}, 10);
+}, 1);
 
 function getSelectionCoords(iframe) {
     win = iframe;

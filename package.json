@@ -4,7 +4,8 @@
   "description": "Rich Text Editor designed for writers novelists and poets.",
   "main": "app.js",
   "scripts": {
-    "start":"electron ."
+    "start": "electron .",
+    "build": "electron-packager . Odyssey --overwrite --platform=win32 --icon=assets/icons/logo.ico"
   },
   "repository": {
     "type": "git",
@@ -25,6 +26,7 @@
   },
   "homepage": "https://github.com/Ph0enixKM/Odyssey#readme",
   "dependencies": {
-    "electron": "^1.7.12"
+    "electron": "^1.7.12",
+    "electron-packager": "^10.1.2"
   }
 }

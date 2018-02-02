@@ -1,15 +1,68 @@
 @import "variables.sass"
 
+
+.sidebar
+  display: inline-block
+  position: absolute
+  top: 100vh
+  left: 0vw
+  padding: 20px
+  z-index: 5
+  transform: translate(0,-100%)
+  user-select: none
+
+  .pages
+    display: inline-block
+    font-family: Lato
+    color: #aaa
+    padding-right: 10px
+    transition: 200ms
+
+    &:hover
+      background-color: #1a1a1a
+      padding: 5px
+      color: white
+      &::before
+        content: "Strona: "
+  .words
+    display: inline-block
+    font-family: Lato
+    color: #aaa
+    transition: 200ms
+    &:hover
+      background-color: #1a1a1a
+      padding: 5px
+      color: white
+      &::before
+        content: "Słowa: "
+  .letters
+    display: inline-block
+    font-family: Lato
+    color: #aaa
+    transition: 200ms
+    &:hover
+      background-color: #1a1a1a
+      padding: 5px
+      color: white
+      &::before
+        content: "Litery: "
+
+
 .menubar
   height: 30px
   z-index: 10
   background-color: #333
   display: flex
+  user-select: none
   & .bar
     display: inline-block
     flex: 1
     height: 30px
     background-color: #333
+    color: #aaa
+    font-family: Lato
+    vertical-align: middle
+    line-height: 30px
     -webkit-app-region: drag
 
   & .minimize
@@ -76,6 +129,7 @@
   padding-bottom: 20px
   box-shadow: 0 10px 20px #222
   z-index: 9
+  user-select: none
 
   div#logo
     display: inline-block

@@ -6,4 +6,11 @@ app.on("ready", ()=>{
   // win.toggleDevTools();
   win.setMenu(null);
   win.loadURL("file://"+__dirname+"/public/index.html");
+
+  //Closing process
+  app.on('window-all-closed', app.quit);
+  app.on('before-quit', () => {
+    mainWindow.removeAllListeners('close');
+    mainWindow.close();
+  });
 })
