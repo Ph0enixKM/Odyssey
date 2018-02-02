@@ -1,6 +1,6 @@
 //Global Variables:
 var fonts, fontSizes, iStyle, iStyleVal, textField, textHtml,
-str, rest, pages, left, right, space;
+str, rest, pages, left, right, space, bodyContent;
 
 //Require Electron
 const { remote } = require('electron');
@@ -125,6 +125,8 @@ fonts = document.getElementsByTagName('select')[0]
 fontSizes = document.getElementsByTagName('select')[1]
 textField = document.getElementsByTagName('iframe')[0]
 
+bodyContent = document.getElementsByClassName('iframe')[0]
+
 //Left/right buttons
 left = document.getElementsByClassName('move left')[0]
 right = document.getElementsByClassName('move right')[0]
@@ -176,9 +178,9 @@ textField.contentWindow.addEventListener("keydown",function(e){
     case 39: //Right
       mapKeys("right");
       break;
-    // case 123:
-    //   var win = remote.getCurrentWindow()
-    //   win.toggleDevTools()
+    case 123:
+      var win = remote.getCurrentWindow()
+      win.toggleDevTools()
   }
 });
 
@@ -321,8 +323,9 @@ function caretInit(){
 }
 
 function caretUpdate(){
-  cs.top = caretLoc.y + textField.offsetTop + 70;
+  cs.top = caretLoc.y + textField.offsetTop + 70 - bodyContent.scrollTop;
   cs.left = caretLoc.x + textField.offsetLeft + 70;
+  // console.log(window.pageYOffset);
   cs.height = space;
 }
 
@@ -381,29 +384,13 @@ setInterval(function () {
   stickIntoBorders(cs.top);
   restrictions();
 
-  // with(textField.contentDocument.getElementsByTagName('body')[0]){
-  //   addEventListener("focus",function () {
-  //     cs.transform = "translate(0,0) scale(1)";
-  //   })
-  //   addEventListener("focusout",function () {
-  //     cs.transform = "translate(-10px,0) scale(0)";
-  //   })
-  //   removeEventListener("focus", function () {
-  //     cs.transform = "translate(0,0) scale(1)";
-  //   })
-  //   removeEventListener("focusout", function () {
-  //     cs.transform = "translate(-10px,0) scale(0)";
-  //   })
-  //
-  // }
-
   //Debugger - if nothing is being placed
   //Just to show the wae to WYSIWYG editor
 
   if (textField.contentDocument.body.textContent == "") {
     textField.contentDocument.body.innerHTML = "&zwnj;"
   }
-  cs.top = (parseInt(cs.top) <= 284) ? 284 : cs.top;
+  cs.top = (parseInt(cs.top) <= 284  - bodyContent.scrollTop) ? 284 - bodyContent.scrollTop : cs.top - bodyContent.scrollTop;
 
 
   updateSidebar();
@@ -455,7 +442,7 @@ function getSelectionCoords(iframe) {
                     return{x : 0, y: cs.top = parseInt(csNum)}
                   }
                   else {
-                    return{x: 0, y: cs.top}
+                    return{x: 0, y: cs.top - bodyContent.scrollTop}
                   }
                 }
             }
