@@ -1,12 +1,12 @@
 @import "variables.sass"
 
-html
-  background-color: #222
+
 
 body
   margin: 0
   width: 100vw
   height: 100vh
+  background-color: black
   background: radial-gradient(#333,#222)
   overflow-x: hidden
   text-align: center
@@ -15,7 +15,15 @@ body
   flex-flow: column
 
 
-
+#all
+  position: absolute
+  top: 30px
+  left: 0
+  width: 100vw
+  height: 100vh
+  background-color: black
+  z-index: 15
+  transition: 500ms
 
 .iframe
   display: flex

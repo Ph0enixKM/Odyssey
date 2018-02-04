@@ -1,6 +1,7 @@
 //Global Variables:
 var fonts, fontSizes, iStyle, iStyleVal, textField, textHtml,
-str, rest, pages, left, right, space, bodyContent;
+str, rest, pages, left, right, space, bodyContent, undefinedPos,
+logo, menu;
 
 //Require Electron
 const { remote } = require('electron');
@@ -127,6 +128,10 @@ textField = document.getElementsByTagName('iframe')[0]
 
 bodyContent = document.getElementsByClassName('iframe')[0]
 
+menu = document.getElementsByClassName('menu')[0]
+
+logo = document.getElementById('logo');
+
 //Left/right buttons
 left = document.getElementsByClassName('move left')[0]
 right = document.getElementsByClassName('move right')[0]
@@ -221,6 +226,17 @@ function menuBar() {
 
 }
 
+function fadeAll() {
+  var all = document.getElementById('all');
+  setTimeout(()=>{
+    all.style.opacity = 0;
+    setTimeout(()=>{
+      all.style.display = "none";
+    },1500)
+  },100)
+}
+
+
 function addStyle() {
 
   var iStyle = textField.contentDocument.createElement("style");
@@ -249,8 +265,39 @@ function addStyle() {
     }
 
     `);
-    iStyle.appendChild(iStyleVal);
+  iStyle.appendChild(iStyleVal);
+}
+
+
+function delayAnchors() {
+  var anchors = document.getElementsByTagName('a');
+  for (let i of anchors){
+    i.addEventListener("click",()=>{
+      all.style.display = "inline-block"
+      setTimeout(()=>{
+        all.style.opacity = 1
+        setTimeout(()=>{
+          window.location = i.href
+        },500)
+      },100)
+    })
   }
+}
+
+function menuF() {
+  logo.addEventListener("click",()=>{ //Open menu
+    menu.style.display = "inline-block"
+    setTimeout(()=>{
+      menu.style.opacity = 1
+    },100)
+  })
+  menu.addEventListener("click",()=>{ //Close Menu
+    menu.style.opacity = 0
+    setTimeout(()=>{
+      menu.style.display = "none"
+    },300)
+  })
+}
 
 //Initial Commands
 init();
@@ -271,9 +318,10 @@ function init(){
 
   })();
 
-
-  menuBar() // Run menu bar options
-
+  fadeAll()
+  menuBar()
+  delayAnchors()
+  menuF()
 
     addStyle();
 
@@ -374,6 +422,56 @@ function updateSidebar(){
   sbLetters.innerHTML = textField.contentDocument.body.textContent.length -1;
 }
 
+function firstLetterFix() {
+  //Debugger - if nothing is being placed
+  //Just to show the wae to WYSIWYG editor
+
+  if (textField.contentDocument.body.textContent == "") {
+    with(textField.contentDocument){
+      body.innerHTML = "&zwnj;"
+      var range = createRange();
+      range.setStart(body,1);
+      range.setEnd(body,1);
+      var selection = textField.contentWindow.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+    }
+  }
+}
+
+function headChecker() {
+  with(textField.contentDocument){
+    //Check if there are any heads inside
+    if (getElementsByTagName('head').length == 0) {
+      var head = createElement('head');
+      var html = getElementsByTagName('html')[0];
+      html.innerHTML = '<head></head>';
+      addStyle();
+      caretInit();
+      with (textField.contentDocument.body.style){
+
+        color = "#ccc";
+        fontFamily = "Lato";
+        margin = 0;
+        caretColor = "transparent";
+        width = "100%";
+        wordWrap = "break-word";
+
+      }
+      with(textField.contentDocument.body){
+        addEventListener("focus",function () {
+          cs.transform = "translate(0,0) scale(1)";
+        })
+        addEventListener("focusout",function () {
+          cs.transform = "translate(-10px,0) scale(0)";
+        })
+      }
+
+    }
+  }
+}
+
+
 setInterval(function () {
 
   bodyBugFix();
@@ -383,18 +481,17 @@ setInterval(function () {
   caretSize();
   stickIntoBorders(cs.top);
   restrictions();
+  firstLetterFix();
 
-  //Debugger - if nothing is being placed
-  //Just to show the wae to WYSIWYG editor
+  caretLoc.x = (caretLoc.x == undefined) ? undefinedPos[0] : caretLoc.x;
+  caretLoc.y = (caretLoc.y == undefined) ? undefinedPos[1] - (textField.offsetTop + 70) : caretLoc.y;
 
-  if (textField.contentDocument.body.textContent == "") {
-    textField.contentDocument.body.innerHTML = "&zwnj;"
-  }
+
   cs.top = (parseInt(cs.top) <= 284  - bodyContent.scrollTop) ? 284 - bodyContent.scrollTop : cs.top - bodyContent.scrollTop;
 
 
   updateSidebar();
-
+  headChecker();
   caretUpdate();
 }, 1);
 
@@ -426,23 +523,27 @@ function getSelectionCoords(iframe) {
 
                   if(keys.enter || keys.down || keys.right){
                     negateKeys();
+                    undefinedPos = [0,cs.top = parseInt(csNum) + space]
                     return {x : 0, y: cs.top = parseInt(csNum) + space}
                   }
                   else if (keys.left || keys.up) {
                     negateKeys();
+                    undefinedPos = [0,cs.top = parseInt(csNum) - space]
                     return{x : 0, y: cs.top = parseInt(csNum) - space}
                   }
                   else if (keys.backsp && !prev) {
                     negateKeys();
+                    undefinedPos = [0,cs.top = parseInt(csNum) - space]
                     return{x : 0, y: cs.top = parseInt(csNum) - space}
                   }
                   else if (keys.backsp && prev) {
                     prev = false;
                     negateKeys();
+                    undefinedPos = [0,cs.top = parseInt(csNum)]
                     return{x : 0, y: cs.top = parseInt(csNum)}
                   }
                   else {
-                    return{x: 0, y: cs.top - bodyContent.scrollTop}
+                    return{x: undefined, y: undefined}
                   }
                 }
             }
@@ -451,9 +552,7 @@ function getSelectionCoords(iframe) {
     return { x: x, y: y };
 }
 function stickIntoBorders(location){
-  if(parseInt(cs.top)<260){
-    cs.top = 260
-  }
+  // TODO:jak nie ma heada, to ma być wraz ze stylem!
 
   if (parseInt(cs.top) > textField.contentDocument.body.offsetHeight + textField.offsetTop + 70 - 18) {
     cs.top = (parseInt(cs.top) - 18)+"px";

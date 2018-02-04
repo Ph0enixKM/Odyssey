@@ -3,17 +3,20 @@
   <head>
     <meta charset="utf-8">
     <title>Odyssey</title>
+    <meta http-equiv="Page-Enter" content="blendTrans(Duration=.01)" />
+    <meta http-equiv="Page-Exit" content="blendTrans(Duration=.01)" />
     <link href="bin/master.css" rel="stylesheet">
     <link href="bin/toolbar.css" rel="stylesheet">
   </head>
   <body>
+    <div id="all"></div>
     <div class="sidebar">
       <div class="pages">1</div>
       <div class="words">200</div>
       <div class="letters">500</div>
     </div>
     <div class="menubar">
-        <div class="bar">Odyseja 1.2 (alfa): Niezdefiniowany Dokument</div>
+        <div class="bar">Odyseja 1.2.7 (alfa): &lt;Brak tytułu&gt; </div>
         <div class="minimize"></div>
         <div class="maximize"></div>
         <div class="exit"></div>
@@ -48,6 +51,10 @@
         <option value="7">57px</option>
       </select>
 
+    </div>
+    <div class="menu">
+      <a href="menu.html" onclick="return false">Powrót do menu</a>
+      <!-- TODO: Dropdown Menu here -->
     </div>
 
     <div class="iframe">
