@@ -1,7 +1,7 @@
 //Global Variables:
 var fonts, fontSizes, iStyle, iStyleVal, textField, textHtml,
-str, rest, pages, left, right, space, bodyContent, undefinedPos,
-logo, menu;
+str, rest, pages, left, right, space, bodyContent, logo,
+menu, scrolling, lastFont;
 
 //Require Electron
 const { remote } = require('electron');
@@ -156,6 +156,22 @@ var cs = caret.style;
 
 space = 19;
 
+
+with (document.getElementsByClassName('iframe')[0]){
+
+  addEventListener("scroll",()=>{
+    cs.transition = "0ms";
+
+    clearTimeout(scrolling);
+
+    scrolling = setTimeout(()=>{
+      cs.transition = "200ms";
+    },66);
+
+  },false)
+
+}
+
 //Caret Key Mapping
 function mapKeys(dock){
   Object.keys(keys).map(function(key,index){
@@ -232,7 +248,7 @@ function fadeAll() {
     all.style.opacity = 0;
     setTimeout(()=>{
       all.style.display = "none";
-    },1500)
+    },500)
   },100)
 }
 
@@ -246,7 +262,7 @@ function addStyle() {
       background-color: rgba(0,0,0,0.3);
       color: #eee;
     }
-    *:not(font){
+    *:not(font):not(b):not(u):not(i){
       color: #ccc;
       font-family: Lato;
     }
@@ -411,6 +427,11 @@ function bodyBugFix(){
     }
     addStyle();
   }
+  if (bodies[0].lastChild.tagName == "FONT") {
+    if (bodies[0].lastChild.size != 3) {
+      bodies[0].innerHTML += "<br><font size='3'>&zwnj;</font>" //ZWNJ musi być
+    }
+  }
 }
 
 function updateSidebar(){
@@ -428,7 +449,9 @@ function firstLetterFix() {
 
   if (textField.contentDocument.body.textContent == "") {
     with(textField.contentDocument){
-      body.innerHTML = "&zwnj;"
+      var bdy = getElementsByTagName('body')[0]
+      bdy.innerHTML = "&zwnj;"
+      console.log(bdy);
       var range = createRange();
       range.setStart(body,1);
       range.setEnd(body,1);
@@ -481,13 +504,11 @@ setInterval(function () {
   caretSize();
   stickIntoBorders(cs.top);
   restrictions();
+
+
   firstLetterFix();
 
-  caretLoc.x = (caretLoc.x == undefined) ? undefinedPos[0] : caretLoc.x;
-  caretLoc.y = (caretLoc.y == undefined) ? undefinedPos[1] - (textField.offsetTop + 70) : caretLoc.y;
-
-
-  cs.top = (parseInt(cs.top) <= 284  - bodyContent.scrollTop) ? 284 - bodyContent.scrollTop : cs.top - bodyContent.scrollTop;
+  cs.top = (parseInt(cs.top) < 280  - bodyContent.scrollTop) ? 280 - bodyContent.scrollTop : cs.top - bodyContent.scrollTop;
 
 
   updateSidebar();
@@ -514,6 +535,7 @@ function getSelectionCoords(iframe) {
                     y = rect.top;
                     x = rect.left;
                     prev = true;
+
                 }
                 else{
 
@@ -523,23 +545,20 @@ function getSelectionCoords(iframe) {
 
                   if(keys.enter || keys.down || keys.right){
                     negateKeys();
-                    undefinedPos = [0,cs.top = parseInt(csNum) + space]
                     return {x : 0, y: cs.top = parseInt(csNum) + space}
                   }
                   else if (keys.left || keys.up) {
                     negateKeys();
-                    undefinedPos = [0,cs.top = parseInt(csNum) - space]
                     return{x : 0, y: cs.top = parseInt(csNum) - space}
                   }
                   else if (keys.backsp && !prev) {
                     negateKeys();
-                    undefinedPos = [0,cs.top = parseInt(csNum) - space]
                     return{x : 0, y: cs.top = parseInt(csNum) - space}
                   }
                   else if (keys.backsp && prev) {
                     prev = false;
                     negateKeys();
-                    undefinedPos = [0,cs.top = parseInt(csNum)]
+
                     return{x : 0, y: cs.top = parseInt(csNum)}
                   }
                   else {
@@ -583,18 +602,18 @@ function restrictions() {
 
   // 3 słowa na 1 pixel przypadają
   if (textField.contentDocument.body.offsetHeight > 5000) {
-    restrictionsOptimal(5000-877);
+    restrictionsOptimal(5000-1123);
   } else if (textField.contentDocument.body.offsetHeight > 3000) {
-    restrictionsOptimal(3000-877);
+    restrictionsOptimal(3000-1123);
   } else if (textField.contentDocument.body.offsetHeight > 2000) {
-    restrictionsOptimal(2000-877);
+    restrictionsOptimal(2000-1123);
   } else if (textField.contentDocument.body.offsetHeight > 1500) {
-    restrictionsOptimal(1500-877);
-  } else if (textField.contentDocument.body.offsetHeight > 1000) {
-    restrictionsOptimal(1000-877);
-  } else if (textField.contentDocument.body.offsetHeight > 900) {
+    restrictionsOptimal(1500-1123);
+  } else if (textField.contentDocument.body.offsetHeight > 1300) {
+    restrictionsOptimal(1300-1123);
+  } else if (textField.contentDocument.body.offsetHeight > 1170) {
     restrictionsOptimal(2);
-  } else if (textField.contentDocument.body.offsetHeight > 877) {
+  } else if (textField.contentDocument.body.offsetHeight > 1123) {
     restrictionsOptimal(1);
   }
   else if(prevCheck) {
