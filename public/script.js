@@ -251,7 +251,7 @@ function fadeAll() {
     setTimeout(()=>{
       all.style.display = "none";
     },500)
-  },100)
+  },(Math.random()*1000)+500)
 }
 
 
@@ -332,7 +332,7 @@ function menuF() {
 
   window.addEventListener("keydown",(e)=>{ //Escape shortcut
     if (e.keyCode == 27) {
-      
+
       menu.style.opacity = 0
       setTimeout(()=>{
         menu.style.display = "none"
@@ -361,6 +361,10 @@ function init(){
     id("underline").addEventListener("click",()=> command("underline"))
     tag("select")[0].addEventListener("change",()=> font())
     tag("select")[1].addEventListener("change",()=> fontSize())
+    id("justify-left").addEventListener("click",()=> command("justifyLeft"))
+    id("justify-center").addEventListener("click",()=> command("justifyCenter"))
+    id("justify-right").addEventListener("click",()=> command("justifyRight"))
+    id("justify-full").addEventListener("click",()=> command("justifyFull"))
 
 
   })();

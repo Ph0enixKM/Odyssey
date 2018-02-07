@@ -9,7 +9,11 @@
     <link href="bin/toolbar.css" rel="stylesheet">
   </head>
   <body>
-    <div id="all"></div>
+    <div id="all">
+      <div id="bg"></div>
+      <div id="image"><div></div></div>
+      <div id="loading"></div>
+    </div>
     <div class="sidebar">
       <div class="pages">1</div>
       <div class="words">200</div>
@@ -22,35 +26,47 @@
         <div class="exit"></div>
     </div>
     <div class="toolbar">
-      <div id="logo"><div></div></div>
-      <p id="ctx-menu">Narzędzia</p>
-      <span id="bold"><b>B</b></span>
-      <span id="italic"><i>I</i></span>
-      <span id="underline"><u>U</u></span>
-      <select>
-        <option a>Arial</option>
-        <option b>Arial Black</option>
-        <option c>Courier</option>
-        <option d>Comic Sans MS</option>
-        <option e>Impact</option>
-        <option f>Lucida Sans Unicode</option>
-        <option g>Tahoma</option>
-        <option h>Times New Roman</option>
-        <option i>Georgia</option>
-        <option j>Helvetica</option>
-        <option k>Verdana</option>
-        <option disabled>───────────────</option>
-        <option l selected>Lato</option>
-      </select>
-      <select>
-        <option value="1">12px</option>
-        <option value="2">16px</option>
-        <option value="3" selected>18px</option>
-        <option value="4">22px</option>
-        <option value="5">29px</option>
-        <option value="6">39px</option>
-        <option value="7">57px</option>
-      </select>
+      <div id="tools">
+
+        <div id="logo"><div></div></div>
+        <p id="ctx-menu">Narzędzia</p>
+        <span id="bold"><b>B</b></span>
+        <span id="italic"><i>I</i></span>
+        <span id="underline"><u>U</u></span>
+        <select>
+          <option a>Arial</option>
+          <option b>Arial Black</option>
+          <option c>Courier</option>
+          <option d>Comic Sans MS</option>
+          <option e>Impact</option>
+          <option f>Lucida Sans Unicode</option>
+          <option g>Tahoma</option>
+          <option h>Times New Roman</option>
+          <option i>Georgia</option>
+          <option j>Helvetica</option>
+          <option k>Verdana</option>
+          <option disabled>───────────────</option>
+          <option l selected>Lato</option>
+        </select>
+        <select>
+          <option value="1">12px</option>
+          <option value="2">16px</option>
+          <option value="3" selected>18px</option>
+          <option value="4">22px</option>
+          <option value="5">29px</option>
+          <option value="6">39px</option>
+          <option value="7">57px</option>
+        </select>
+        <div class="justify">
+          <div id="justify-left"></div>
+          <div id="justify-center"></div>
+          <div id="justify-right"></div>
+          <div id="justify-full"></div>
+        </div>
+      </div>
+      <div id="view">
+        <!-- TODO: Add some options here! -->
+      </div>
 
     </div>
     <div class="menu">
