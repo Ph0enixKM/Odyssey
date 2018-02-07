@@ -129,7 +129,9 @@ textField = document.getElementsByTagName('iframe')[0]
 bodyContent = document.getElementsByClassName('iframe')[0]
 
 menu = document.getElementsByClassName('menu')[0]
+ctxMenu = document.getElementsByClassName('menu')[1]
 
+ctxLogo = document.getElementById('ctx-menu')
 logo = document.getElementById('logo');
 
 //Left/right buttons
@@ -313,6 +315,35 @@ function menuF() {
       menu.style.display = "none"
     },300)
   })
+
+  ctxLogo.addEventListener("click",()=>{ //Open Context Menu
+    ctxMenu.style.display = "inline-block"
+    setTimeout(()=>{
+      ctxMenu.style.opacity = 1
+    },100)
+  })
+
+  ctxMenu.addEventListener("click",()=>{ //Close Context Menu
+    ctxMenu.style.opacity = 0
+    setTimeout(()=>{
+      ctxMenu.style.display = "none"
+    },300)
+  })
+
+  window.addEventListener("keydown",(e)=>{ //Escape shortcut
+    if (e.keyCode == 27) {
+      
+      menu.style.opacity = 0
+      setTimeout(()=>{
+        menu.style.display = "none"
+      },300)
+
+      ctxMenu.style.opacity = 0
+      setTimeout(()=>{
+        ctxMenu.style.display = "none"
+      },300)
+    }
+  })
 }
 
 //Initial Commands
@@ -427,11 +458,6 @@ function bodyBugFix(){
     }
     addStyle();
   }
-  if (bodies[0].lastChild.tagName == "FONT") {
-    if (bodies[0].lastChild.size != 3) {
-      bodies[0].innerHTML += "<br><font size='3'>&zwnj;</font>" //ZWNJ musi być
-    }
-  }
 }
 
 function updateSidebar(){
@@ -451,7 +477,6 @@ function firstLetterFix() {
     with(textField.contentDocument){
       var bdy = getElementsByTagName('body')[0]
       bdy.innerHTML = "&zwnj;"
-      console.log(bdy);
       var range = createRange();
       range.setStart(body,1);
       range.setEnd(body,1);
@@ -586,12 +611,12 @@ function restrictionsOptimal (wordSize){
   if(textField.contentDocument.body.lastChild.textContent == ""){
     //If the div is empty - delete it
     textField.contentDocument.body.lastChild.remove();
-    console.log("deleted");
+    console.log("deleted"); //TMP
   } else {
     //Otherwise delete the last character
     textField.contentDocument.body.lastChild.textContent =
     textField.contentDocument.body.lastChild.textContent.slice(0,-wordSize);
-    console.log("removed");
+    console.log("removed"); //TMP
   }
   //textContent
 }
@@ -608,11 +633,11 @@ function restrictions() {
   } else if (textField.contentDocument.body.offsetHeight > 2000) {
     restrictionsOptimal(2000-1123);
   } else if (textField.contentDocument.body.offsetHeight > 1500) {
-    restrictionsOptimal(1500-1123);
+    restrictionsOptimal(1700-1123);
   } else if (textField.contentDocument.body.offsetHeight > 1300) {
-    restrictionsOptimal(1300-1123);
+    restrictionsOptimal(1500-1123);
   } else if (textField.contentDocument.body.offsetHeight > 1170) {
-    restrictionsOptimal(2);
+    restrictionsOptimal(5);
   } else if (textField.contentDocument.body.offsetHeight > 1123) {
     restrictionsOptimal(1);
   }
@@ -621,7 +646,10 @@ function restrictions() {
     autosaveF();
     setTimeout(()=>{
 
-      pages[curPage+1] = (pages[curPage+1] == undefined) ? restOf : restOf + pages[curPage+1];
+      pages.splice(curPage+1,0,restOf);
+      console.log(restOf);
+      restOf = ""
+      // pages[curPage+1] = (pages[curPage+1] == undefined) ? restOf : restOf + pages[curPage+1];
       turnRight();
     },100)
 

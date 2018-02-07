@@ -9,7 +9,7 @@ app.on("ready", ()=>{
   win = new BrowserWindow({width: 1620, height: 1080, frame:false, show:false});
   // win.toggleDevTools();
   win.setMenu(null);
-  win.loadURL("file://"+__dirname+"/public/menu.html");
+  win.loadURL("file://"+__dirname+"/public/index.html");
 
   win.setBackgroundColor("#000");
 

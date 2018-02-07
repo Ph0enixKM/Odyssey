@@ -29,6 +29,25 @@
     transform: translate(0,-50%)
     &:hover
       background-color: #333
+  button
+    display: inline-block
+    color: #aaa
+    background-color: #222
+    border: 1px solid #333
+    padding: 2vw
+    text-align: center
+    margin: 10px
+    border-radius: 10px
+    font-family: Lato
+    text-decoration: none
+    transition: 300ms
+    user-select: none
+    position: relative
+    top: 50%
+    transform: translate(0,-50%)
+    cursor: pointer
+    &:hover
+      background-color: #333
 
 
 .sidebar
@@ -160,7 +179,24 @@
   box-shadow: 0 10px 20px #222
   z-index: 9
   user-select: none
+  perspective: 500px
 
+  p
+    display: inline-block
+    font-family: Lato
+    padding-right: 10px
+    color: #aaa
+    cursor: pointer
+    transition: 300ms
+    transform-origin: left
+    outline: 0px solid $border
+    border: 1px solid $border
+    padding: 5px
+    &:hover
+      outline: 1px solid rgba(255,255,255,0)
+      outline-offset: 7px
+      border: 1px solid $border + 50
+      box-shadow: 0 0 15px $border inset
   div#logo
     display: inline-block
     background-image: url("../arts/logo.png")
