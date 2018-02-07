@@ -261,10 +261,14 @@ function addStyle() {
   textField.contentDocument.head.appendChild(iStyle);
   var iStyleVal = document.createTextNode(`
     *::selection{
+      /*
       background-color: rgba(0,0,0,0.3);
       color: #eee;
+      */
+      background-color: rgba(255,150,0,0.3);
+      color: #eee;
     }
-    *:not(font):not(b):not(u):not(i){
+    *:not(font):not(b):not(u):not(i):not(div):not(span){
       color: #ccc;
       font-family: Lato;
     }
