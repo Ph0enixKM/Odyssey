@@ -17,6 +17,7 @@ var keys = {
   right: false
 };
 var prev = false;
+var position = 0;
 var curPage = 0;
 var autosave = true;
 
@@ -527,6 +528,17 @@ function headChecker() {
   }
 }
 
+function checkForFloatingDivs () {
+  let els = textField.contentDocument.documentElement.childNodes;
+  let body = textField.contentDocument.body;
+  // console.log(els);
+  for (i of els){
+    if (i.tagName == "DIV") {
+      body.prepend(i);
+    }
+  }
+}
+
 
 setInterval(function () {
 
@@ -543,11 +555,36 @@ setInterval(function () {
 
   cs.top = (parseInt(cs.top) < 280  - bodyContent.scrollTop) ? 280 - bodyContent.scrollTop : cs.top - bodyContent.scrollTop;
 
+  checkForFloatingDivs();
 
   updateSidebar();
   headChecker();
   caretUpdate();
 }, 1);
+
+function getSelectionCoordsPosition(elem) {
+  switch (elem) {
+    case "left":
+      console.log("left");
+      position = 0;
+      break;
+    case "center":
+      console.log("center");
+      position = 1;
+      break;
+    case "right":
+      console.log("right");
+      position = 2;
+      break;
+    case "justify":
+      console.log("justify");
+      position = 0;
+      break;
+    default:
+      position = 0;
+  }
+}
+
 
 function getSelectionCoords(iframe) {
     win = iframe;
@@ -568,7 +605,10 @@ function getSelectionCoords(iframe) {
                     y = rect.top;
                     x = rect.left;
                     prev = true;
-
+                    if(sel.anchorNode.parentElement.parentElement.tagName == "SPAN")
+                      getSelectionCoordsPosition(sel.anchorNode.parentElement.parentElement.parentElement.style.textAlign);
+                    else if (sel.anchorNode.parentElement.parentElement.tagName == "DIV")
+                      getSelectionCoordsPosition(sel.anchorNode.parentElement.parentElement.style.textAlign);
                 }
                 else{
 
@@ -578,7 +618,13 @@ function getSelectionCoords(iframe) {
 
                   if(keys.enter || keys.down || keys.right){
                     negateKeys();
-                    return {x : 0, y: cs.top = parseInt(csNum) + space}
+                    console.log(position);
+                    return {
+                      x : (position == 0)? 0 :
+                          (position == 1)?
+                          (+textField.contentDocument.body.offsetWidth/2) :
+                          textField.contentDocument.body.offsetWidth,
+                      y: cs.top = parseInt(csNum) + space}
                   }
                   else if (keys.left || keys.up) {
                     negateKeys();
