@@ -14,7 +14,9 @@ var keys = {
   up: false,
   down: false,
   left: false,
-  right: false
+  right: false,
+  shift: false,
+  v: false
 };
 var prev = false;
 var position = 0;
@@ -75,8 +77,8 @@ function turnLeft() {
       setTimeout(function () {
         textField.style.transform = "translate(0) scale(1)";
         textField.style.opacity = 1;
-      },300)
-    },300);
+      },150)
+    },150);
     }
   }
 }
@@ -102,8 +104,8 @@ function turnRight(){
       setTimeout(function () {
         textField.style.transform = "translate(0) scale(1)";
         textField.style.opacity = 1;
-      },300)
-    },300);
+      },150)
+    },150);
   }
 }
 
@@ -347,7 +349,25 @@ function menuF() {
       setTimeout(()=>{
         ctxMenu.style.display = "none"
       },300)
+
+      document.querySelector('.full-view').style.opacity = 0
+      setTimeout(()=>{
+        document.querySelector('.full-view').style.display = "none"
+        fv.off()
+      },300)
     }
+  })
+
+  ctxMenu.childNodes[1].addEventListener("click",()=>{
+    document.querySelector('#ctx-menu').innerText = "Narzędzia"
+    document.querySelector('#view').style.display = "none"
+    document.querySelector('#tools').style.display = "inline-block"
+  })
+
+  ctxMenu.childNodes[3].addEventListener("click",()=>{
+    document.querySelector('#ctx-menu').innerText = "Widok"
+    document.querySelector('#view').style.display = "inline-block"
+    document.querySelector('#tools').style.display = "none"
   })
 }
 
@@ -565,23 +585,20 @@ setInterval(function () {
 function getSelectionCoordsPosition(elem) {
   switch (elem) {
     case "left":
-      console.log("left");
       position = 0;
       break;
     case "center":
-      console.log("center");
       position = 1;
       break;
     case "right":
-      console.log("right");
       position = 2;
       break;
     case "justify":
-      console.log("justify");
       position = 0;
       break;
-    default:
+    default: //And this won't occur
       position = 0;
+      break;
   }
 }
 
@@ -605,10 +622,14 @@ function getSelectionCoords(iframe) {
                     y = rect.top;
                     x = rect.left;
                     prev = true;
-                    if(sel.anchorNode.parentElement.parentElement.tagName == "SPAN")
-                      getSelectionCoordsPosition(sel.anchorNode.parentElement.parentElement.parentElement.style.textAlign);
-                    else if (sel.anchorNode.parentElement.parentElement.tagName == "DIV")
-                      getSelectionCoordsPosition(sel.anchorNode.parentElement.parentElement.style.textAlign);
+                    try{
+                      if(sel.anchorNode.parentElement.parentElement.tagName == "SPAN")
+                        getSelectionCoordsPosition(sel.anchorNode.parentElement.parentElement.parentElement.style.textAlign);
+                      else if (sel.anchorNode.parentElement.parentElement.tagName == "DIV")
+                        getSelectionCoordsPosition(sel.anchorNode.parentElement.parentElement.style.textAlign);
+                    } catch(e){
+                        position = 0
+                    }
                 }
                 else{
 
@@ -618,7 +639,6 @@ function getSelectionCoords(iframe) {
 
                   if(keys.enter || keys.down || keys.right){
                     negateKeys();
-                    console.log(position);
                     return {
                       x : (position == 0)? 0 :
                           (position == 1)?
@@ -628,17 +648,32 @@ function getSelectionCoords(iframe) {
                   }
                   else if (keys.left || keys.up) {
                     negateKeys();
-                    return{x : 0, y: cs.top = parseInt(csNum) - space}
+                    return{
+                      x : (position == 0)? 0 :
+                        (position == 1)?
+                        (+textField.contentDocument.body.offsetWidth/2) :
+                        textField.contentDocument.body.offsetWidth,
+                      y: cs.top = parseInt(csNum) - space}
                   }
                   else if (keys.backsp && !prev) {
                     negateKeys();
-                    return{x : 0, y: cs.top = parseInt(csNum) - space}
+                    return{
+                      x : (position == 0)? 0 :
+                          (position == 1)?
+                          (+textField.contentDocument.body.offsetWidth/2) :
+                          textField.contentDocument.body.offsetWidth,
+                      y: cs.top = parseInt(csNum) - space}
                   }
                   else if (keys.backsp && prev) {
                     prev = false;
                     negateKeys();
 
-                    return{x : 0, y: cs.top = parseInt(csNum)}
+                    return{
+                      x : (position == 0)? 0 :
+                          (position == 1)?
+                          (+textField.contentDocument.body.offsetWidth/2) :
+                          textField.contentDocument.body.offsetWidth,
+                      y: cs.top = parseInt(csNum)}
                   }
                   else {
                     return{x: undefined, y: undefined}

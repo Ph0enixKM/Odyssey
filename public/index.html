@@ -23,11 +23,14 @@
         <div class="maximize"></div>
         <div class="exit"></div>
     </div>
+
     <div class="toolbar">
-      <div id="tools">
 
         <div id="logo"><div></div></div>
         <p id="ctx-menu">Narzędzia</p>
+
+      <div id="tools">
+
         <span id="bold"><b>B</b></span>
         <span id="italic"><i>I</i></span>
         <span id="underline"><u>U</u></span>
@@ -63,6 +66,10 @@
         </div>
       </div>
       <div id="view">
+
+        <div id="full-view">
+        </div>
+
         <!-- TODO: Add some options here! -->
       </div>
 
@@ -73,6 +80,12 @@
     <div class="menu">
       <button>Narzędzia</button>
       <button>Widok</button>
+    </div>
+    <div class="full-view">
+      <div class="fv-tools">
+        <span id="trash"></span>
+      </div>
+      <div class="docs"></div>
     </div>
 
     <div class="iframe">
@@ -86,7 +99,10 @@
       <span>></span>
     </div>
     </div>
+    <p id="shortcut"></p>
 
     <script src="script.js"></script>
+    <script src="widok.js"></script>
+    <script src="input.js"></script>
   </body>
 </html>
