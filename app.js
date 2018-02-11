@@ -11,7 +11,7 @@ app.on("ready", ()=>{
   win.setMenu(null);
   win.loadURL("file://"+__dirname+"/public/index.html");
 
-  win.setBackgroundColor("#000");
+  win.setBackgroundColor("#222");
 
   win.webContents.on("did-finish-load", ()=>{
     setTimeout(()=>{

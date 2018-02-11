@@ -411,6 +411,7 @@ function init(){
       caretColor = "transparent";
       width = "100%";
       wordWrap = "break-word";
+      height = "auto";
 
     }
 
@@ -558,6 +559,16 @@ function checkForFloatingDivs () {
     }
   }
 }
+
+window.addEventListener("click",e=>{
+  cs.transform = "translate(10px,0) scale(0)"
+})
+
+
+textField.contentDocument.documentElement.addEventListener("click",e=>{
+  e.stopPropagation()
+  cs.transform = "translate(0,0) scale(1)"
+})
 
 
 setInterval(function () {
@@ -738,7 +749,6 @@ function restrictions() {
       pages.splice(curPage+1,0,restOf);
       console.log(restOf);
       restOf = ""
-      // pages[curPage+1] = (pages[curPage+1] == undefined) ? restOf : restOf + pages[curPage+1];
       turnRight();
     },100)
 

@@ -50,7 +50,7 @@ fv.bg.addEventListener("click",()=>{
 })
 fv.btn.addEventListener("mouseover",()=> shortcutOn("SHITF + V"))
 fv.btn.addEventListener("mouseout",shortcutOff)
-fv.tools.addEventListener("click",e=> e.stopPropagation()) //Prevent toolbar from closing
+fv.tools.addEventListener("click",e => e.stopPropagation()) //Prevent toolbar from closing
 
 fv.tools.childNodes[1].addEventListener("click",()=>{ //Delete Button
   for (data of fv.sel) {
