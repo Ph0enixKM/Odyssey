@@ -29,7 +29,7 @@ It's time to install all dependencies using NPM (If you don't have Node.js insta
     
 All of the dependencies should be installed. Now we can open up Odyssey.
 
-## Executing
+## Execution
 To execute Odyssey you can just use npm script command:
 
     $ npm start
