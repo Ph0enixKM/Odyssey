@@ -1,6 +1,6 @@
 # Odyssey
 
-![Odyssey Logo](https://raw.githubusercontent.com/Ph0enixKM/Odyssey/master/public/arts/logo-250.png)
+![Odyssey Logo](https://github.com/Ph0enixKM/Odyssey/blob/dev/public/arts/logo-250.png)
 
 ## Odyssey is a rich text editor for writers, novelists and poets. 
 It provides more natural way of designig documents,books,poems
