@@ -350,11 +350,20 @@ function menuF() {
         ctxMenu.style.display = "none"
       },300)
 
-      document.querySelector('.full-view').style.opacity = 0
-      setTimeout(()=>{
-        document.querySelector('.full-view').style.display = "none"
-        fv.off()
-      },300)
+      if(!merge.state){  // Merge comes from another file
+        document.querySelector('.full-view').style.opacity = 0
+        setTimeout(()=>{
+          document.querySelector('.full-view').style.display = "none"
+          fv.off()
+        },300)
+      } else {
+        document.querySelector('#merge-bg').style.opacity = 0
+        setTimeout(()=>{
+          document.querySelector('#merge-bg').style.display = "none"
+          merge.state = false
+          merge.off()
+        },150)
+      }
     }
   })
 

@@ -167,7 +167,8 @@
       background-color: red
       filter: brightness(1.1)
 
-
+.tippy-popper // Tippy Customisation
+  font-family: Lato
 
 #shortcut
   position: absolute
@@ -240,6 +241,16 @@
     height: 50px
     background-color: #222
     box-shadow: 0 0 50px black
+    user-select: none
+    & p
+      display: inline-block
+      color: #aaa
+      margin: 0
+      padding: 0 10px 0 0
+      font-family: Lato
+      border-right: 2px dashed #333
+      vertical-align: middle
+
     & span
       display: inline-block
       height: 50px
@@ -248,12 +259,63 @@
       padding: 0
       transition: 300ms
       cursor: pointer
+      vertical-align: middle
       &#trash
         background-image: url('../arts/bin.png')
         background-size: cover
         background-position: center
         &:hover
           background-color: #933
+      &#merge-btn
+        background-image: url('../arts/merge.png')
+        background-size: cover
+        background-position: center
+        &:hover
+          background-color: #333
+#merge-bg
+  display: none
+  width: 100vw
+  height: 100vh
+  background-color: rgba(0,0,0,0.7)
+  position: absolute
+  top: 0
+  left: 0
+  z-index: 18
+  opacity: 0
+  overflow-y: scroll
+  cursor: default
+  transition: 300ms
+  &::-webkit-scrollbar-track
+  	-webkit-box-shadow: inset 0 0 6px #222
+  	border-radius: 10px
+  	background-color: #222
+  &::-webkit-scrollbar
+    width: 12px
+    background-color: #222
+  &::-webkit-scrollbar-thumb
+    border-radius: 10px
+    -webkit-box-shadow: inset 0 0 6px #222
+    background-color: #333
+  & #merge-tools
+    width: 100vw
+    // height: 40px
+    background-color: #222
+    box-shadow: 0 0 20px #111
+    & p
+      vertical-align: middle
+      font-size: 20px
+    & #ok
+      vertical-align: middle
+      display: inline-block
+      width: 40px
+      height: 40px
+      background-image: url("../arts/ok.png")
+      background-position: center
+      background-size: cover
+      transition: 300ms
+      cursor: pointer
+      &:hover
+        background-color: #363
   #docs
     display: inline-block
     position: absolute
@@ -365,7 +427,7 @@
       &:hover
         background-color: #555
 
-  p
+  p#ctx-menu
     display: inline-block
     font-family: Lato
     padding-right: 10px
@@ -373,14 +435,12 @@
     cursor: pointer
     transition: 300ms
     transform-origin: left
-    outline: 0px solid $border
-    border: 1px solid $border
     padding: 5px
+    border: 1px solid transparent
     &:hover
-      outline: 1px solid rgba(255,255,255,0)
-      outline-offset: 7px
-      border: 1px solid $border + 50
-      box-shadow: 0 0 15px $border inset
+      background-color: $border
+      border: 1px solid $border
+
   div#logo
     display: inline-block
     background-image: url("../arts/logo.png")
@@ -427,9 +487,6 @@
       background-color: #555
 
   option
-    // padding-top: 20px
-    // line-height: 100px
-    // height: 100px
 
     &[a]
       font-family: Arial, sans-serif

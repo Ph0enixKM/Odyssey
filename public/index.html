@@ -26,15 +26,15 @@
 
     <div class="toolbar">
 
-        <div id="logo"><div></div></div>
-        <p id="ctx-menu">Narzędzia</p>
+        <div id="logo" title="Menu"><div></div></div>
+        <p id="ctx-menu" title="Zmień tryb">Narzędzia</p>
 
       <div id="tools">
 
-        <span id="bold"><b>B</b></span>
-        <span id="italic"><i>I</i></span>
-        <span id="underline"><u>U</u></span>
-        <select>
+        <span id="bold" title="Pogrubienie"><b>B</b></span>
+        <span id="italic" title="Pochylenie"><i>I</i></span>
+        <span id="underline" title="Podkreślenie"><u>U</u></span>
+        <select title="Font">
           <option a>Arial</option>
           <option b>Arial Black</option>
           <option c>Courier</option>
@@ -49,7 +49,7 @@
           <option disabled>───────────────</option>
           <option l selected>Lato</option>
         </select>
-        <select>
+        <select title="Wielkość Fonta">
           <option value="1">12px</option>
           <option value="2">16px</option>
           <option value="3" selected>18px</option>
@@ -58,7 +58,7 @@
           <option value="6">39px</option>
           <option value="7">57px</option>
         </select>
-        <div class="justify">
+        <div class="justify" title="Położenie tekstu">
           <div id="justify-left"></div>
           <div id="justify-center"></div>
           <div id="justify-right"></div>
@@ -67,7 +67,7 @@
       </div>
       <div id="view">
 
-        <div id="full-view">
+        <div id="full-view" title="Pełny Widok">
         </div>
 
         <!-- TODO: Add some options here! -->
@@ -83,7 +83,19 @@
     </div>
     <div class="full-view">
       <div class="fv-tools">
-        <span id="trash"></span>
+        <p>Pełny widok</p>
+        <span id="trash" title="Usuń strony">
+        </span><span id="merge-btn" title="Scal strony"> <!-- To po to, żeby nie było stresującej spacji -->
+        </span>
+
+          <div id="merge-bg">
+            <div id="merge-tools">
+              <p>Scalanie</p>
+              <div id="ok"></div>
+            </div>
+
+
+          </div>
       </div>
       <div class="docs"></div>
     </div>
@@ -101,6 +113,7 @@
     </div>
     <p id="shortcut"></p>
 
+    <script src="tippy.all.min.js"></script>
     <script src="script.js"></script>
     <script src="widok.js"></script>
     <script src="input.js"></script>

@@ -1,5 +1,15 @@
 let qs = document.querySelectorAll.bind(document)
 
+//Setting up Tippy.js:
+tippy('[title]',{
+  placement : "bottom",
+  animation : "shift-toward" ,
+  arrow : true,
+  arrowType : "sharp",
+  inertia : true
+})
+
+
 
 // SHORTCUT SECTION
 let shortcut = qs("#shortcut")[0]
@@ -52,7 +62,7 @@ fv.btn.addEventListener("mouseover",()=> shortcutOn("SHITF + V"))
 fv.btn.addEventListener("mouseout",shortcutOff)
 fv.tools.addEventListener("click",e => e.stopPropagation()) //Prevent toolbar from closing
 
-fv.tools.childNodes[1].addEventListener("click",()=>{ //Delete Button
+fv.tools.childNodes[3].addEventListener("click",()=>{ //Delete Button
   for (data of fv.sel) {
     if (data != undefined) {
       data.style.transform = "translate(0,-50px)"
@@ -118,7 +128,6 @@ fv.on = ()=>{
 
     });
     doc.addEventListener("contextmenu",function(){ // Right mouse button
-      // TODO: Select page on right click
       if (this.sel) {
         // this.style.borderRadius = "0px"
         this.style.boxShadow = "none"
@@ -143,4 +152,48 @@ fv.on = ()=>{
 fv.off = ()=>{
   fv.docs.innerHTML = ""
   fv.sel = []
+}
+
+
+
+
+
+
+
+// MERGE SECTION
+let merge = {
+  // TODO: na kliknęcie gdzieś - wyłącz
+  // TODO: na kliknięcie na przycisk - włącz
+  btn : qs("#merge-btn")[0],
+  bg : qs("#merge-bg")[0],
+  on : new Function(),
+  off : new Function(),
+  state : false
+
+
+}
+
+merge.btn.addEventListener("click",()=>{ //When you click on BTN
+  merge.bg.style.opacity = 0
+  merge.bg.style.display = "inline-block"
+  setTimeout(()=>{
+    merge.bg.style.opacity = 1
+    merge.state = true
+    merge.on()
+  },150)
+})
+
+merge.bg.addEventListener("click",()=>{ //When you click on BG
+  merge.bg.style.opacity = 0
+  setTimeout(()=>{
+    merge.bg.style.display = "none"
+    merge.state = false
+    merge.off()
+  },150)
+})
+
+merge.on = ()=>{
+}
+
+merge.off = ()=> {
 }
