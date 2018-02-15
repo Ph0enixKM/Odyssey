@@ -1,5 +1,6 @@
 @import "variables.sass"
 
+
 .menu
   display: none
   opacity: 0
@@ -212,6 +213,34 @@
     color: #777
     font-style: italic
 
+.doc-block
+  position: relative
+  display: block
+  z-index: 17
+  color: #aaa
+  background-color: #333
+  box-shadow: 0 0 25px black
+  width: 42mm
+  height: 60mm
+  margin: 25px auto 25px auto
+  padding: 14px
+  vertical-align: middle
+  font-family: Lato
+  font-size: 20px
+  user-select: none
+  cursor: -webkit-grab
+  box-shadow: 0 0 50px black
+  word-wrap: break-word
+  border-radius: 0px
+  box-shadow: none
+  &:hover
+    background-color: #444
+  &:active
+    cursor: -webkit-grabbing
+  & emp
+    color: #777
+    font-style: italic
+
 .full-view
   display: none
   position: absolute
@@ -275,7 +304,7 @@
 #merge-bg
   display: none
   width: 100vw
-  height: 100vh
+  height: 100%
   background-color: rgba(0,0,0,0.7)
   position: absolute
   top: 0
@@ -283,6 +312,7 @@
   z-index: 18
   opacity: 0
   overflow-y: scroll
+  overflow-x: hidden
   cursor: default
   transition: 300ms
   &::-webkit-scrollbar-track
@@ -316,6 +346,18 @@
       cursor: pointer
       &:hover
         background-color: #363
+    & #cancel
+      vertical-align: middle
+      display: inline-block
+      width: 40px
+      height: 40px
+      background-image: url("../arts/cancel.png")
+      background-position: center
+      background-size: cover
+      transition: 300ms
+      cursor: pointer
+      &:hover
+        background-color: #933
   #docs
     display: inline-block
     position: absolute
@@ -324,10 +366,6 @@
     width: 100vw
     height: 100vw
     z-index: 16
-
-
-
-
 
 .toolbar
   position: fixed

@@ -162,15 +162,16 @@ fv.off = ()=>{
 
 // MERGE SECTION
 let merge = {
-  // TODO: na kliknęcie gdzieś - wyłącz
-  // TODO: na kliknięcie na przycisk - włącz
   btn : qs("#merge-btn")[0],
   bg : qs("#merge-bg")[0],
+  docs : qs('#merge-docs')[0],
+  ok : qs("#merge-tools #ok")[0],
+  cancel : qs("#merge-tools #cancel")[0],
   on : new Function(),
   off : new Function(),
-  state : false
-
-
+  sel : undefined,
+  move : setInterval(()=>{},1000),
+  loc : {x: 0, y: 0}
 }
 
 merge.btn.addEventListener("click",()=>{ //When you click on BTN
@@ -178,22 +179,88 @@ merge.btn.addEventListener("click",()=>{ //When you click on BTN
   merge.bg.style.display = "inline-block"
   setTimeout(()=>{
     merge.bg.style.opacity = 1
-    merge.state = true
     merge.on()
   },150)
 })
 
-merge.bg.addEventListener("click",()=>{ //When you click on BG
+merge.cancel.addEventListener("mousedown", e =>{ //When you click on BG
+  e.stopPropagation()
   merge.bg.style.opacity = 0
   setTimeout(()=>{
     merge.bg.style.display = "none"
-    merge.state = false
     merge.off()
   },150)
 })
+merge.bg.addEventListener("mouseup", e =>{ //When you click on BG
+  e.stopPropagation()
+  if(merge.sel != undefined) merge.sel.style.zIndex = "17"
+  merge.sel = undefined
+})
+// merge.bg.addEventListener("mouseup", e => {
+//   e.stopPropagation()
+//
+// })
 
 merge.on = ()=>{
+  //Unanabling scrolling previous layer
+  fv.bg.style.overflowY = "hidden"
+
+
+  let index = 1
+
+
+  for (data of fv.sel){
+    if (data != undefined) {
+      let doc = document.createElement("article")
+      doc.className = "doc-block"
+      doc.innerHTML = `
+        ${ (data.childNodes[0].textContent == undefined ||
+           data.childNodes[0].textContent.trim().length <= 1) ?
+          "<emp>(pusta strona)</emp>" : data.childNodes[0].textContent }
+      <br><br>
+        <h1 style="
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        ">
+          ${index}
+        </h1>
+      `
+      doc.loc = {x: doc.offsetLeft, y: doc.offsetTop}
+      // TODO: Przenoszenie i zrobienie przedziałki :D
+      doc.addEventListener("click", e => e.stopPropagation())
+      doc.addEventListener("mousedown", e => {
+
+        e.stopPropagation()
+        this.el = doc
+        merge.sel = (merge.sel != undefined) ? merge.sel : this.el
+
+        this.el.style.top = (this.el.style.top == "") ? "0px" : this.el.style.top
+        this.el.style.zIndex = "18"
+
+      })
+
+
+
+      doc.index = index
+      merge.docs.appendChild(doc)
+      index++
+    }
+  }
+  document.body.addEventListener("mousemove", e =>{merge.loc = {x: e.pageX, y: e.pageY-30}})
+  merge.move = setInterval(()=>{
+    if (merge.sel != undefined) {
+      console.log(merge.loc.y);
+      merge.sel.style.top = parseInt(merge.sel.style.top) + (merge.loc.y - merge.sel.offsetTop)-(merge.sel.offsetHeight/2) + "px"
+      // TODO: Napraw to (kartka się przesowa w zależności do offsetu, a jej style.top jest pozycją relatywną)
+    }
+  },16)
 }
 
 merge.off = ()=> {
+  merge.sel = undefined
+  merge.docs.innerHTML = ""
+  clearInterval(merge.move)
+  fv.bg.style.overflowY = "scroll"
 }
