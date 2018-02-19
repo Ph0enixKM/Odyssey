@@ -171,6 +171,12 @@
 .tippy-popper // Tippy Customisation
   font-family: Lato
 
+canvas#move
+  position: absolute
+  z-index: 15
+  top: 0
+  left: 0
+
 #shortcut
   position: absolute
   top: 100%
@@ -213,8 +219,8 @@
     color: #777
     font-style: italic
 
-.doc-block
-  position: relative
+.doc-move
+  position: absolute
   display: block
   z-index: 17
   color: #aaa
@@ -233,6 +239,7 @@
   word-wrap: break-word
   border-radius: 0px
   box-shadow: none
+  opacity: 0.7
   &:hover
     background-color: #444
   &:active
@@ -295,13 +302,13 @@
         background-position: center
         &:hover
           background-color: #933
-      &#merge-btn
-        background-image: url('../arts/merge.png')
+      &#move-btn
+        background-image: url('../arts/move.png')
         background-size: cover
         background-position: center
         &:hover
           background-color: #333
-#merge-bg
+#move-bg
   display: none
   width: 100vw
   height: 100%
@@ -326,8 +333,12 @@
     border-radius: 10px
     -webkit-box-shadow: inset 0 0 6px #222
     background-color: #333
-  & #merge-tools
+  & #move-docs
+    height: 100% //It should be scroll height here
+  & #move-tools
     width: 100vw
+    position: fixed
+    z-index: 19
     // height: 40px
     background-color: #222
     box-shadow: 0 0 20px #111

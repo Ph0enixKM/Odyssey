@@ -160,59 +160,56 @@ fv.off = ()=>{
 
 
 
-// MERGE SECTION
-let merge = {
-  btn : qs("#merge-btn")[0],
-  bg : qs("#merge-bg")[0],
-  docs : qs('#merge-docs')[0],
-  ok : qs("#merge-tools #ok")[0],
-  cancel : qs("#merge-tools #cancel")[0],
+// MOVE SECTION
+const moveModule = require("./move.js")
+
+let move = {
+  btn : qs("#move-btn")[0],
+  bg : qs("#move-bg")[0],
+  canvas : qs("canvas#move")[0],
+  docs : qs('#move-docs')[0],
+  ok : qs("#move-tools #ok")[0],
+  cancel : qs("#move-tools #cancel")[0],
   on : new Function(),
   off : new Function(),
+  state : false,
   sel : undefined,
   move : setInterval(()=>{},1000),
   loc : {x: 0, y: 0}
 }
 
-merge.btn.addEventListener("click",()=>{ //When you click on BTN
-  merge.bg.style.opacity = 0
-  merge.bg.style.display = "inline-block"
+move.btn.addEventListener("click",()=>{ //When you click on BTN
+  move.bg.style.opacity = 0
+  move.bg.style.display = "inline-block"
   setTimeout(()=>{
-    merge.bg.style.opacity = 1
-    merge.on()
+    move.bg.style.opacity = 1
+    move.state = true //Turn on first this layer
+    move.on()
   },150)
 })
-
-merge.cancel.addEventListener("mousedown", e =>{ //When you click on BG
+move.cancel.addEventListener("mousedown", e =>{ //When you click on BG
   e.stopPropagation()
-  merge.bg.style.opacity = 0
+  move.bg.style.opacity = 0
   setTimeout(()=>{
-    merge.bg.style.display = "none"
-    merge.off()
+    move.bg.style.display = "none"
+    move.state = false //Turn off first this layer
+    move.off()
   },150)
 })
-merge.bg.addEventListener("mouseup", e =>{ //When you click on BG
+move.bg.addEventListener("mouseup", e =>{ //When you click on BG
   e.stopPropagation()
-  if(merge.sel != undefined) merge.sel.style.zIndex = "17"
-  merge.sel = undefined
+  if(move.sel != undefined) move.sel.style.zIndex = "17"
+  move.sel = undefined
 })
-// merge.bg.addEventListener("mouseup", e => {
-//   e.stopPropagation()
-//
-// })
-
-merge.on = ()=>{
-  //Unanabling scrolling previous layer
-  fv.bg.style.overflowY = "hidden"
 
 
+move.on = ()=>{
+  fv.bg.style.overflowY = "hidden"  //Unanabling scrolling previous layer
   let index = 1
-
-
   for (data of fv.sel){
     if (data != undefined) {
       let doc = document.createElement("article")
-      doc.className = "doc-block"
+      doc.className = "doc-move"
       doc.innerHTML = `
         ${ (data.childNodes[0].textContent == undefined ||
            data.childNodes[0].textContent.trim().length <= 1) ?
@@ -227,40 +224,46 @@ merge.on = ()=>{
           ${index}
         </h1>
       `
-      doc.loc = {x: doc.offsetLeft, y: doc.offsetTop}
-      // TODO: Przenoszenie i zrobienie przedziałki :D
+      doc.center = {
+        x: doc.offsetTop + (doc.offsetHeight/2),
+        y: doc.offsetLeft + (doc.offsetWidth/2)
+      }
+
+      doc.loc = {
+        x: doc.offsetLeft,
+        y: doc.offsetTop
+      }
+
       doc.addEventListener("click", e => e.stopPropagation())
       doc.addEventListener("mousedown", e => {
 
         e.stopPropagation()
         this.el = doc
-        merge.sel = (merge.sel != undefined) ? merge.sel : this.el
+        move.sel = (move.sel != undefined) ? move.sel : this.el
 
         this.el.style.top = (this.el.style.top == "") ? "0px" : this.el.style.top
+        this.el.style.left = (this.el.style.left == "") ? "0px" : this.el.style.left
         this.el.style.zIndex = "18"
-
       })
 
-
-
       doc.index = index
-      merge.docs.appendChild(doc)
+      move.docs.appendChild(doc)
       index++
     }
   }
-  document.body.addEventListener("mousemove", e =>{merge.loc = {x: e.pageX, y: e.pageY-30}})
-  merge.move = setInterval(()=>{
-    if (merge.sel != undefined) {
-      console.log(merge.loc.y);
-      merge.sel.style.top = parseInt(merge.sel.style.top) + (merge.loc.y - merge.sel.offsetTop)-(merge.sel.offsetHeight/2) + "px"
-      // TODO: Napraw to (kartka się przesowa w zależności do offsetu, a jej style.top jest pozycją relatywną)
+  document.body.addEventListener("mousemove", e =>{move.loc = {x: e.pageX, y: e.pageY-30}})
+  move.move = setInterval(()=>{ //Move Interval Function
+    if (move.sel != undefined) {
+      move.sel.style.top = parseInt(move.sel.style.top) + (move.loc.y - move.sel.offsetTop)-(move.sel.offsetHeight/2-move.bg.scrollTop) + "px"
+      move.sel.style.left = parseInt(move.sel.style.left) + (move.loc.x - move.sel.offsetLeft)-(move.sel.offsetWidth/2) + "px"
     }
   },16)
+  moveModule.construct()
 }
 
-merge.off = ()=> {
-  merge.sel = undefined
-  merge.docs.innerHTML = ""
-  clearInterval(merge.move)
+move.off = ()=> {
+  move.sel = undefined
+  move.docs.innerHTML = ""
+  clearInterval(move.move)
   fv.bg.style.overflowY = "scroll"
 }

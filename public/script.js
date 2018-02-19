@@ -350,18 +350,18 @@ function menuF() {
         ctxMenu.style.display = "none"
       },300)
 
-      if(!merge.state){  // Merge comes from another file
+      if(!move.state){  // Merge comes from another file
         document.querySelector('.full-view').style.opacity = 0
         setTimeout(()=>{
           document.querySelector('.full-view').style.display = "none"
           fv.off()
         },300)
       } else {
-        document.querySelector('#merge-bg').style.opacity = 0
+        document.querySelector('#move-bg').style.opacity = 0
         setTimeout(()=>{
-          document.querySelector('#merge-bg').style.display = "none"
-          merge.state = false
-          merge.off()
+          document.querySelector('#move-bg').style.display = "none"
+          move.state = false
+          move.off()
         },150)
       }
     }
