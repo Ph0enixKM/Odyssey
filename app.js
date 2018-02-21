@@ -6,7 +6,8 @@ let win
 
 
 app.on("ready", ()=>{
-  win = new BrowserWindow({width: 1620, height: 1080, frame:false, show:false});
+  const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize
+  win = new BrowserWindow({width, height, frame:false, show:false});
   // win.toggleDevTools();
   win.setMenu(null);
   win.loadURL("file://"+__dirname+"/public/index.html");

@@ -260,37 +260,33 @@ function fadeAll() {
 
 function addStyle() {
 
-  var iStyle = textField.contentDocument.createElement("style");
-  textField.contentDocument.head.appendChild(iStyle);
-  var iStyleVal = document.createTextNode(`
-    *::selection{
-      /*
-      background-color: rgba(0,0,0,0.3);
-      color: #eee;
-      */
-      background-color: rgba(255,150,0,0.3);
-      color: #eee;
-    }
-    *:not(font):not(b):not(u):not(i):not(div):not(span){
-      color: #ccc;
-      font-family: Lato;
-    }
-    @page {
-      size: auto;
-    }
-    html{
-      overflow: hidden;
-      word-wrap: break-word;
-      height: 100%;
-    }
+  textField.contentDocument.head.innerHTML = `
 
-    @font-face{
-      font-family: Lato;
-      src: url("arts/lato.ttf");
-    }
-
-    `);
-  iStyle.appendChild(iStyleVal);
+    <style>
+      *::selection{
+        /*
+        background-color: rgba(0,0,0,0.3);
+        color: #eee;
+        */
+        background-color: rgba(255,150,0,0.3);
+        color: #eee;
+      }
+      *:not(font):not(b):not(u):not(i):not(div):not(span){
+        color: #ccc;
+        font-family: Lato;
+      }
+      @font-face{
+        font-family: Lato;
+        src: url("lato.ttf");
+      }
+      html{
+        overflow: hidden;
+        word-wrap: break-word;
+        height: 100%;
+      }
+    </style>
+    <link href="bin/toolbar.css" rel="stylesheet">
+    `
 }
 
 
@@ -803,10 +799,18 @@ function caretSize() {
         space = 12
         fontSizes.value = 1;
         break;
+        default:
+        space = 18
+        fontSizes.value = 3;
+        break;
       }
+      // console.log((selEl.parentElement.tagName == "FONT") ? selEl.parentElement.face : "Lato");
+      fonts.value = (selEl.face != "") ? selEl.face : (selEl.parentElement.tagName == "FONT") ? selEl.parentElement.face : "Lato"
+      console.log(fonts.value);
     } else {
       space = 18
       fontSizes.value = 3;
+      fonts.value = "Lato"
     }
   } catch (e) {
     //Do not do anything

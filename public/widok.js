@@ -189,6 +189,7 @@ move.btn.addEventListener("click",()=>{ //When you click on BTN
 })
 move.cancel.addEventListener("mousedown", e =>{ //When you click on BG
   e.stopPropagation()
+  clearInterval(moveModule.loop)
   move.bg.style.opacity = 0
   setTimeout(()=>{
     move.bg.style.display = "none"
