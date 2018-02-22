@@ -1,15 +1,20 @@
 let qs = document.querySelectorAll.bind(document)
 
 //Setting up Tippy.js:
-tippy('[title]',{
+tippy('[title]:not(disabled)',{
   placement : "bottom",
   animation : "shift-toward" ,
   arrow : true,
   arrowType : "sharp",
   inertia : true
 })
-
-
+tippy('disabled[title]',{
+  placement : "left",
+  animation : "shift-toward",
+  arrow : true,
+  arrowType : "sharp",
+  inertia : true
+})
 
 // SHORTCUT SECTION
 let shortcut = qs("#shortcut")[0]
@@ -139,6 +144,9 @@ fv.on = ()=>{
         this.sel = true
         fv.sel.push(this)
         this.id = fv.sel.length -1
+        fv.sel.sort((a,b)=>{ // Order all the selections
+          return a.index - b.index
+        })
       }
     })
 
@@ -168,6 +176,7 @@ let move = {
   bg : qs("#move-bg")[0],
   canvas : qs("canvas#move")[0],
   docs : qs('#move-docs')[0],
+  docsList : function() {return this.docs.childNodes},
   ok : qs("#move-tools #ok")[0],
   cancel : qs("#move-tools #cancel")[0],
   on : new Function(),
@@ -178,14 +187,19 @@ let move = {
   loc : {x: 0, y: 0}
 }
 
+
 move.btn.addEventListener("click",()=>{ //When you click on BTN
-  move.bg.style.opacity = 0
-  move.bg.style.display = "inline-block"
-  setTimeout(()=>{
-    move.bg.style.opacity = 1
-    move.state = true //Turn on first this layer
-    move.on()
-  },150)
+  if (!move.btn.getAttribute("disabled")) {
+    move.bg.style.opacity = 0
+    move.bg.style.display = "inline-block"
+    setTimeout(()=>{
+      move.bg.style.opacity = 1
+      move.state = true //Turn on first this layer
+      move.on()
+    },150)
+  } else {
+
+  }
 })
 move.cancel.addEventListener("mousedown", e =>{ //When you click on BG
   e.stopPropagation()

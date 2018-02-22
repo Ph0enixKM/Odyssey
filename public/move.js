@@ -1,7 +1,8 @@
 
 let loop
 let construct = () => {
-
+  //Update the list of documents
+  move.docsList = move.docs.childNodes
   /////// CANVAS
   let can = move.canvas
   let c = can.getContext("2d")
@@ -11,11 +12,11 @@ let construct = () => {
 
   let row = 0
   let column = 0
-  for(data of move.docs.childNodes) {
+  for(data of move.docsList) {
     if(data.tagName){
       //Poukadaj
       data.style.left = column*200 + "px"
-      data.style.top = (row*300)+30 + "px"
+      data.style.top = (row*400)+30 + "px"
       column++
       if(data.offsetLeft > move.bg.offsetWidth-400){
         row++
@@ -29,7 +30,7 @@ let construct = () => {
 
     //Update Docs
     let docs
-    docs = Array.from(move.docs.childNodes)
+    docs = Array.from(move.docsList)
     docs = docs.filter(item =>{
       if(item.tagName) return item
     })
@@ -43,7 +44,7 @@ let construct = () => {
     c.filter = "blur(1px)"
     c.clearRect(0,0,can.width,can.height)
     c.beginPath()
-    if (move.docs.childNodes.length > 1) { //If actually there is something
+    if (move.docsList.length > 1) { //If actually there is something
 
       let prev = null
       let first = [[],[]]
@@ -57,7 +58,12 @@ let construct = () => {
           c.bezierCurveTo(prev.offsetLeft+prev.offsetWidth,prev.offsetTop+prev.offsetHeight/2,
             doc.offsetLeft-doc.offsetWidth,doc.offsetTop+doc.offsetHeight/2,
             doc.offsetLeft+doc.offsetWidth/2,doc.offsetTop+doc.offsetHeight/2)
-
+            c.strokeStyle = 'orange'
+            c.lineWidth = 3
+            c.lineCap = 'round'
+            c.stroke()
+            c.filter = "blur(0px)"
+            // TODO: Zrob coś z tym blurem :D
         }
         prev = doc
 
@@ -68,60 +74,41 @@ let construct = () => {
         first[0].push(Math.sqrt( Math.pow(doc.offsetTop,2) + Math.pow(doc.offsetLeft,2) ) )
         first[1].push(doc)
       }
-        matrixDocs = docs
-        // console.log(matrixDocs);
-        let firstIndex = first[0].indexOf(Math.min(...first[0]))
-        first = first[1][firstIndex] //Take first el closest
-        vectors.push(first)
-        matrixDocs.splice(firstIndex,1)
-        console.log(matrixDocs);
 
-        //Add the smallest
-        for (d of matrixDocs) {
-
-          //Create Vector
-          for (doc of matrixDocs) {
-
-            let last = Math.sqrt(
-              Math.pow(vectors[vectors.length-1].offsetTop,2) +
-              Math.pow(vectors[vectors.length-1].offsetLeft,2)
-            )
-            let cur = Math.sqrt(
-              Math.pow(doc.offsetTop,2) +
-              Math.pow(doc.offsetLeft,2)
-            )
-            let difference = Math.abs( last - cur )
-
-            if (difference != 0)
-              vecList.push(difference)
-          }
-
-          vectors.push(matrixDocs[vecList.indexOf(Math.min(...vecList))])
-          matrixDocs.splice(vecList.indexOf(Math.min(...vecList)),1)
+        matrixDocs = []
+        for (el of docs){
+          matrixDocs.push({
+            el,
+            val : [el.offsetLeft, el.offsetTop]
+          })
         }
-        //Reindexing:
-        console.log(vectors);
-        move.docs.childNodes = vectors
 
+        let xVec = matrixDocs.map(obj=>{
+          return obj.val
+        })
 
+        let xEl = matrixDocs.map(obj=>{
+          return obj.el
+        })
 
+        xVec = xVec.map(item=>{
+          return Math.sqrt(
+            Math.pow(item[0],2) +
+            Math.pow(item[1],2)
+          )
+        })
 
+        while(xEl.length > 0){
+          let minimum = xVec.indexOf(Math.min(...xVec))
+          vectors.push(xEl[minimum])
+          xVec.splice(minimum,1)
+          xEl.splice(minimum,1)
+        }
 
-
-
-
-
-
-
-
-      // TODO: Do that ^ only if the element is an article
+        move.docsList = vectors
+        // TODO: napraw mechanikę, bo jednak nie działa
     }
-    c.strokeStyle = 'orange'
-    c.lineWidth = 3
-    c.lineCap = 'round'
-    c.stroke()
-    c.filter = "blur(0px)"
-    // TODO: Zrob coś z tym blurem :D
+
 
   },16)
 
@@ -129,7 +116,7 @@ let construct = () => {
 }
 
 let calculate = () => {
-  if (move.docs.childNodes.length > 1) { //If actually there is something
+  if (move.docsList.length > 1) { //If actually there is something
     let prev = null
     for(doc of docs){
       if(prev != null){
