@@ -1,3 +1,8 @@
+let cls = ()=>{
+  clearInterval(loop)
+
+}
+
 
 let loop
 let construct = () => {
@@ -27,7 +32,6 @@ let construct = () => {
 
 
   loop = setInterval(()=>{
-
     //Update Docs
     let docs
     docs = Array.from(move.docsList)
@@ -44,12 +48,11 @@ let construct = () => {
     c.filter = "blur(1px)"
     c.clearRect(0,0,can.width,can.height)
     c.beginPath()
-    if (move.docsList.length > 1) { //If actually there is something
+    if (move.docsList.length > 1) { //If actually there is something to connect
 
       let prev = null
       let first = [[],[]]
       let vectors = []
-      let vecList = []
 
       for(doc of docs){
         if(prev != null){
@@ -68,12 +71,15 @@ let construct = () => {
         prev = doc
 
 
+
         //// CALCULATIONS:
 
         //First Element:
         first[0].push(Math.sqrt( Math.pow(doc.offsetTop,2) + Math.pow(doc.offsetLeft,2) ) )
         first[1].push(doc)
       }
+      if (input.LMBReleased == true){
+        input.LMBReleased = !input.LMBReleased
 
         matrixDocs = []
         for (el of docs){
@@ -106,30 +112,30 @@ let construct = () => {
         }
 
         move.docsList = vectors
+
+        console.log(fv.s);
+        for(s of fv.sel){
+          if(s.index) console.log(s.index);
+          break
+        }
+
         // TODO: napraw mechanikę, bo jednak nie działa
+      }
     }
-
-
   },16)
 
 
 }
 
-let calculate = () => {
-  if (move.docsList.length > 1) { //If actually there is something
-    let prev = null
-    for(doc of docs){
-      if(prev != null){
-        p
-      }
-      prev = doc
-
-    }
-  }
+let apply = () => {
+  docs.splice(vectors,vectors.length,...vectors)
 }
+
+
 
 module.exports = {
   construct,
-  calculate,
-  loop
+  apply,
+  loop,
+  cls : new Function()
 }

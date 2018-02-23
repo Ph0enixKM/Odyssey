@@ -137,7 +137,7 @@ fv.on = ()=>{
         // this.style.borderRadius = "0px"
         this.style.boxShadow = "none"
         this.sel = false
-        fv.sel[this.id] = undefined
+        fv.sel.splice(this.id,1)//[this.id] = undefined
       } else {
         // this.style.borderRadius = "20px"
         this.style.boxShadow = "0 0 5px orange inset, 0 0 20px orange"
@@ -147,6 +147,7 @@ fv.on = ()=>{
         fv.sel.sort((a,b)=>{ // Order all the selections
           return a.index - b.index
         })
+        //TODO: When you spam those two, you get a BUG
       }
     })
 
@@ -189,7 +190,7 @@ let move = {
 
 
 move.btn.addEventListener("click",()=>{ //When you click on BTN
-  if (!move.btn.getAttribute("disabled")) {
+  if (move.btn.getAttribute("disabled") != "true") {
     move.bg.style.opacity = 0
     move.bg.style.display = "inline-block"
     setTimeout(()=>{
@@ -221,6 +222,11 @@ move.bg.addEventListener("mouseup", e =>{ //When you click on BG
 move.on = ()=>{
   fv.bg.style.overflowY = "hidden"  //Unanabling scrolling previous layer
   let index = 1
+
+  fv.sel = fv.sel.map(doc=>{
+    if(doc != undefined) return doc
+  })
+
   for (data of fv.sel){
     if (data != undefined) {
       let doc = document.createElement("article")
@@ -281,4 +287,5 @@ move.off = ()=> {
   move.docs.innerHTML = ""
   clearInterval(move.move)
   fv.bg.style.overflowY = "scroll"
+  moveModule.cls()
 }
