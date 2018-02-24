@@ -1,3 +1,4 @@
-node_modules
-Odyssey-win32-x64
-notImportant
+node_modules/
+Odyssey-win32-x64.rar
+Odyssey-win32-x64/
+notImportant/
