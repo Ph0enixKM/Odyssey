@@ -2,10 +2,12 @@ let input = {
   keydown : new Function(),
   keyup : new Function(),
   shift : false,
-  v : false
+  v : false,
+  move : { LMBRelease : false },
 }
 
 
+move.docs.addEventListener("mouseup", () => { input.move.LMBRelease = true })
 window.addEventListener("keydown", e =>{ input.keydown(e) })
 window.addEventListener("keyup", e =>{ input.keyup(e) })
 

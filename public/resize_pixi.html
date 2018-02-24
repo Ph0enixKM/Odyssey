@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>pixi</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.5.1/pixi.min.js"></script>
+  </head>
+  <body>
+    <script>
+      var size = [1920, 1080];
+      var ratio = size[0] / size[1];
+      var stage = new PIXI.Stage(0x333333, true);
+      var renderer = PIXI.autoDetectRenderer(size[0], size[1], {
+        // transparent : true,
+        autoResize : true,
+        antialias : true
+      });
+      document.body.appendChild(renderer.view);
+
+
+      // var stage = new PIXI.Container();
+      // PIXI.loader
+      //   .add('arts/logo.png')
+      //   .load(setup)
+      //
+      // var rat;
+      //
+      // function setup() {
+      //   rat = new PIXI.Sprite(
+      //     PIXI.loader.resources["arts/logo.png"].texture
+      //   )
+      //   stage.addChild(rat)
+      //   renderer.render(stage)
+      // }
+
+
+      // window.addEventListener("click",()=>{ renderer.resize(500,500) /*renderer.view.width = 500 ; renderer.view.height = 500*/;  rat.sprite.width = 500})
+      // window.addEventListener("click",()=>{ renderer.resize(500,500) ;rat.scale.set(1,1);renderer.render(stage) })
+
+       n = new PIXI.Graphics()
+       n.lineStyle(3,0xffaa00, 1)
+      n.moveTo(100,100)
+      n.bezierCurveTo(125,225,425,125,600,600)
+      stage.addChild(n)
+
+//       let rectangle = new PIXI.Graphics();
+// rectangle.lineStyle(4, 0xFF3300, 1);
+// rectangle.beginFill(0x66CCFF);
+// rectangle.drawRect(0, 0, 64, 64);
+// rectangle.endFill();
+// rectangle.x = 170;
+// rectangle.y = 170;
+// stage.addChild(rectangle);
+
+
+  renderer.render(stage)
+
+  renderer.resize(500,500)
+  renderer.render(stage)
+        // var texture = new PIXI.RenderTexture();
+        // r1 = new PIXI.Graphics();
+        // r1.beginFill(0x00ffff);
+        // r1.drawRect(0, 0, 100, 100);
+        // r1.endFill();
+        // texture.render(r1);
+        // var block = new PIXI.Sprite(texture);
+        // block.position.x = 100;
+        // block.position.y = 100;
+        // block.anchor.x = .5;
+        // block.anchor.y = .5;
+        // stage.addChild(block);
+        // requestAnimFrame(animate);
+      //   resize();
+      //   // function animate() {
+      //   //   requestAnimFrame(animate);
+      //   //   block.rotation += .01;
+      //   //   renderer.render(stage);
+      //   // }
+      // function resize() {
+      //   if (window.innerWidth / window.innerHeight >= ratio) {
+      //       var w = window.innerHeight * ratio;
+      //       var h = window.innerHeight;
+      //   } else {
+      //       var w = window.innerWidth;
+      //       var h = window.innerWidth / ratio;
+      //   }
+      //   renderer.view.style.width = w + 'px';
+      //   renderer.view.style.height = h + 'px';
+      // }
+      // window.onresize = resize;
+    </script>
+  </body>
+</html>

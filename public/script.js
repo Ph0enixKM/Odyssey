@@ -5,6 +5,7 @@ menu, scrolling, lastFont;
 
 //Require Electron
 const { remote } = require('electron');
+const PIXI = require('pixi.js');
 
 var sbPages, sbWords, sbLetters;
 

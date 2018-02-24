@@ -99,6 +99,7 @@ fv.tools.childNodes[3].addEventListener("click",()=>{ //Delete Button
 
 //View Turned on
 fv.on = ()=>{
+
   fv.pages = (pages.length == 0) ? [""] : pages
   fv.pages = fv.pages.map( data =>{
     return (data == null) ? data :
@@ -136,17 +137,14 @@ fv.on = ()=>{
       if (this.sel) {
         // this.style.borderRadius = "0px"
         this.style.boxShadow = "none"
-        this.sel = false
         fv.sel[this.id] = undefined
+        this.sel = false
       } else {
         // this.style.borderRadius = "20px"
         this.style.boxShadow = "0 0 5px orange inset, 0 0 20px orange"
-        this.sel = true
         fv.sel.push(this)
         this.id = fv.sel.length -1
-        fv.sel.sort((a,b)=>{ // Order all the selections
-          return a.index - b.index
-        })
+        this.sel = true
       }
     })
 
@@ -189,7 +187,7 @@ let move = {
 
 
 move.btn.addEventListener("click",()=>{ //When you click on BTN
-  if (!move.btn.getAttribute("disabled")) {
+  if (move.btn.getAttribute("disabled") == "false") {
     move.bg.style.opacity = 0
     move.bg.style.display = "inline-block"
     setTimeout(()=>{
@@ -219,6 +217,9 @@ move.bg.addEventListener("mouseup", e =>{ //When you click on BG
 
 
 move.on = ()=>{
+  fv.sel.sort((a,b)=>{ // Order all the selections
+    return a.index - b.index
+  })
   fv.bg.style.overflowY = "hidden"  //Unanabling scrolling previous layer
   let index = 1
   for (data of fv.sel){
@@ -270,7 +271,7 @@ move.on = ()=>{
   move.move = setInterval(()=>{ //Move Interval Function
     if (move.sel != undefined) {
       move.sel.style.top = parseInt(move.sel.style.top) + (move.loc.y - move.sel.offsetTop)-(move.sel.offsetHeight/2-move.bg.scrollTop) + "px"
-      move.sel.style.left = parseInt(move.sel.style.left) + (move.loc.x - move.sel.offsetLeft)-(move.sel.offsetWidth/2) + "px"
+      move.sel.style.left = parseInt(move.sel.style.left) + (move.loc.x - move.sel.offsetLeft)-(move.sel.offsetWidth/2-move.bg.scrollLeft) + "px"
     }
   },16)
   moveModule.construct()
@@ -281,4 +282,9 @@ move.off = ()=> {
   move.docs.innerHTML = ""
   clearInterval(move.move)
   fv.bg.style.overflowY = "scroll"
+  fv.sel.sort((a,b)=>{ // Order all the selections
+    return a.index - b.index
+  })
+  fv.off()
+  fv.on()
 }

@@ -27,6 +27,7 @@
   "homepage": "https://github.com/Ph0enixKM/Odyssey#readme",
   "dependencies": {
     "electron": "^1.7.12",
-    "electron-packager": "^10.1.2"
+    "electron-packager": "^10.1.2",
+    "pixi.js": "^4.7.0"
   }
 }
