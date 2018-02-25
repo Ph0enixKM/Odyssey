@@ -2,8 +2,8 @@
 let loop
 let construct = () => {
 
-  PIXI.utils.sayHello();
-  const renderer = PIXI.autoDetectRenderer()
+  // PIXI.utils.sayHello();
+  // const renderer = PIXI.autoDetectRenderer()
 
   //Update the list of documents
   move.docsList = move.docs.childNodes
@@ -27,14 +27,14 @@ let construct = () => {
   }
 
   //Update Docs
-  let docs
-  docs = Array.from(move.docsList)
-  docs = docs.filter(item =>{
-    if(item.tagName) return item
-  })
 
   loop = setInterval(()=>{
 
+    let docs
+    docs = Array.from(move.docsList)
+    docs = docs.filter(item =>{
+      if(item.tagName) return item
+    })
 
     // Change canvas size
     can.height = move.bg.scrollHeight
@@ -98,7 +98,6 @@ let construct = () => {
         move.docsList = vectors
 
         //Update Docs
-        let docs
         docs = Array.from(move.docsList)
         docs = docs.filter(item =>{
           if(item.tagName) return item
