@@ -56,8 +56,19 @@
   renderer.render(stage)
 
   renderer.resize(500,500)
-  
+
   renderer.render(stage)
+
+let x = 600
+  setInterval(()=>{
+    x++
+    n.clear()
+    n.lineStyle(3,0xffaa00, 1)
+   n.moveTo(100,100)
+   n.bezierCurveTo(125,225,425,125,600,x)
+   renderer.render(stage)
+
+ },16)
         // var texture = new PIXI.RenderTexture();
         // r1 = new PIXI.Graphics();
         // r1.beginFill(0x00ffff);

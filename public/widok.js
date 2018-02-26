@@ -163,16 +163,13 @@ fv.off = ()=>{
 
 
 
-
-
-
 // MOVE SECTION
 const moveModule = require("./move.js")
 
 let move = {
   btn : qs("#move-btn")[0],
   bg : qs("#move-bg")[0],
-  canvas : qs("canvas#move")[0],
+  canvas : new Function(),
   docs : qs('#move-docs')[0],
   docsList : function() {return this.docs.childNodes},
   ok : qs("#move-tools #ok")[0],
@@ -184,6 +181,16 @@ let move = {
   move : setInterval(()=>{},1000),
   loc : {x: 0, y: 0}
 }
+
+move.canvas = new PIXI.Application(0,0,{
+  antialias : true,
+  autoResize : true,
+  transparent : true
+})
+move.bg.appendChild(move.canvas.view)
+move.canvas.view.id = "move"
+move.canvas.renderer.plugins.interaction.autoPreventDefault = false
+move.canvas.view.style['touch-action'] = 'auto';
 
 
 move.btn.addEventListener("click",()=>{ //When you click on BTN
@@ -275,6 +282,7 @@ move.on = ()=>{
     }
   },16)
   moveModule.construct()
+  move.canvas.renderer.resize(move.bg.offsetWidth,move.bg.offsetHeight)
 }
 
 move.off = ()=> {

@@ -2,18 +2,42 @@
 let loop
 let construct = () => {
 
-  // PIXI.utils.sayHello();
-  // const renderer = PIXI.autoDetectRenderer()
-
   //Update the list of documents
   move.docsList = move.docs.childNodes
+
+  /**
+    @param { move.canvas } PIXI.Application
+  */
+
+  //Fetch docs
+  let docs
+  docs = Array.from(move.docsList)
+  docs = docs.filter(item =>{
+    if(item.tagName) return item
+  })
+
+
   /////// CANVAS
-  let can = move.canvas
-  let c = can.getContext("2d")
 
-  let res = [move.bg.width,move.bg.scrollHeight]
+  //Bezier Curve Class Model
+  class BezierCurve {
+    constructor() {
+      this.self = new PIXI.Graphics()
+      move.canvas.stage.addChild(this.self)
+      return this.self
+    }
+  }
 
+  //Initialising bezierCurves
+  let curves = []
+  for (d of docs) {
+    if(docs.indexOf(d) == 0) continue
+    curves.push( new BezierCurve() )
+  }
 
+  console.log(curves);
+
+  // Docs Initialisation
   let row = 0
   let offset = false
   for(data of move.docsList) {
@@ -29,21 +53,16 @@ let construct = () => {
   //Update Docs
 
   loop = setInterval(()=>{
+    move.canvas.view.style.top = move.bg.scrollTop+"px"
 
-    let docs
+
+    //Update
     docs = Array.from(move.docsList)
     docs = docs.filter(item =>{
       if(item.tagName) return item
     })
 
-    // Change canvas size
-    can.height = move.bg.scrollHeight
-    can.width = move.bg.scrollWidth
 
-    res = [can.width,can.height]
-
-    c.filter = "blur(1px)"
-    c.clearRect(0,0,can.width,can.height)
     if (move.docsList.length > 1) { //If actually there is something
 
       let prev = null
@@ -53,15 +72,27 @@ let construct = () => {
       for(doc of docs){
         if(prev != null){
           //Lippy and Messy
-          c.moveTo(prev.offsetLeft+prev.offsetWidth/2,prev.offsetTop+prev.offsetHeight/2)
-          c.bezierCurveTo(prev.offsetLeft+prev.offsetWidth/2,(prev.offsetTop+prev.offsetHeight+doc.offsetTop-doc.offsetHeight)/2+(prev.offsetHeight/2),
-            doc.offsetLeft+doc.offsetWidth/2,(prev.offsetTop+prev.offsetHeight+doc.offsetTop-doc.offsetHeight)/2+(prev.offsetHeight/2),
-            doc.offsetLeft+doc.offsetWidth/2,doc.offsetTop+doc.offsetHeight/2)
-            c.strokeStyle = 'orange'
-            c.lineWidth = 3
-            c.lineCap = 'round'
-            c.stroke()
-            c.filter = "blur(0px)"
+          curves[docs.indexOf(doc)-1].clear()
+          curves[docs.indexOf(doc)-1].lineStyle(3,0xffaa00,1)
+          curves[docs.indexOf(doc)-1].moveTo(
+            prev.offsetLeft+prev.offsetWidth/2,
+            prev.offsetTop+prev.offsetHeight/2-move.bg.scrollTop)
+          curves[docs.indexOf(doc)-1].bezierCurveTo(
+            prev.offsetLeft+prev.offsetWidth/2,
+            (prev.offsetTop+prev.offsetHeight+doc.offsetTop-doc.offsetHeight)/2+
+            (prev.offsetHeight/2-move.bg.scrollTop),
+            doc.offsetLeft+doc.offsetWidth/2,
+            (prev.offsetTop+prev.offsetHeight+doc.offsetTop-doc.offsetHeight)/2+
+            (prev.offsetHeight/2-move.bg.scrollTop),
+            doc.offsetLeft+doc.offsetWidth/2,
+            doc.offsetTop+doc.offsetHeight/2-move.bg.scrollTop)
+
+            // c.strokeStyle = 'orange'
+            // c.lineWidth = 3
+            // c.lineCap = 'round'
+            // c.stroke()
+            // c.filter = "blur(0px)"
+          move.canvas.renderer.render(move.canvas.stage)
 
             // Bezier Curve Helpers
             // c.fillRect(prev.offsetLeft+prev.offsetWidth/2,(prev.offsetTop+prev.offsetHeight+doc.offsetTop-doc.offsetHeight)/2+(prev.offsetHeight/2),10,10)
