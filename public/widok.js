@@ -8,7 +8,7 @@ tippy('[title]:not(disabled)',{
   arrowType : "sharp",
   inertia : true
 })
-tippy('disabled[title]',{
+tippy('disabled',{
   placement : "left",
   animation : "shift-toward",
   arrow : true,
@@ -39,6 +39,7 @@ let shortcutOff = ()=>{
 // FULL VIEW SECTION
 let fv = {
   btn : qs("#full-view")[0],
+  btnBlocker : qs("disabled#move")[0],
   bg : qs(".full-view")[0],
   docs : qs(".full-view .docs")[0],
   tools : qs(".fv-tools")[0],
@@ -69,7 +70,7 @@ fv.tools.addEventListener("click",e => e.stopPropagation()) //Prevent toolbar fr
 
 fv.tools.childNodes[3].addEventListener("click",()=>{ //Delete Button
   for (data of fv.sel) {
-    if (data != undefined) {
+    if (data !== undefined) {
       data.style.transform = "translate(0,-50px)"
       data.style.opacity = 0
       data.style.backgroundColor = "#933"
@@ -84,7 +85,7 @@ fv.tools.childNodes[3].addEventListener("click",()=>{ //Delete Button
   setTimeout(()=>{
 
   for (let i = 0; i < pages.length; i++) {
-    if (pages[i] == null){
+    if (pages[i] === null){
       pages.splice(i,1)
       i = 0
     }
@@ -135,7 +136,7 @@ fv.on = ()=>{
 
     });
     doc.addEventListener("contextmenu",function(){ // Right mouse button
-      if (this.sel) {
+      if (this.sel) { // Select page
         // this.style.borderRadius = "0px"
         this.style.boxShadow = "none"
         fv.sel[this.id] = undefined
@@ -143,10 +144,43 @@ fv.on = ()=>{
       } else {
         // this.style.borderRadius = "20px"
         this.style.boxShadow = "0 0 5px orange inset, 0 0 20px orange"
+        this.id = fv.sel.length
         fv.sel.push(this)
-        this.id = fv.sel.length -1
         this.sel = true
       }
+
+
+      let sortedSel = fv.sel.slice() //Clone Array
+      sortedSel.sort((a,b)=>{ return a.index - b.index })
+      filteredSel = sortedSel.filter(d =>{ if(d != undefined) return d})
+
+      if (filteredSel.length > 0) {
+
+        //Check whether you can open Chain Editor
+
+        for (sel of sortedSel) {
+          if(sel !== undefined){
+            if(sortedSel[sortedSel.indexOf(sel)+1] !== undefined){ // If it is not the last item
+              console.log("passed");
+              if(sel.index == sortedSel[sortedSel.indexOf(sel)+1].index -1){
+                fv.btnBlocker.setAttribute("disabled",false)
+              } else {
+                fv.btnBlocker.setAttribute("disabled",true)
+                break
+              }
+
+            } else {
+              if (filteredSel.length == 1) {
+                fv.btnBlocker.setAttribute("disabled",true)
+                break
+              }
+            }
+          }
+        }
+      } else {
+        fv.btnBlocker.setAttribute("disabled",true)
+      }
+
     })
 
     fv.docs.appendChild(doc);
@@ -234,7 +268,7 @@ move.ok.addEventListener("mousedown", e =>{ //When you click on OK
       tempPages[Array.from(move.docsList).indexOf(item)] = pages[item.index-1]
     }
   }
-  
+
   for (key in tempPages)
     pages[key] = tempPages[key]
 

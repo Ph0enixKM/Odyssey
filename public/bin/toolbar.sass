@@ -310,10 +310,13 @@ canvas#move
         background-image: url('../arts/chain.png')
         background-size: cover
         background-position: center
-        &[disabled="true"]
-          filter: brightness(0.3)
         &:hover
           background-color: #333
+
+disabled[disabled="true"]
+  filter: brightness(0.3)
+disabled[disabled="false"]
+  filter: brightness(1)
 #move-bg
   display: none
   width: 100%
