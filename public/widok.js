@@ -110,6 +110,7 @@ fv.on = ()=>{
     //Create Elements
     let doc = document.createElement("article")
     doc.className = "doc"
+    doc.setAttribute("index",index)
     doc.innerHTML = `
       ${ (data == undefined || data.length <= 1) ? "<emp>(pusta strona)</emp>" : data }
     <br><br>
@@ -179,7 +180,9 @@ let move = {
   state : false,
   sel : undefined,
   move : setInterval(()=>{},1000),
-  loc : {x: 0, y: 0}
+  loc : {x: 0, y: 0},
+  curves : [],
+  loop : setInterval(()=>{},1000)
 }
 
 move.canvas = new PIXI.Application(0,0,{
@@ -206,9 +209,8 @@ move.btn.addEventListener("click",()=>{ //When you click on BTN
 
   }
 })
-move.cancel.addEventListener("mousedown", e =>{ //When you click on BG
+move.cancel.addEventListener("mousedown", e =>{ //When you click on CANCEL
   e.stopPropagation()
-  clearInterval(moveModule.loop)
   move.bg.style.opacity = 0
   setTimeout(()=>{
     move.bg.style.display = "none"
@@ -221,18 +223,43 @@ move.bg.addEventListener("mouseup", e =>{ //When you click on BG
   if(move.sel != undefined) move.sel.style.zIndex = "17"
   move.sel = undefined
 })
+move.ok.addEventListener("mousedown", e =>{ //When you click on OK
+  e.stopPropagation()
 
+  //Modify Pages
+  let tempPages = {}
+  for (item of Array.from(move.docsList)) {
+    if(item.tagName){
+      tempPages[Array.from(move.docsList).indexOf(item)] = item.index-1
+      tempPages[Array.from(move.docsList).indexOf(item)] = pages[item.index-1]
+    }
+  }
+  
+  for (key in tempPages)
+    pages[key] = tempPages[key]
+
+
+  curPage = 0
+  textField.contentDocument.body.innerHTML = (pages[curPage] == undefined) ? "" : pages[curPage];
+
+  move.bg.style.opacity = 0
+  setTimeout(()=>{
+    move.bg.style.display = "none"
+    move.state = false //Turn off first this layer
+    move.off()
+  },150)
+})
 
 move.on = ()=>{
   fv.sel.sort((a,b)=>{ // Order all the selections
     return a.index - b.index
   })
   fv.bg.style.overflowY = "hidden"  //Unanabling scrolling previous layer
-  let index = 1
   for (data of fv.sel){
     if (data != undefined) {
       let doc = document.createElement("article")
       doc.className = "doc-move"
+      doc.index = data.index
       doc.innerHTML = `
         ${ (data.childNodes[0].textContent == undefined ||
            data.childNodes[0].textContent.trim().length <= 1) ?
@@ -244,7 +271,7 @@ move.on = ()=>{
         left: 50%;
         transform: translate(-50%,-50%);
         ">
-          ${index}
+          ${doc.index}
         </h1>
       `
       doc.center = {
@@ -269,9 +296,7 @@ move.on = ()=>{
         this.el.style.zIndex = "18"
       })
 
-      doc.index = index
       move.docs.appendChild(doc)
-      index++
     }
   }
   document.body.addEventListener("mousemove", e =>{move.loc = {x: e.pageX, y: e.pageY-30}})
@@ -289,10 +314,15 @@ move.off = ()=> {
   move.sel = undefined
   move.docs.innerHTML = ""
   clearInterval(move.move)
+  clearInterval(move.loop)
   fv.bg.style.overflowY = "scroll"
   fv.sel.sort((a,b)=>{ // Order all the selections
     return a.index - b.index
   })
+  for (c of move.curves) {
+    c.clear()
+  }
+  move.curves = []
   fv.off()
   fv.on()
 }

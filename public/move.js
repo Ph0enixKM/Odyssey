@@ -1,5 +1,4 @@
 
-let loop
 let construct = () => {
 
   //Update the list of documents
@@ -29,13 +28,12 @@ let construct = () => {
   }
 
   //Initialising bezierCurves
-  let curves = []
+  move.curves = []
   for (d of docs) {
     if(docs.indexOf(d) == 0) continue
-    curves.push( new BezierCurve() )
+    move.curves.push( new BezierCurve() )
   }
 
-  console.log(curves);
 
   // Docs Initialisation
   let row = 0
@@ -50,13 +48,10 @@ let construct = () => {
     }
   }
 
-  //Update Docs
-
-  loop = setInterval(()=>{
-    move.canvas.view.style.top = move.bg.scrollTop+"px"
 
 
-    //Update
+  move.loop = setInterval(()=>{
+    //Update Docs
     docs = Array.from(move.docsList)
     docs = docs.filter(item =>{
       if(item.tagName) return item
@@ -72,12 +67,12 @@ let construct = () => {
       for(doc of docs){
         if(prev != null){
           //Lippy and Messy
-          curves[docs.indexOf(doc)-1].clear()
-          curves[docs.indexOf(doc)-1].lineStyle(3,0xffaa00,1)
-          curves[docs.indexOf(doc)-1].moveTo(
+          move.curves[docs.indexOf(doc)-1].clear()
+          move.curves[docs.indexOf(doc)-1].lineStyle(3,0xffaa00,1)
+          move.curves[docs.indexOf(doc)-1].moveTo(
             prev.offsetLeft+prev.offsetWidth/2,
             prev.offsetTop+prev.offsetHeight/2-move.bg.scrollTop)
-          curves[docs.indexOf(doc)-1].bezierCurveTo(
+          move.curves[docs.indexOf(doc)-1].bezierCurveTo(
             prev.offsetLeft+prev.offsetWidth/2,
             (prev.offsetTop+prev.offsetHeight+doc.offsetTop-doc.offsetHeight)/2+
             (prev.offsetHeight/2-move.bg.scrollTop),
@@ -87,16 +82,10 @@ let construct = () => {
             doc.offsetLeft+doc.offsetWidth/2,
             doc.offsetTop+doc.offsetHeight/2-move.bg.scrollTop)
 
-            // c.strokeStyle = 'orange'
-            // c.lineWidth = 3
-            // c.lineCap = 'round'
-            // c.stroke()
-            // c.filter = "blur(0px)"
           move.canvas.renderer.render(move.canvas.stage)
 
-            // Bezier Curve Helpers
-            // c.fillRect(prev.offsetLeft+prev.offsetWidth/2,(prev.offsetTop+prev.offsetHeight+doc.offsetTop-doc.offsetHeight)/2+(prev.offsetHeight/2),10,10)
-            // c.fillRect(doc.offsetLeft+doc.offsetWidth/2,(prev.offsetTop+prev.offsetHeight+doc.offsetTop-doc.offsetHeight)/2+(prev.offsetHeight/2),10,10)
+          //Update
+          move.canvas.view.style.top = move.bg.scrollTop+"px"
         }
         prev = doc
       }
@@ -159,5 +148,4 @@ let calculate = () => {
 module.exports = {
   construct,
   calculate,
-  loop
 }
