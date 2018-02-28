@@ -260,18 +260,25 @@ move.bg.addEventListener("mouseup", e =>{ //When you click on BG
 move.ok.addEventListener("mousedown", e =>{ //When you click on OK
   e.stopPropagation()
 
-  //Modify Pages
-  let tempPages = {}
-  for (item of Array.from(move.docsList)) {
-    if(item.tagName){
-      tempPages[Array.from(move.docsList).indexOf(item)] = item.index-1
-      tempPages[Array.from(move.docsList).indexOf(item)] = pages[item.index-1]
-    }
-  }
+  let sorted = fv.sel.slice()
 
-  for (key in tempPages)
-    pages[key] = tempPages[key]
+  sorted = Array.from(sorted)
+  sorted.filter(item =>{
+    if(item.tagName) return item
+  })
 
+  sorted.sort((a,b)=>{
+    return a.index - b.index
+  })
+
+  sorted = sorted.map(item =>{
+    return item.index-1
+  })
+
+  pagesTemp = pages.slice()
+
+  for (var i = sorted[0]; i < sorted[sorted.length-1]+1; i++)
+    pages[i] = pagesTemp[Array.from(move.docsList)[i-sorted[0]].index-1]
 
   curPage = 0
   textField.contentDocument.body.innerHTML = (pages[curPage] == undefined) ? "" : pages[curPage];
