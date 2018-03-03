@@ -6,7 +6,16 @@ let win
 
 
 app.on("ready", ()=>{
-  const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize
+  let {width, height} = electron.screen.getPrimaryDisplay().workAreaSize
+
+  /**
+  * @param { width, height } TEMP
+  * Smallest is 1280x720 supported
+  */
+  // width = 1280
+  // height = 720
+
+
   win = new BrowserWindow({width, height, frame:false, show:false});
   // win.toggleDevTools();
   win.setMenu(null);

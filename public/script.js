@@ -7,6 +7,8 @@ menu, scrolling, lastFont;
 const { remote } = require('electron');
 const PIXI = require('pixi.js');
 
+let qs = document.querySelectorAll.bind(document)
+
 var sbPages, sbWords, sbLetters;
 
 var keys = {
@@ -100,6 +102,15 @@ function turnRight(){
       curPage++;
       textField.contentDocument.body.innerHTML = (pages[curPage] == undefined) ? "" : pages[curPage];
 
+      sbPages.innerHTML = curPage + 1;
+
+      sbWords.innerHTML = (textField.contentDocument.body.textContent.length == 1) ? 0 :
+        textField.contentDocument.body.textContent.split(" ").length;
+
+      sbLetters.innerHTML = textField.contentDocument.body.textContent.length -1;
+
+      console.log(sbLetters.innerHTML);
+
       //Logic Section
 
       setTimeout(function () {
@@ -147,11 +158,11 @@ left.addEventListener("click",turnLeft);
 right.addEventListener("click",turnRight);
 
 
-with(document){
-  sbPages = getElementsByClassName("pages")[0]
-  sbWords = getElementsByClassName("words")[0]
-  sbLetters = getElementsByClassName("letters")[0]
-}
+
+  sbPages = document.getElementsByClassName("pages")[0]
+  sbWords = document.getElementsByClassName("words")[0]
+  sbLetters = document.getElementsByClassName("letters")[0]
+
 
 
 
@@ -163,9 +174,9 @@ var cs = caret.style;
 space = 19;
 
 
-with (document.getElementsByClassName('iframe')[0]){
 
-  addEventListener("scroll",()=>{
+
+  document.getElementsByClassName('iframe')[0].addEventListener("scroll",()=>{
     cs.transition = "0ms";
 
     clearTimeout(scrolling);
@@ -176,7 +187,6 @@ with (document.getElementsByClassName('iframe')[0]){
 
   },false)
 
-}
 
 //Caret Key Mapping
 function mapKeys(dock){
@@ -213,14 +223,12 @@ textField.contentWindow.addEventListener("keydown",function(e){
 
 
 
-  with(textField.contentDocument.getElementsByTagName('body')[0]){
-    addEventListener("focus",function () {
+    textField.contentDocument.getElementsByTagName('body')[0].addEventListener("focus",function () {
       cs.transform = "translate(0,0) scale(1)";
     })
-    addEventListener("focusout",function () {
+    textField.contentDocument.getElementsByTagName('body')[0].addEventListener("focusout",function () {
       cs.transform = "translate(-10px,0) scale(0)";
     })
-  }
 
 
 
@@ -368,12 +376,20 @@ function menuF() {
     document.querySelector('#ctx-menu').innerText = "Narzędzia"
     document.querySelector('#view').style.display = "none"
     document.querySelector('#tools').style.display = "inline-block"
+    document.querySelector('#pages').style.display = "none"
   })
 
   ctxMenu.childNodes[3].addEventListener("click",()=>{
     document.querySelector('#ctx-menu').innerText = "Widok"
     document.querySelector('#view').style.display = "inline-block"
     document.querySelector('#tools').style.display = "none"
+    document.querySelector('#pages').style.display = "none"
+  })
+  ctxMenu.childNodes[5].addEventListener("click",()=>{
+    document.querySelector('#ctx-menu').innerText = "Strony"
+    document.querySelector('#view').style.display = "none"
+    document.querySelector('#tools').style.display = "none"
+    document.querySelector('#pages').style.display = "inline-block"
   })
 }
 
@@ -409,17 +425,13 @@ function init(){
 
     pages = [];
 
-    with (textField.contentDocument.body.style){
-
-      color = "#ccc";
-      fontFamily = "Lato";
-      margin = 0;
-      caretColor = "transparent";
-      width = "100%";
-      wordWrap = "break-word";
-      height = "auto";
-
-    }
+    textField.contentDocument.body.style.color = "#ccc";
+    textField.contentDocument.body.style.fontFamily = "Lato";
+    textField.contentDocument.body.style.margin = 0;
+    textField.contentDocument.body.style.caretColor = "transparent";
+    textField.contentDocument.body.style.width = "100%";
+    textField.contentDocument.body.style.wordWrap = "break-word";
+    textField.contentDocument.body.style.height = "auto";
 
 
     textField.style.position = "relative";
@@ -484,14 +496,13 @@ function bodyBugFix(){
       bodies[whileIter].remove();
       whileIter--;
     }
-    with(bodies[0]){
-      addEventListener("focus",function () {
-        cs.transform = "translate(0,0) scale(1)";
+
+      bodies[0].addEventListener("focus",function () {
+        bodies[0].cs.transform = "translate(0,0) scale(1)";
       })
-      addEventListener("focusout",function () {
-        cs.transform = "translate(-10px,0) scale(0)";
+      bodies[0].addEventListener("focusout",function () {
+        bodies[0].cs.transform = "translate(-10px,0) scale(0)";
       })
-    }
     addStyle();
   }
 }
@@ -510,49 +521,40 @@ function firstLetterFix() {
   //Just to show the wae to WYSIWYG editor
 
   if (textField.contentDocument.body.textContent == "") {
-    with(textField.contentDocument){
-      var bdy = getElementsByTagName('body')[0]
-      bdy.innerHTML = "&zwnj;"
-      var range = createRange();
-      range.setStart(body,1);
-      range.setEnd(body,1);
-      var selection = textField.contentWindow.getSelection();
-      selection.removeAllRanges();
-      selection.addRange(range);
-    }
+    var bdy = textField.contentDocument.getElementsByTagName('body')[0]
+    bdy.innerHTML = "&zwnj;"
+    var range = textField.contentDocument.createRange();
+    range.setStart(textField.contentDocument.body,1);
+    range.setEnd(textField.contentDocument.body,1);
+    var selection = textField.contentWindow.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
   }
 }
 
 function headChecker() {
-  with(textField.contentDocument){
     //Check if there are any heads inside
-    if (getElementsByTagName('head').length == 0) {
-      var head = createElement('head');
-      var html = getElementsByTagName('html')[0];
+    if (textField.contentDocument.getElementsByTagName('head').length == 0) {
+      var head = textField.contentDocument.createElement('head');
+      var html = textField.contentDocument.getElementsByTagName('html')[0];
       html.innerHTML = '<head></head>';
       addStyle();
       caretInit();
-      with (textField.contentDocument.body.style){
 
-        color = "#ccc";
-        fontFamily = "Lato";
-        margin = 0;
-        caretColor = "transparent";
-        width = "100%";
-        wordWrap = "break-word";
+        textField.contentDocument.body.style.color = "#ccc";
+        textField.contentDocument.body.style.fontFamily = "Lato";
+        textField.contentDocument.body.style.margin = 0;
+        textField.contentDocument.body.style.caretColor = "transparent";
+        textField.contentDocument.body.style.width = "100%";
+        textField.contentDocument.body.style.wordWrap = "break-word";
 
-      }
-      with(textField.contentDocument.body){
-        addEventListener("focus",function () {
+        textField.contentDocument.body.addEventListener("focus",function () {
           cs.transform = "translate(0,0) scale(1)";
         })
-        addEventListener("focusout",function () {
+        textField.contentDocument.body.addEventListener("focusout",function () {
           cs.transform = "translate(-10px,0) scale(0)";
         })
-      }
-
     }
-  }
 }
 
 function checkForFloatingDivs () {
@@ -590,7 +592,8 @@ setInterval(function () {
 
   firstLetterFix();
 
-  cs.top = (parseInt(cs.top) < 280  - bodyContent.scrollTop) ? 280 - bodyContent.scrollTop : cs.top - bodyContent.scrollTop;
+  //284 && 280
+  cs.top = (parseInt(cs.top) < 273  - bodyContent.scrollTop) ? 273 - bodyContent.scrollTop : cs.top - bodyContent.scrollTop;
 
   checkForFloatingDivs();
 
@@ -713,16 +716,13 @@ function restrictionsOptimal (wordSize){
   //Sprawdź, czy skończył poprawiać
   prevCheck = true;
   restOf = str.slice(str.length-wordSize,str.length) + restOf;
-  // textField.contentDocument.body.innerHTML = str.slice(0,-1); //TMP
   if(textField.contentDocument.body.lastChild.textContent == ""){
     //If the div is empty - delete it
     textField.contentDocument.body.lastChild.remove();
-    console.log("deleted"); //TMP
   } else {
     //Otherwise delete the last character
     textField.contentDocument.body.lastChild.textContent =
     textField.contentDocument.body.lastChild.textContent.slice(0,-wordSize);
-    console.log("removed"); //TMP
   }
   //textContent
 }
@@ -730,9 +730,14 @@ function restrictionsOptimal (wordSize){
 
 function restrictions() {
   str = textField.contentDocument.body.textContent;
+  let prevLetters = sbLetters
 
-  // 3 słowa na 1 pixel przypadają
-  if (textField.contentDocument.body.offsetHeight > 5000) {
+  // 3 słowa przypadają na 1 pixel
+  if (textField.contentDocument.body.offsetHeight > 25000) {
+    restrictionsOptimal(25000-1123);
+  } else if (textField.contentDocument.body.offsetHeight > 10000) {
+    restrictionsOptimal(10000-1123);
+  } else if (textField.contentDocument.body.offsetHeight > 5000) {
     restrictionsOptimal(5000-1123);
   } else if (textField.contentDocument.body.offsetHeight > 3000) {
     restrictionsOptimal(3000-1123);
@@ -743,22 +748,35 @@ function restrictions() {
   } else if (textField.contentDocument.body.offsetHeight > 1300) {
     restrictionsOptimal(1500-1123);
   } else if (textField.contentDocument.body.offsetHeight > 1170) {
-    restrictionsOptimal(5);
+    restrictionsOptimal(10);
   } else if (textField.contentDocument.body.offsetHeight > 1123) {
     restrictionsOptimal(1);
   }
-  else if(prevCheck) {
+  else if(prevCheck && !strony.invoked) {
     prevCheck = false;
     autosaveF();
     setTimeout(()=>{
 
       pages.splice(curPage+1,0,restOf);
-      console.log(restOf);
       restOf = ""
       turnRight();
     },100)
-
-
+  } else if (prevCheck && strony.invoked) {
+    prevCheck = false;
+    pages[curPage] = textField.contentDocument.body.innerHTML; //Autosave
+    pages.splice(curPage+1,0,restOf);
+    restOf = ""
+    //Turn Right
+    curPage++;
+    textField.contentDocument.body.innerHTML = (pages[curPage] == undefined) ? "" : pages[curPage];
+  } else {
+    if (strony.invoked) {
+      if (sbLetters == prevLetters) {
+        console.warn("closed");
+        strony.finished = true
+        strony.invoked = false
+      }
+    }
   }
 }
 
@@ -820,15 +838,14 @@ function caretSize() {
 
 
 //Pasting text
-with (textField){
-  contentWindow.addEventListener("paste",(e)=>{
+  textField.contentWindow.addEventListener("paste",(e)=>{
     //Prevent from default pasting text
     e.preventDefault();
     //Take text from clipboard and execute command to paste the text
-    var normalizedText = contentWindow.event.clipboardData.getData("text/plain");
-    contentDocument.execCommand("insertHTML",false,normalizedText);
+    var normalizedText = textField.contentWindow.event.clipboardData.getData("text/plain");
+    textField.contentDocument.execCommand("insertHTML",false,normalizedText);
   })
-}
+
 
 
 });

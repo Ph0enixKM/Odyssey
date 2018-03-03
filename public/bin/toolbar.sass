@@ -252,6 +252,24 @@ canvas#move
     color: #777
     font-style: italic
 
+#pages
+  display: none
+  vertical-align: middle
+  #merge-all
+    display: inline-block
+    width: 39px
+    height: 39px
+    margin: 5px
+    border: 1px solid $border
+    transition: 300ms
+    background-image: url("../arts/merge.png")
+    background-position: center
+    background-size: cover
+    cursor: pointer
+    &:hover
+      background-color: #555
+
+
 .full-view
   display: none
   position: absolute
@@ -407,7 +425,7 @@ disabled[disabled="false"]
     vertical-align: middle
     #full-view
       display: inline-block
-      width: 28px
+      width: 39px
       height: 39px
       margin: 5px
       border: 1px solid $border

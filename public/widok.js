@@ -1,4 +1,3 @@
-let qs = document.querySelectorAll.bind(document)
 
 //Setting up Tippy.js:
 tippy('[title]:not(disabled)',{
@@ -259,21 +258,6 @@ move.bg.addEventListener("mouseup", e =>{ //When you click on BG
 })
 move.ok.addEventListener("mousedown", e =>{ //When you click on OK
   e.stopPropagation()
-
-  //Modify Pages
-  // let tempPages = {}
-  // for (item of Array.from(move.docsList)) {
-  //   if(item.tagName){
-  //     tempPages[Array.from(move.docsList).indexOf(item)] = item.index-1
-  //     // console.log(Array.from(move.docsList).indexOf(item));
-  //     tempPages[Array.from(move.docsList).indexOf(item)] = pages[item.index-1]
-  //   }
-  // }
-
-  // for (page of pages){
-  //   console.log(key);
-  //   page = tempPages[key]
-  // }
 
   let sorted = fv.sel.slice()
 
