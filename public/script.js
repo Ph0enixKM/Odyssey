@@ -1,4 +1,4 @@
-//Global Variables:
+﻿//Global Variables:
 var fonts, fontSizes, iStyle, iStyleVal, textField, textHtml,
 str, rest, pages, left, right, space, bodyContent, logo,
 menu, scrolling, lastFont;
@@ -106,10 +106,6 @@ function turnRight(){
 
       sbWords.innerHTML = (textField.contentDocument.body.textContent.length == 1) ? 0 :
         textField.contentDocument.body.textContent.split(" ").length;
-
-      sbLetters.innerHTML = textField.contentDocument.body.textContent.length -1;
-
-      console.log(sbLetters.innerHTML);
 
       //Logic Section
 
