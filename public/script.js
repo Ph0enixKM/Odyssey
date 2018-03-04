@@ -4,12 +4,27 @@ str, rest, pages, left, right, space, bodyContent, logo,
 menu, scrolling, lastFont;
 
 //Require Electron
-const { remote } = require('electron');
-const PIXI = require('pixi.js');
+const { remote } = require('electron')
+const PIXI = require('pixi.js')
+const { ipcRenderer } = require('electron')
 
 let qs = document.querySelectorAll.bind(document)
 
 var sbPages, sbWords, sbLetters;
+
+let BASE_FILE = {
+  title : undefined,
+  author : undefined,
+  keywords : [],
+  book : {
+    prolog : [],
+    content : [],
+    end : []
+  },
+  fonts : []
+}
+
+
 
 var keys = {
   enter: false,
@@ -160,6 +175,15 @@ right.addEventListener("click",turnRight);
   sbLetters = document.getElementsByClassName("letters")[0]
 
 
+qs(".menu button#open-file")[0].addEventListener("click",()=>{
+  ipcRenderer.send('open-file')
+})
+// TODO: finishit
+ipcRenderer.on('selected-files',(event,path) =>{
+  alert(path)
+})
+
+// TODO: Function changing credentials based on BASE_FILE
 
 
 var caretLoc = { x: 0, y: 0 };
@@ -170,6 +194,12 @@ var cs = caret.style;
 space = 19;
 
 
+
+qs("input#keys")[0].addEventListener('change',()=>{
+  let attrib = (qs("input#keys")[0].value.length == 0) ? [] : qs("input#keys")[0].value.split(" ")
+  qs("#all-keys p")[0].innerHTML = attrib.length
+
+})
 
 
   document.getElementsByClassName('iframe')[0].addEventListener("scroll",()=>{
@@ -368,11 +398,15 @@ function menuF() {
     }
   })
 
+  ctxLogo.addEventListener("mouseover",()=> shortcutOn("SHIFT + A"))
+  ctxLogo.addEventListener("mouseout", shortcutOff)
+
   ctxMenu.childNodes[1].addEventListener("click",()=>{
     document.querySelector('#ctx-menu').innerText = "Narzędzia"
     document.querySelector('#view').style.display = "none"
     document.querySelector('#tools').style.display = "inline-block"
     document.querySelector('#pages').style.display = "none"
+    document.querySelector('#project').style.display = "none"
   })
 
   ctxMenu.childNodes[3].addEventListener("click",()=>{
@@ -380,12 +414,21 @@ function menuF() {
     document.querySelector('#view').style.display = "inline-block"
     document.querySelector('#tools').style.display = "none"
     document.querySelector('#pages').style.display = "none"
+    document.querySelector('#project').style.display = "none"
   })
   ctxMenu.childNodes[5].addEventListener("click",()=>{
     document.querySelector('#ctx-menu').innerText = "Strony"
     document.querySelector('#view').style.display = "none"
     document.querySelector('#tools').style.display = "none"
     document.querySelector('#pages').style.display = "inline-block"
+    document.querySelector('#project').style.display = "none"
+  })
+  ctxMenu.childNodes[7].addEventListener("click",()=>{
+    document.querySelector('#ctx-menu').innerText = "Projekt"
+    document.querySelector('#view').style.display = "none"
+    document.querySelector('#tools').style.display = "none"
+    document.querySelector('#pages').style.display = "none"
+    document.querySelector('#project').style.display = "inline-block"
   })
 }
 

@@ -28,6 +28,7 @@
     position: relative
     top: 50%
     transform: translate(0,-50%)
+    cursor: pointer
     &:hover
       background-color: #333
   button
@@ -60,6 +61,19 @@
   z-index: 5
   transform: translate(0,-100%)
   user-select: none
+  .chapter
+    display: inline-block
+    font-family: Lato
+    color: #777
+    padding-right: 10px
+    transition: 200ms
+
+    &:hover
+      background-color: #1a1a1a
+      padding: 5px
+      color: white
+      &::before
+        content: "Rozdział: "
 
   .pages
     display: inline-block
@@ -114,7 +128,9 @@
     vertical-align: middle
     line-height: 30px
     -webkit-app-region: drag
-
+    & span
+      color: #777
+      font-style: italic
   & .minimize
     display: inline-block
     float: right
@@ -251,6 +267,46 @@ canvas#move
   & emp
     color: #777
     font-style: italic
+
+#project
+  display: none
+  vertical-align: middle
+  #title
+    display: inline-block
+    background-color: #222
+    color: #aaa
+    padding: 5px
+    margin: 5px
+    border: 0px solid $border
+    transition: 300ms
+    border-radius: 30px
+    &:hover
+      background-color: #111
+  #all-keys
+    background-color: #252525
+    border-radius: 30px
+    display: inline-block
+    padding: 2px
+    p
+      display: inline-block
+      font-family: Lato
+      font-size: 12px
+      color: #aaa
+      user-select: none
+      cursor: default
+      padding-right: 5px
+    #keys
+      display: inline-block
+      background-color: #222
+      color: #aaa
+      padding: 5px
+      margin: 5px
+      border: 0px solid $border
+      transition: 300ms
+      border-radius: 30px
+      &:hover
+        background-color: #111
+
 
 #pages
   display: none

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <style media="screen">
+      body{
+        background-color: #555
+      }
+      #canvas{
+        border: 1px solid #222
+      }
+      input{
+        background-color: white;
+        /* border-radius: 50%; */
+        padding: 0;
+        offset: 0;
+        margin: 0;
+        width: 20px;
+        height: 25px;
+        -webkit-appearance: button-bevel;
+      }
+    </style>
+  </head>
+  <body>
+
+    <span id="draw" onclick="drawingMode.mode('draw')">Draw</span>
+    <span id="rect" onclick="drawingMode.mode('rect')">Rectangle</span>
+    <span id="arc" onclick="drawingMode.mode('arc')">Arc</span>
+    <span id="fig1" onclick="drawingMode.mode('fig1')">figure1</span>
+    <span id="fig2" onclick="drawingMode.mode('fig2')">figure2</span>
+    <span id="fig3" onclick="drawingMode.mode('fig3')">figure3</span>
+    <input type="color">
+    <div id="color-picker"></div>
+    <br>
+
+    <canvas id="canvas"></canvas>
+    <script src="iro.min.js"></script>
+    <script>
+    var colorWheel = iro.ColorWheel("#color-picker", {
+      width: 150,
+      height: 150,
+      padding: 4,
+      sliderMargin: 24,
+      markerRadius: 1,
+      color: "rgb(68, 255, 158)",
+      CSS: {} // apply colors to any elements
+    });
+
+
+      drawingMode = new Canvas()
+      function Canvas(){
+        this.canvas = document.getElementById('canvas')
+        this.c = canvas.getContext("2d")
+
+
+        this.outliner = [
+          {
+            name : "rect",
+            color : "red",
+            loc : [20,20,20,20]
+          }
+        ]
+
+        this.modes = {
+          draw : [false,new Function()],
+          rect : [false,new Function()],
+          arc : [false,new Function()],
+          fig1 : [false,new Function()],
+          fig2 : [false,new Function()],
+          fig3 : [false,new Function()]
+        }
+
+
+        // INPUTS
+        this.input = {
+          LMB : false,
+          LMBPressed : false,
+          LMBReleased : false,
+          mouse : [0,0]
+        }
+
+        this.canvas.addEventListener("mousedown",e =>{
+          this.input.LMB = true
+          this.input.LMBPressed = true
+        })
+        this.canvas.addEventListener("mouseup",e =>{
+          this.input.LMB = false
+          this.input.LMBReleased = true
+        })
+        this.canvas.addEventListener("mousemove", e =>{
+          this.input.mouse = [
+            e.pageX - this.canvas.offsetLeft,
+            e.pageY - this.canvas.offsetTop
+          ]
+        })
+        // !INPUTS
+
+        this.startPoint
+        this.endPoint
+
+        this.loop = setInterval(()=>{
+          this.c.clearRect(0,0,this.canvas.width,this.canvas.height)
+
+          for (obj of this.outliner) {
+            if(obj.name == "rect"){
+              this.c.fillStyle = obj.color
+              this.c.fillRect(...obj.loc)
+            }
+          }
+
+
+          // TODO: COLOR, then FIGURES
+
+          if (this.input.LMB) {
+            if(this.input.LMBPressed) this.startPoint = this.input.mouse
+            this.input.LMBPressed = false
+
+
+            this.c.fillStyle = "black"
+
+            this.tempObj = {
+              name : "rect",
+              color : this.c.fillStyle,
+              loc : [
+                this.startPoint[0],
+                this.startPoint[1],
+                this.input.mouse[0] - this.startPoint[0],
+                this.input.mouse[1] - this.startPoint[1]
+              ],
+            }
+
+            this.c.fillStyle = "black"
+            this.c.fillRect(...this.tempObj.loc)
+
+
+
+          } else if (this.input.LMBReleased){
+            this.outliner.push(this.tempObj)
+            this.input.LMBReleased = false
+          }
+
+          // TODO: REFACTOR IT
+          this.c.fillStyle = "black"
+          this.c.fillRect(...this.tempObj.loc)
+
+        },16)
+
+        //Map objects
+        this.mode = function(type){
+          let prev = this.modes[type][0]
+          for ([mod,val] of Object.entries(this.modes)){
+            this.modes[mod][0] = false
+          }
+          this.modes[type][0] = (prev != true) ? true : false
+        }
+      }
+
+
+
+
+
+    </script>
+  </body>
+</html>
