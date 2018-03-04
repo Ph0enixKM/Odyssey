@@ -1,6 +1,6 @@
-const electron = require('electron');
-const { app, BrowserWindow } = electron;
-
+const electron = require('electron')
+const { app, BrowserWindow, ipcMain, dialog } = electron
+const fs = require('fs');
 
 let win
 
@@ -14,6 +14,26 @@ app.on("ready", ()=>{
   */
   // width = 1280
   // height = 720
+
+  ipcMain.on('open-file',e =>{
+    dialog.showOpenDialog({
+      properties : ['openFile'],
+      filters : [
+        {name : 'Odyssey files', extensions : ["odyss"]},
+        {name : 'Text files', extensions : ["txt"]},
+        {name : 'Microsoft Word document files', extensions : ["docx"]},
+        {name : 'All files', extensions : ["*"]},
+      ]
+    }, files =>{
+      if (files){ //e.sender.send('selected-files',files)
+        fs.readFile(files[0], 'utf-8', (err,data)=>{
+          if (err) console.log(err)
+          e.sender.send('selected-files',data)
+        })
+
+      }
+    })
+  })
 
 
   win = new BrowserWindow({width, height, frame:false, show:false});

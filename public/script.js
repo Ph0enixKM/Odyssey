@@ -766,7 +766,13 @@ function restrictionsOptimal (wordSize){
   //textContent
 }
 
-
+// TODO: Make copying to use HTML
+/**
+  @param { x } AbstractElement
+x = document.createElement("div") //Virtual DIV
+x.innerHTML = "Broken HTML"
+console.log(x.innerHTML) //Gives back fixed HTML
+*/
 function restrictions() {
   str = textField.contentDocument.body.textContent;
   let prevLetters = sbLetters
