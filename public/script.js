@@ -134,10 +134,7 @@ function turnRight(){
 
 function autosaveF(e){
     setTimeout(function () {
-
       pages[curPage] = textField.contentDocument.body.innerHTML;
-      console.log("autosave executed");
-
     },10)
 }
 
@@ -256,7 +253,11 @@ textField.contentWindow.addEventListener("keydown",function(e){
       cs.transform = "translate(-10px,0) scale(0)";
     })
 
-
+if (autosave) {
+  setInterval(()=>{
+    autosaveF()
+  },10)
+}
 
 
 //ManuBar
@@ -537,10 +538,10 @@ function bodyBugFix(){
     }
 
       bodies[0].addEventListener("focus",function () {
-        bodies[0].cs.transform = "translate(0,0) scale(1)";
+        cs.transform = "translate(0,0) scale(1)";
       })
       bodies[0].addEventListener("focusout",function () {
-        bodies[0].cs.transform = "translate(-10px,0) scale(0)";
+        cs.transform = "translate(-10px,0) scale(0)";
       })
     addStyle();
   }
@@ -559,7 +560,7 @@ function firstLetterFix() {
   //Debugger - if nothing is being placed
   //Just to show the wae to WYSIWYG editor
 
-  if (textField.contentDocument.body.textContent == "") {
+  if (textField.contentDocument.body.innerHTML == "") {
     var bdy = textField.contentDocument.getElementsByTagName('body')[0]
     bdy.innerHTML = "&zwnj;"
     var range = textField.contentDocument.createRange();
@@ -755,47 +756,60 @@ function restrictionsOptimal (wordSize){
   //Sprawdź, czy skończył poprawiać
   prevCheck = true;
   restOf = str.slice(str.length-wordSize,str.length) + restOf;
-  if(textField.contentDocument.body.lastChild.textContent == ""){
-    //If the div is empty - delete it
-    textField.contentDocument.body.lastChild.remove();
-  } else {
+  // if(textField.contentDocument.body.lastChild.innerHTML == ""){
+  //   //If the div is empty - delete it
+  //   textField.contentDocument.body.lastChild.remove();
+  // } else {
     //Otherwise delete the last character
-    textField.contentDocument.body.lastChild.textContent =
-    textField.contentDocument.body.lastChild.textContent.slice(0,-wordSize);
-  }
+    textField.contentDocument.body.innerHTML = str.slice(0,-wordSize);
+    str = str.slice(0,-wordSize);
+    console.log(str);
+    console.log(textField.contentDocument.body.innerHTML);
+    return str
+  // }
   //textContent
 }
 
-// TODO: Make copying to use HTML
+// TODO: jeśli jest "SIZE" to wkleja poprawnie - do wszystkich fontów daj size = 3
 /**
   @param { x } AbstractElement
 x = document.createElement("div") //Virtual DIV
 x.innerHTML = "Broken HTML"
 console.log(x.innerHTML) //Gives back fixed HTML
 */
+let restrictions_start = false
 function restrictions() {
-  str = textField.contentDocument.body.textContent;
+
+  if (!restrictions_start && textField.contentDocument.body.offsetHeight > 1123) {
+    str = textField.contentDocument.body.innerHTML
+    restrictions_start = true
+    // console.log("locked");
+  } else if (textField.contentDocument.body.offsetHeight <= 1123) {
+    restrictions_start = false
+    // console.log("unlocked");
+  }
+
   let prevLetters = sbLetters
 
   // 3 słowa przypadają na 1 pixel
   if (textField.contentDocument.body.offsetHeight > 25000) {
-    restrictionsOptimal(25000-1123);
+    str = restrictionsOptimal(25000-1123);
   } else if (textField.contentDocument.body.offsetHeight > 10000) {
-    restrictionsOptimal(10000-1123);
+    str = restrictionsOptimal(10000-1123);
   } else if (textField.contentDocument.body.offsetHeight > 5000) {
-    restrictionsOptimal(5000-1123);
+    str = restrictionsOptimal(5000-1123);
   } else if (textField.contentDocument.body.offsetHeight > 3000) {
-    restrictionsOptimal(3000-1123);
+    str = restrictionsOptimal(3000-1123);
   } else if (textField.contentDocument.body.offsetHeight > 2000) {
-    restrictionsOptimal(2000-1123);
+    str = restrictionsOptimal(2000-1123);
   } else if (textField.contentDocument.body.offsetHeight > 1500) {
-    restrictionsOptimal(1700-1123);
+    str = restrictionsOptimal(1700-1123);
   } else if (textField.contentDocument.body.offsetHeight > 1300) {
-    restrictionsOptimal(1500-1123);
+    str = restrictionsOptimal(1500-1123);
   } else if (textField.contentDocument.body.offsetHeight > 1170) {
-    restrictionsOptimal(10);
+    str = restrictionsOptimal(10);
   } else if (textField.contentDocument.body.offsetHeight > 1123) {
-    restrictionsOptimal(1);
+    str = restrictionsOptimal(1);
   }
   else if(prevCheck && !strony.invoked) {
     prevCheck = false;
@@ -808,6 +822,7 @@ function restrictions() {
     },100)
   } else if (prevCheck && strony.invoked) {
     prevCheck = false;
+
     pages[curPage] = textField.contentDocument.body.innerHTML; //Autosave
     pages.splice(curPage+1,0,restOf);
     restOf = ""
