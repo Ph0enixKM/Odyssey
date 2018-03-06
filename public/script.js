@@ -1,7 +1,7 @@
 ﻿//Global Variables:
-var fonts, fontSizes, iStyle, iStyleVal, textField, textHtml,
+var fonts, fontSizes, textField,
 str, rest, pages, left, right, space, bodyContent, logo,
-menu, scrolling, lastFont;
+menu, scrolling;
 
 //Require Electron
 const { remote } = require('electron')
@@ -180,7 +180,6 @@ ipcRenderer.on('selected-files',(event,path) =>{
   alert(path)
 })
 
-// TODO: Function changing credentials based on BASE_FILE
 
 
 var caretLoc = { x: 0, y: 0 };
@@ -195,9 +194,27 @@ space = 19;
 qs("input#keys")[0].addEventListener('change',()=>{
   let attrib = (qs("input#keys")[0].value.length == 0) ? [] : qs("input#keys")[0].value.split(" ")
   qs("#all-keys p")[0].innerHTML = attrib.length
-
+  BASE_FILE_UPDATE("keys",attrib)
 })
 
+qs("input#title")[0].addEventListener('change',()=>{
+  BASE_FILE_UPDATE("title",qs("input#title")[0].value)
+})
+
+qs("input#author")[0].addEventListener('change',()=>{
+  BASE_FILE_UPDATE("author",qs("input#author")[0].value)
+})
+
+// TODO: Function changing credentials based on BASE_FILE
+
+function BASE_FILE_UPDATE(key,val) {
+  if (key == "book") {
+    console.log("...")
+    //Do it differentaly
+  } else {
+    BASE_FILE[key] = val
+  }
+}
 
   document.getElementsByClassName('iframe')[0].addEventListener("scroll",()=>{
     cs.transition = "0ms";
@@ -770,13 +787,6 @@ function restrictionsOptimal (wordSize){
   //textContent
 }
 
-// TODO: jeśli jest "SIZE" to wkleja poprawnie - do wszystkich fontów daj size = 3
-/**
-  @param { x } AbstractElement
-x = document.createElement("div") //Virtual DIV
-x.innerHTML = "Broken HTML"
-console.log(x.innerHTML) //Gives back fixed HTML
-*/
 let restrictions_start = false
 function restrictions() {
 
