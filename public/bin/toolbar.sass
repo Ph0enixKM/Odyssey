@@ -61,9 +61,11 @@
   z-index: 5
   transform: translate(0,-100%)
   user-select: none
+  cursor: default
   .chapter
     display: inline-block
     font-family: Lato
+    font-style: italic
     color: #777
     padding-right: 10px
     transition: 200ms
@@ -74,6 +76,7 @@
       color: white
       &::before
         content: "Rozdział: "
+        font-style: normal
 
   .pages
     display: inline-block
@@ -392,6 +395,13 @@ canvas#move
         background-position: center
         &:hover
           background-color: #333
+      &#chapter-view
+        background-image: url("../arts/chapter.png")
+        background-size: cover
+        background-position: center
+        &:hover
+          background-color: #333
+
 
 disabled[disabled="true"]
   filter: brightness(0.3)
@@ -469,6 +479,78 @@ disabled[disabled="false"]
     height: 100vw
     z-index: 16
 
+#chapter-bg
+  display: none
+  width: 100%
+  height: 100%
+  background-color: rgba(0,0,0,0.7)
+  position: absolute
+  top: 0
+  left: 0
+  z-index: 18
+  opacity: 0
+  overflow-y: scroll
+  overflow-x: hidden
+  cursor: default
+  transition: 300ms
+  &::-webkit-scrollbar-track
+  	-webkit-box-shadow: inset 0 0 6px #222
+  	border-radius: 10px
+  	background-color: #222
+  &::-webkit-scrollbar
+    width: 12px
+    background-color: #222
+  &::-webkit-scrollbar-thumb
+    border-radius: 10px
+    -webkit-box-shadow: inset 0 0 6px #222
+    background-color: #333
+  & #chapter-docs
+    height: 100% //It should be scroll height here
+    position: absolute
+    z-index: 16
+  & #chapter-tools
+    width: 100vw
+    position: fixed
+    z-index: 19
+    background-color: #222
+    box-shadow: 0 0 20px #111
+    & p
+      vertical-align: middle
+      font-size: 20px
+    & #ok
+      vertical-align: middle
+      display: inline-block
+      width: 40px
+      height: 40px
+      background-image: url("../arts/ok.png")
+      background-position: center
+      background-size: cover
+      transition: 300ms
+      cursor: pointer
+      &:hover
+        background-color: #363
+    & #cancel
+      vertical-align: middle
+      display: inline-block
+      width: 40px
+      height: 40px
+      background-image: url("../arts/cancel.png")
+      background-position: center
+      background-size: cover
+      transition: 300ms
+      cursor: pointer
+      &:hover
+        background-color: #933
+  // #docs
+  //   display: inline-block
+  //   position: absolute
+  //   top: 70px
+  //   left: 0
+  //   width: 100vw
+  //   height: 100vw
+  //   z-index: 16
+
+
 .toolbar
   position: fixed
   width: 100vw
@@ -490,9 +572,23 @@ disabled[disabled="false"]
       width: 39px
       height: 39px
       margin: 5px
+      padding: 0 10px 0 10px
       border: 1px solid $border
       transition: 300ms
       background-image: url("../arts/fullView.png")
+      background-position: center
+      background-size: contain
+      background-repeat: no-repeat
+      cursor: pointer
+      &:hover
+        background-color: #555
+    #chapter-view
+      display: inline-block
+      width: 39px
+      height: 39px
+      margin: 5px
+      border: 1px solid $border
+      transition: 300ms
       background-position: center
       background-size: cover
       cursor: pointer

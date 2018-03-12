@@ -14,13 +14,13 @@
       <div id="loading"></div>
     </div>
     <div class="sidebar">
-      <div class="chapter">1</div> <!-- TODO: CHAPTERS -->
+      <div class="chapter">Prolog</div> <!-- TODO: CHAPTERS -->
       <div class="pages">1</div>
       <div class="words">200</div>
       <div class="letters">500</div>
     </div>
     <div class="menubar">
-        <div class="bar">Odyseja 1.3.2 (alfa): <span>&lt;Brak tytułu&gt;</span> </div>
+        <div class="bar">Odyseja 1.3.3 (alfa): <span>&lt;Brak tytułu&gt;</span> </div>
         <div class="minimize"></div>
         <div class="maximize"></div>
         <div class="exit"></div>
@@ -69,10 +69,9 @@
       </div>
       <div id="view">
 
-        <div id="full-view" title="Pełny widok">
-        </div>
+        <div id="full-view" title="Pełen Widok"></div>
 
-        <!-- TODO: Add some options here! -->
+
       </div>
       <div id="pages">
         <div id="merge-all" title="Scal wszystkie strony"></div>
@@ -102,10 +101,11 @@
     </div>
     <div class="full-view">
       <div class="fv-tools">
-        <p>Pełny widok</p>
+        <p>Pełen widok</p>
         <span id="trash" title="Usuń strony">
         </span><disabled id="move" disabled="true" title="Musisz zaznaczyć ciąg kartek następujących po sobie"><span id="move-btn" disabled="false" title="Edytor Łańcuchowy"></disabled> <!-- To po to, żeby nie było stresującej spacji -->
         </span>
+        <span id="chapter-view" title="Widok wszystkich rozdziałów"></span>
 
           <div id="move-bg">
             <div id="move-tools">
@@ -115,29 +115,42 @@
             </div>
 
             <div id="move-docs">
+            </div>
+          </div>
 
+          <div id="chapter-bg">
+            <div id="chapter-tools">
+              <p>Rozdziały</p>
+              <div id="ok"></div>
+              <div id="cancel"></div>
             </div>
 
-
+            <div id="chapter-docs">
+            </div>
           </div>
+
       </div>
       <div class="docs"></div>
     </div>
 
     <div class="iframe">
+      <div id="up">
 
-    <div class="move left">
-      <span><</span>
-    </div>
-    <iframe name="textField" width="" height="">
-    </iframe>
+        <div class="move left">
+          <span><</span>
+        </div>
+        <iframe name="textField" width="" height="">
+        </iframe>
 
+        <div class="move right">
+          <span>></span>
+        </div>
 
+      </div>
+      <div id="down">
 
+      </div>
 
-    <div class="move right">
-      <span>></span>
-    </div>
     </div>
     <p id="shortcut"></p>
 

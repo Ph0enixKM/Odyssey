@@ -31,10 +31,6 @@ let shortcutOff = ()=>{
   shortcut.style.display = "none"
 }
 
-
-
-
-
 // FULL VIEW SECTION
 let fv = {
   btn : qs("#full-view")[0],
@@ -161,7 +157,6 @@ fv.on = ()=>{
         for (sel of sortedSel) {
           if(sel !== undefined){
             if(sortedSel[sortedSel.indexOf(sel)+1] !== undefined){ // If it is not the last item
-              console.log("passed");
               if(sel.index == sortedSel[sortedSel.indexOf(sel)+1].index -1){
                 fv.btnBlocker.setAttribute("disabled",false)
               } else {
@@ -363,7 +358,53 @@ move.off = ()=> {
   for (c of move.curves) {
     c.clear()
   }
+  fv.btnBlocker.setAttribute("disabled",true) //Turn off
   move.curves = []
   fv.off()
   fv.on()
+}
+
+
+
+
+//CHAPTER SECTION
+let chapter = {
+  btn : qs("#chapter-view")[0],
+  bg : qs("#chapter-bg")[0],
+  ok : qs("#chapter-tools #okay")[0],
+  docs : qs("#chapter-docs")[0],
+  cancel : qs("#chapter-tools #cancel")[0],
+  on : new Function(),
+  off : new Function(),
+  state : false
+}
+
+chapter.btn.addEventListener("click",()=>{
+  chapter.bg.style.display = "inline-block"
+  chapter.bg.style.opacity = 0
+  setTimeout(()=>{
+    chapter.bg.style.opacity = 1
+    chapter.state = true
+    chapter.on()
+  },150);
+})
+
+chapter.cancel.addEventListener("click",()=>{
+  document.querySelector('#chapter-bg').style.opacity = 0
+  setTimeout(()=>{
+    document.querySelector('#chapter-bg').style.display = "none"
+    chapter.state = false
+    chapter.off()
+  },150)
+})
+
+
+chapter.on = () => {
+  for (let current of BASE_FILE.book) {
+    console.log(current[0]); //TMP
+    console.log(chapter.docs);
+
+    // TODO: finishit
+
+  }
 }

@@ -16,11 +16,9 @@ let BASE_FILE = {
   title : undefined,
   author : undefined,
   keywords : [],
-  book : {
-    prolog : [],
-    content : [],
-    end : []
-  },
+  book : [
+    ["Prolog", [] ],
+  ],
   fonts : []
 }
 
@@ -38,10 +36,15 @@ var keys = {
 };
 var prev = false;
 var position = 0;
+
 var curPage = 0;
+var curChapter = 0;
+
 var autosave = true;
+var scrollPastEnd = true;
 
 var prevCheck = false, restOf="";
+
 
 
 
@@ -143,6 +146,11 @@ function autosaveF(e){
 
 //Presets & initialisation
 document.addEventListener("DOMContentLoaded",function(){
+
+  //If scroll past end enabled in settings
+  if (scrollPastEnd) {
+    qs(".iframe #down")[0].innerHTML += `<div id="dummy"></div>`
+  }
 
 //Vars
 fonts = document.getElementsByTagName('select')[0]
@@ -399,18 +407,27 @@ function menuF() {
         ctxMenu.style.display = "none"
       },300)
 
-      if(!move.state){  // Merge comes from another file
+      if(!move.state && !chapter.state){  // Merge comes from another file
         document.querySelector('.full-view').style.opacity = 0
         setTimeout(()=>{
           document.querySelector('.full-view').style.display = "none"
           fv.off()
         },300)
       } else {
+        //Apply to move
         document.querySelector('#move-bg').style.opacity = 0
         setTimeout(()=>{
           document.querySelector('#move-bg').style.display = "none"
           move.state = false
           move.off()
+        },150)
+
+        //Apply to chapter
+        document.querySelector('#chapter-bg').style.opacity = 0
+        setTimeout(()=>{
+          document.querySelector('#chapter-bg').style.display = "none"
+          chapter.state = false
+          chapter.off()
         },150)
       }
     }
