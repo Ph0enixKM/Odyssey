@@ -403,6 +403,11 @@ chapter.on = () => {
   for (let current of BASE_FILE.book) {
     console.log(current[0]); //TMP
     console.log(chapter.docs);
+    let doc = document.createElement("div")
+    doc.className = "doc-chapter"
+    doc.innerHTML = `<p> ${current[0]} </p>`
+
+    chapter.docs.appendChild(doc)
 
     // TODO: finishit
 

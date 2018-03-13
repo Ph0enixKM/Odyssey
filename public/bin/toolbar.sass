@@ -242,6 +242,43 @@ canvas#move
     color: #777
     font-style: italic
 
+.doc-chapter
+  position: relative
+  display: inline-block
+  z-index: 17
+  color: #aaa
+  background-color: #333
+  box-shadow: -5px -5px 0px #2a2a2a, -10px -10px 0px #222
+  width: 42mm
+  height: 60mm
+  margin: 25px 10px 25px 10px
+  padding: 14px
+  vertical-align: middle
+  font-family: Lato
+  font-size: 20px
+  user-select: none
+  cursor: pointer
+  transition: 300ms
+  word-wrap: break-word
+  border-radius: 0px
+  margin: 2vw 10vw 2vw 10vw
+  background-image: url("../arts/chapterDoc.png")
+  background-size: 21mm 21mm
+  background-position: left top
+  background-repeat: no-repeat
+  &:hover
+    background-color: #444
+    box-shadow: -10px -10px 0px #3a3a3a, 10px 10px 0px #333
+  & emp
+    color: #777
+    font-style: italic
+  & p
+    display: inline-block
+    position: relative
+    top: 50%
+    transform: translate(0,-50%)
+    border-right: none !important
+
 .doc-move
   position: absolute
   display: block
@@ -507,6 +544,8 @@ disabled[disabled="false"]
   & #chapter-docs
     height: 100% //It should be scroll height here
     position: absolute
+    top: 40px
+    text-align: center
     z-index: 16
   & #chapter-tools
     width: 100vw
