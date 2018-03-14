@@ -320,6 +320,7 @@ canvas#move
     border: 0px solid $border
     transition: 300ms
     border-radius: 30px
+    caret-color: #aaa
     &::selection
       background-color: rgba(255,150,0,0.5)
       color: #fff
@@ -347,6 +348,7 @@ canvas#move
       border: 0px solid $border
       transition: 300ms
       border-radius: 30px
+      caret-color: #aaa
       &::selection
         background-color: rgba(255,150,0,0.5)
         color: #fff
@@ -545,6 +547,7 @@ disabled[disabled="false"]
     height: 100% //It should be scroll height here
     position: absolute
     top: 40px
+    width: 100%
     text-align: center
     z-index: 16
   & #chapter-tools
@@ -556,38 +559,40 @@ disabled[disabled="false"]
     & p
       vertical-align: middle
       font-size: 20px
-    & #ok
-      vertical-align: middle
+    & #edit-chapter
       display: inline-block
-      width: 40px
-      height: 40px
-      background-image: url("../arts/ok.png")
-      background-position: center
-      background-size: cover
+      transform: translate(0,-100px)
       transition: 300ms
-      cursor: pointer
-      &:hover
-        background-color: #363
-    & #cancel
-      vertical-align: middle
-      display: inline-block
-      width: 40px
-      height: 40px
-      background-image: url("../arts/cancel.png")
-      background-position: center
-      background-size: cover
-      transition: 300ms
-      cursor: pointer
-      &:hover
-        background-color: #933
-  // #docs
-  //   display: inline-block
-  //   position: absolute
-  //   top: 70px
-  //   left: 0
-  //   width: 100vw
-  //   height: 100vw
-  //   z-index: 16
+      & input
+        vertical-align: middle
+        display: inline-block
+        background-color: #111
+        color: #aaa
+        padding: 5px
+        margin: 5px
+        border: 0px solid $border
+        transition: 300ms
+        border-radius: 30px
+        caret-color: #aaa
+        &::selection
+          background-color: rgba(255,150,0,0.5)
+          color: #fff
+        &:hover
+          background-color: #000
+      & #trash
+        display: inline-block
+        vertical-align: middle
+        height: 50px
+        width: 50px
+        margin: 0
+        padding: 0
+        transition: 300ms
+        cursor: pointer
+        background-image: url('../arts/bin.png')
+        background-size: cover
+        background-position: center
+        &:hover
+          background-color: #933
 
 
 .toolbar

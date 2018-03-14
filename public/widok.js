@@ -371,12 +371,15 @@ move.off = ()=> {
 let chapter = {
   btn : qs("#chapter-view")[0],
   bg : qs("#chapter-bg")[0],
-  ok : qs("#chapter-tools #okay")[0],
   docs : qs("#chapter-docs")[0],
-  cancel : qs("#chapter-tools #cancel")[0],
+  tools : qs("#chapter-tools")[0],
+  edit : qs("#chapter-tools #edit-chapter")[0],
+  input : qs("#chapter-tools input")[0],
+  trash : qs("#chapter-tools #trash")[0],
   on : new Function(),
   off : new Function(),
-  state : false
+  state : false,
+  sel : undefined
 }
 
 chapter.btn.addEventListener("click",()=>{
@@ -389,27 +392,99 @@ chapter.btn.addEventListener("click",()=>{
   },150);
 })
 
-chapter.cancel.addEventListener("click",()=>{
-  document.querySelector('#chapter-bg').style.opacity = 0
+chapter.bg.addEventListener("click",()=>{
+  chapter.bg.style.opacity = 0
   setTimeout(()=>{
-    document.querySelector('#chapter-bg').style.display = "none"
+    chapter.bg.style.display = "none"
     chapter.state = false
     chapter.off()
   },150)
 })
 
+chapter.tools.addEventListener("click", e => {
+  e.stopPropagation()
+})
+
 
 chapter.on = () => {
+  let index = 0
   for (let current of BASE_FILE.book) {
-    console.log(current[0]); //TMP
-    console.log(chapter.docs);
     let doc = document.createElement("div")
     doc.className = "doc-chapter"
     doc.innerHTML = `<p> ${current[0]} </p>`
+    doc.state = false
+    doc.index = index
+
+    // HOVER
+    doc.addEventListener("mouseover", e =>{
+      let el = e.target //The element
+      if (el.tagName == "DIV" && !el.state)
+        el.style.boxShadow = "-10px -10px 0px #3a3a3a, 10px 10px 0px #333"
+      else if (el.tagName == "P" && !el.parentNode.state){
+        el.style.boxShadow = "none"
+        el.parentNode.style.boxShadow = "-10px -10px 0px #3a3a3a, 10px 10px 0px #333"
+      }
+    })
+    doc.addEventListener("mouseout", e =>{
+      let el = e.target //The element
+      if (el.tagName == "DIV" && !el.state)
+        el.style.boxShadow = "-5px -5px 0px #2a2a2a, -10px -10px 0px #222"
+      else if (el.tagName == "P" && !el.parentNode.state){
+        el.style.boxShadow = "none"
+        el.parentNode.style.boxShadow = "-5px -5px 0px #2a2a2a, -10px -10px 0px #222"
+      }
+    })
+
+    // SELECT
+    doc.addEventListener("contextmenu", e =>{
+
+      e.stopPropagation()
+      let el = e.target //The element
+
+      // Trigger it
+      if (el.tagName == "DIV" && !el.state) {
+        el.style.boxShadow = "-10px 10px 0px #850, 10px -10px 0px #960, -10px 10px 25px #850, 10px -10px 25px #960"
+        el.state = true
+        chapter.sel = el.index
+      }
+      else if (el.tagName == "P" && !el.parentNode.state) {
+        el.style.boxShadow = "none"
+        el.parentNode.style.boxShadow = "-10px 10px 0px #850, 10px -10px 0px #960"
+        el.parentNode.state = true
+        chapter.sel = el.parentNode.index
+      }
+      else if (el.tagName == "DIV" && el.state) {
+        el.style.boxShadow = "-10px -10px 0px #3a3a3a, 10px 10px 0px #333"
+        el.state = false
+        chapter.sel = undefined
+      }
+      else if (el.tagName == "P" && el.parentNode.state) {
+        el.parentNode.style.boxShadow = "-10px -10px 0px #3a3a3a, 10px 10px 0px #333"
+        el.parentNode.state = false
+        chapter.sel = undefined
+      }
+
+      // Trigger Toolbar
+      if (typeof chapter.sel == "number") {
+        chapter.edit.style.transform = "translate(0,0)"
+        if (el.tagName == "DIV")
+          chapter.input.value = el.childNodes[0].innerText
+        else
+          chapter.input.value = el.innerText
+      } else {
+        chapter.edit.style.transform = "translate(0,-100px)"
+      }
+
+    })
+
+
+
 
     chapter.docs.appendChild(doc)
-
-    // TODO: finishit
-
+    index++
   }
+}
+
+chapter.off = () => {
+  chapter.docs.innerHTML = ""
 }
