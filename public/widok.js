@@ -405,6 +405,14 @@ chapter.tools.addEventListener("click", e => {
   e.stopPropagation()
 })
 
+chapter.input.addEventListener("change",()=>{
+  BASE_FILE.book[chapter.sel][0] = chapter.input.value
+  for (doc of chapter.docs.childNodes) {
+    if (doc.tagName == "DIV" && doc.index == chapter.sel) {
+      doc.childNodes[0].innerText = chapter.input.value
+    }
+  }
+})
 
 chapter.on = () => {
   let index = 0
@@ -487,4 +495,5 @@ chapter.on = () => {
 
 chapter.off = () => {
   chapter.docs.innerHTML = ""
+  chapter.edit.style.transform = "translate(0,-100px)"
 }
