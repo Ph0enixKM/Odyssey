@@ -10,7 +10,7 @@ const { ipcRenderer } = require('electron')
 
 let qs = document.querySelectorAll.bind(document)
 
-var sbPages, sbWords, sbLetters;
+var sbPages, sbWords, sbLetters, sbChapter;
 
 let BASE_FILE = {
   title : undefined,
@@ -138,6 +138,10 @@ function turnRight(){
 function autosaveF(e){
     setTimeout(function () {
       pages[curPage] = textField.contentDocument.body.innerHTML;
+      
+      if (BASE_FILE.book[curChapter][1] != undefined) {
+        BASE_FILE.book[curChapter][1] = pages
+      }
     },10)
 }
 
@@ -178,6 +182,7 @@ right.addEventListener("click",turnRight);
   sbPages = document.getElementsByClassName("pages")[0]
   sbWords = document.getElementsByClassName("words")[0]
   sbLetters = document.getElementsByClassName("letters")[0]
+  sbChapter = document.getElementsByClassName("chapter")[0]
 
 
 qs(".menu button#open-file")[0].addEventListener("click",()=>{

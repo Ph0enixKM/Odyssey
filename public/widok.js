@@ -406,6 +406,7 @@ chapter.tools.addEventListener("click", e => {
   e.stopPropagation()
 })
 
+//Change Name
 chapter.input.addEventListener("change",()=>{
   BASE_FILE.book[chapter.sel][0] = chapter.input.value
   for (doc of chapter.docs.childNodes) {
@@ -415,8 +416,40 @@ chapter.input.addEventListener("change",()=>{
   }
 })
 
+//Trash
+chapter.trash.addEventListener("click",()=>{
+  chapter.docs.childNodes[chapter.sel].style.transform = "translate(0,-100px)"
+  chapter.docs.childNodes[chapter.sel].style.backgroundColor = "#930"
+  chapter.docs.childNodes[chapter.sel].style.boxShadow = "-30px 30px 0px #930, 30px -30px 0px #930, -30px 30px 25px #930, 30px -30px 25px #930"
+  chapter.docs.childNodes[chapter.sel].style.opacity = 0
+  setTimeout(()=>{
+    BASE_FILE.book.splice(chapter.sel, 1)
+
+    if (curChapter == chapter.sel) {
+      curChapter = 0
+      pages = BASE_FILE.book[curChapter][1]
+      console.log(BASE_FILE.book);
+      console.log(pages);
+
+      curPage = 0;
+      textField.contentDocument.body.innerHTML = (pages[curPage] == undefined) ? "" : pages[curPage];
+      pages[curPage] = textField.contentDocument.body.innerHTML;
+      sbChapter.innerHTML = BASE_FILE.book[curChapter][0]
+    }
+
+    chapter.off()
+    chapter.on()
+  },300)
+})
+
 chapter.on = () => {
   let index = 0
+
+  //If there is no chapter
+  if (BASE_FILE.book.length == 0) {
+      BASE_FILE.book[0] = ["Prolog", [] ]
+  }
+
   for (let current of BASE_FILE.book) {
     let doc = document.createElement("div")
     doc.className = "doc-chapter"
@@ -450,6 +483,8 @@ chapter.on = () => {
       e.stopPropagation()
       let el = e.target //The element
 
+
+
       // Trigger on
       if (el.tagName == "DIV" && !el.state) {
         el.style.boxShadow = "-10px 10px 0px #850, 10px -10px 0px #960, -10px 10px 25px #850, 10px -10px 25px #960"
@@ -473,7 +508,7 @@ chapter.on = () => {
           old.style.boxShadow = "-5px -5px 0px #2a2a2a, -10px -10px 0px #222"
           old.state = false
         }
-        
+
         chapter.sel = el.parentNode.index
       }
       //Trigger off
@@ -499,7 +534,27 @@ chapter.on = () => {
         chapter.edit.style.transform = "translate(0,-100px)"
       }
 
+
+
     })
+
+    doc.addEventListener("click", e =>{
+      this.el = (e.target.tagName == "DIV") ? e.target : e.target.parentNode
+      this.el.style.transform = "scale(2)"
+      this.el.style.opacity = 0
+
+      curChapter = this.el.index
+      pages = BASE_FILE.book[curChapter][1]
+
+      curPage = 0;
+      textField.contentDocument.body.innerHTML = (pages[curPage] == undefined) ? "" : pages[curPage];
+      pages[curPage] = textField.contentDocument.body.innerHTML;
+      sbChapter.innerHTML = BASE_FILE.book[curChapter][0]
+
+      fv.off()
+      fv.on()
+    })
+
     chapter.docs.appendChild(doc)
     index++
   }
@@ -519,8 +574,18 @@ chapter.addF = ()=> {
     BASE_FILE.book.push(["Nowy Rozdział", [] ])
 
     chapter.on()
+    let last = chapter.docs.childNodes[chapter.docs.childNodes.length-2]
+    last.style.transition = "0ms"
+    last.style.transform = "scale(0)"
+    last.style.transition = "300ms"
+    last.style.transitionTimingFunction = "cubic-bezier(0.2, 0.8, 0.5, 1.5)"
+    setTimeout(()=>{
+      last.style.transform = "scale(1)"
+      setTimeout(()=>{
+        last.style.transitionTimingFunction = "ease"
+      },280)
+    },10)
   })
-
   chapter.docs.appendChild(doc)
 }
 
@@ -528,4 +593,5 @@ chapter.addF = ()=> {
 chapter.off = () => {
   chapter.docs.innerHTML = ""
   chapter.edit.style.transform = "translate(0,-100px)"
+  chapter.sel = undefined
 }
