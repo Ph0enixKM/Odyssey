@@ -281,6 +281,52 @@ canvas#move
     transform: translate(0,-50%)
     border-right: none !important
 
+.doc-chapter-add
+  position: relative
+  display: inline-block
+  z-index: 17
+  border: 5px dashed #960
+  box-shadow: 0 0 25px 0 orange
+  width: 42mm
+  height: 60mm
+  margin: 25px 10px 25px 10px
+  padding: 14px
+  vertical-align: middle
+  font-family: Lato
+  font-size: 20px
+  user-select: none
+  opacity: 0.5
+  cursor: pointer
+  transition: 300ms
+  transition-timing-function: cubic-bezier(0.2, 0.8, 0.5, 2)
+  word-wrap: break-word
+  border-radius: 0px
+  margin: 2vw 10vw 2vw 10vw
+  &:hover
+    box-shadow: 0 0 50px 0 orange
+    opacity: 1
+    & p
+      // transform: translate(0, -50%) rotate(45deg)
+
+  & emp
+    color: #777
+    font-style: italic
+  & p
+    color: orange !important
+    font-size: 70px
+    transition: 300ms
+    padding: 0 !important
+    display: inline-block
+    word-wrap: break-word
+    position: relative
+    max-width: 42mm
+    top: 50%
+    transform: translate(0,-50%)
+    border-right: none !important
+    text-shadow: -1px 0 2px #960, 1px 0 2px #960, 0 1px 2px #960, 0 -1px 2px #960
+
+
+
 .doc-move
   position: absolute
   display: block

@@ -379,7 +379,8 @@ let chapter = {
   on : new Function(),
   off : new Function(),
   state : false,
-  sel : undefined
+  sel : undefined,
+  addF : new Function()
 }
 
 chapter.btn.addEventListener("click",()=>{
@@ -449,18 +450,33 @@ chapter.on = () => {
       e.stopPropagation()
       let el = e.target //The element
 
-      // Trigger it
+      // Trigger on
       if (el.tagName == "DIV" && !el.state) {
         el.style.boxShadow = "-10px 10px 0px #850, 10px -10px 0px #960, -10px 10px 25px #850, 10px -10px 25px #960"
         el.state = true
+
+        if (typeof chapter.sel == "number") {
+          let old = chapter.docs.childNodes[chapter.sel]
+          old.style.boxShadow = "-5px -5px 0px #2a2a2a, -10px -10px 0px #222"
+          old.state = false
+        }
+
         chapter.sel = el.index
       }
       else if (el.tagName == "P" && !el.parentNode.state) {
         el.style.boxShadow = "none"
         el.parentNode.style.boxShadow = "-10px 10px 0px #850, 10px -10px 0px #960"
         el.parentNode.state = true
+
+        if (typeof chapter.sel == "number") {
+          let old = chapter.docs.childNodes[chapter.sel]
+          old.style.boxShadow = "-5px -5px 0px #2a2a2a, -10px -10px 0px #222"
+          old.state = false
+        }
+        
         chapter.sel = el.parentNode.index
       }
+      //Trigger off
       else if (el.tagName == "DIV" && el.state) {
         el.style.boxShadow = "-10px -10px 0px #3a3a3a, 10px 10px 0px #333"
         el.state = false
@@ -484,14 +500,30 @@ chapter.on = () => {
       }
 
     })
-
-
-
-
     chapter.docs.appendChild(doc)
     index++
   }
+  chapter.addF()
 }
+
+
+chapter.addF = ()=> {
+  let doc = document.createElement("div")
+  doc.className = "doc-chapter-add"
+  doc.innerHTML = `<p> + </p>`
+  doc.addEventListener("click", e =>{
+    e.stopPropagation()
+    chapter.off()
+
+    //Append new Element
+    BASE_FILE.book.push(["Nowy Rozdział", [] ])
+
+    chapter.on()
+  })
+
+  chapter.docs.appendChild(doc)
+}
+
 
 chapter.off = () => {
   chapter.docs.innerHTML = ""
