@@ -138,8 +138,8 @@ function turnRight(){
 function autosaveF(e){
     setTimeout(function () {
       pages[curPage] = textField.contentDocument.body.innerHTML;
-      
-      if (BASE_FILE.book[curChapter][1] != undefined) {
+
+      if (BASE_FILE.book[curChapter] != undefined) {
         BASE_FILE.book[curChapter][1] = pages
       }
     },10)

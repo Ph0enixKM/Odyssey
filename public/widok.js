@@ -108,8 +108,9 @@ fv.on = ()=>{
     let doc = document.createElement("article")
     doc.className = "doc"
     doc.setAttribute("index",index)
+    // Tutaj ukryty jest zwnj w pustym stringu XDDDD
     doc.innerHTML = `
-      ${ (data == undefined || data.length <= 1) ? "<emp>(pusta strona)</emp>" : data }
+      ${ (data == undefined || data.length <= 0 || data == "‌") ? "<emp>(pusta strona)</emp>" : data }
     <br><br>
       <h1 style="
       position: absolute;
@@ -418,27 +419,27 @@ chapter.input.addEventListener("change",()=>{
 
 //Trash
 chapter.trash.addEventListener("click",()=>{
-  chapter.docs.childNodes[chapter.sel].style.transform = "translate(0,-100px)"
-  chapter.docs.childNodes[chapter.sel].style.backgroundColor = "#930"
-  chapter.docs.childNodes[chapter.sel].style.boxShadow = "-30px 30px 0px #930, 30px -30px 0px #930, -30px 30px 25px #930, 30px -30px 25px #930"
-  chapter.docs.childNodes[chapter.sel].style.opacity = 0
+  let sel = chapter.sel
+  chapter.docs.childNodes[sel].style.transform = "translate(0,-100px)"
+  chapter.docs.childNodes[sel].style.backgroundColor = "#930"
+  chapter.docs.childNodes[sel].style.boxShadow = "-30px 30px 0px #930, 30px -30px 0px #930, -30px 30px 25px #930, 30px -30px 25px #930"
+  chapter.docs.childNodes[sel].style.opacity = 0
   setTimeout(()=>{
-    BASE_FILE.book.splice(chapter.sel, 1)
+    BASE_FILE.book.splice(sel, 1)
 
-    if (curChapter == chapter.sel) {
+
+    chapter.off()
+    chapter.on()
+
+    if (curChapter == sel) {
       curChapter = 0
       pages = BASE_FILE.book[curChapter][1]
-      console.log(BASE_FILE.book);
-      console.log(pages);
 
       curPage = 0;
       textField.contentDocument.body.innerHTML = (pages[curPage] == undefined) ? "" : pages[curPage];
       pages[curPage] = textField.contentDocument.body.innerHTML;
       sbChapter.innerHTML = BASE_FILE.book[curChapter][0]
     }
-
-    chapter.off()
-    chapter.on()
   },300)
 })
 
@@ -559,6 +560,10 @@ chapter.on = () => {
     index++
   }
   chapter.addF()
+
+  if (chapter.docs.childNodes[0].nodeName == "#text") {
+    chapter.docs.removeChild(chapter.docs.childNodes[0])
+  }
 }
 
 
@@ -595,3 +600,5 @@ chapter.off = () => {
   chapter.edit.style.transform = "translate(0,-100px)"
   chapter.sel = undefined
 }
+
+// TODO: move from chapter to chapter + box selections
