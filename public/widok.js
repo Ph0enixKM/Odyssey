@@ -108,7 +108,7 @@ fv.on = ()=>{
     let doc = document.createElement("article")
     doc.className = "doc"
     doc.setAttribute("index",index)
-    // Tutaj ukryty jest zwnj w pustym stringu XDDDD
+    // Tutaj ukryty jest zwnj w pustym stringu XD
     doc.innerHTML = `
       ${ (data == undefined || data.length <= 0 || data == "‌") ? "<emp>(pusta strona)</emp>" : data }
     <br><br>

@@ -188,6 +188,11 @@ right.addEventListener("click",turnRight);
 qs(".menu button#open-file")[0].addEventListener("click",()=>{
   ipcRenderer.send('open-file')
 })
+
+qs(".menu button#save-file")[0].addEventListener("click",()=>{
+  ipcRenderer.send('save-file', JSON.stringify(BASE_FILE) )
+})
+
 // TODO: finishit
 ipcRenderer.on('selected-files',(event,path) =>{
   alert(path)

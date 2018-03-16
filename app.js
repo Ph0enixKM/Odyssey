@@ -35,6 +35,19 @@ app.on("ready", ()=>{
     })
   })
 
+  ipcMain.on("save-file", (e,source) =>{
+    dialog.showSaveDialog({
+      options : {}
+    },
+    file =>{
+      if (file != undefined) {
+        fs.writeFile(file, source, err => {
+          if (err) throw err
+        })
+      }
+    })
+  })
+
 
   win = new BrowserWindow({width, height, frame:false, show:false});
   // win.toggleDevTools();
