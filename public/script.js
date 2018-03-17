@@ -686,8 +686,8 @@ setInterval(function () {
 
   firstLetterFix();
 
-  //284 && 280
-  cs.top = (parseInt(cs.top) < 273  - bodyContent.scrollTop) ? 273 - bodyContent.scrollTop : cs.top - bodyContent.scrollTop;
+  //284 && 280 && 270
+  cs.top = (parseInt(cs.top) < 270  - bodyContent.scrollTop) ? 270 - bodyContent.scrollTop : cs.top - bodyContent.scrollTop;
 
   checkForFloatingDivs();
 
@@ -810,10 +810,6 @@ function restrictionsOptimal (wordSize){
   //Sprawdź, czy skończył poprawiać
   prevCheck = true;
   restOf = str.slice(str.length-wordSize,str.length) + restOf;
-  // if(textField.contentDocument.body.lastChild.innerHTML == ""){
-  //   //If the div is empty - delete it
-  //   textField.contentDocument.body.lastChild.remove();
-  // } else {
     //Otherwise delete the last character
     textField.contentDocument.body.innerHTML = str.slice(0,-wordSize);
     str = str.slice(0,-wordSize);
