@@ -194,8 +194,18 @@ qs(".menu button#save-file")[0].addEventListener("click",()=>{
 })
 
 // TODO: finishit
-ipcRenderer.on('selected-files',(event,path) =>{
-  alert(path)
+ipcRenderer.on('selected-files',(event,source) =>{
+  BASE_FILE = JSON.parse(source)
+
+  curPage = 0
+  curChapter = 0
+
+  pages = BASE_FILE.book[curChapter][1]
+
+  textField.contentDocument.body.innerHTML = (pages[curPage] == undefined) ? "" : pages[curPage];
+  pages[curPage] = textField.contentDocument.body.innerHTML;
+  sbChapter.innerHTML = BASE_FILE.book[curChapter][0]
+
 })
 
 

@@ -112,15 +112,11 @@ fv.on = ()=>{
     doc.innerHTML = `
       ${ (data == undefined || data.length <= 0 || data == "‌") ? "<emp>(pusta strona)</emp>" : data }
     <br><br>
-      <h1 style="
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%,-50%);
-      ">
+      <h1 style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); ">
         ${index}
       </h1>
     `
+
     doc.index = index
     doc.sel = false //Selection attribute
     doc.addEventListener("click",function(){
@@ -302,15 +298,11 @@ move.on = ()=>{
            data.childNodes[0].textContent.trim().length <= 1) ?
           "<emp>(pusta strona)</emp>" : data.childNodes[0].textContent }
       <br><br>
-        <h1 style="
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%,-50%);
-        ">
+        <h1 style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);">
           ${doc.index}
         </h1>
       `
+
       doc.center = {
         x: doc.offsetTop + (doc.offsetHeight/2),
         y: doc.offsetLeft + (doc.offsetWidth/2)
@@ -602,3 +594,5 @@ chapter.off = () => {
 }
 
 // TODO: move from chapter to chapter + box selections
+
+// TODO: Tytułowanie stron
