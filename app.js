@@ -26,9 +26,10 @@ app.on("ready", ()=>{
       ]
     }, files =>{
       if (files){ //e.sender.send('selected-files',files)
+
         fs.readFile(files[0], 'utf-8', (err,data)=>{
           if (err) console.log(err)
-          e.sender.send('selected-files',data)
+          e.sender.send('selected-files',data, files[0])
         })
 
       }
@@ -46,6 +47,9 @@ app.on("ready", ()=>{
       if (file != undefined) {
         fs.writeFile(file, source, err => {
           if (err) throw err
+
+          e.sender.send('saved-file', file)
+
         })
       }
     })
@@ -65,11 +69,13 @@ app.on("ready", ()=>{
   ipcMain.on('check-if-opened-with-file',e =>{
     if (process.platform == 'win32' && process.argv.length >= 2) {
       var openFilePath = process.argv[1]
-      fs.readFile(openFilePath, 'utf-8', (err,data)=>{
-        if (err) console.log(err)
-        e.sender.send('selected-files',data)
-      })
-      // dialog.showMessageBox({type : "info",message : openFilePath})
+      if (openFilePath != ".") { //If it's opened in emulator
+
+        fs.readFile(openFilePath, 'utf-8', (err,data)=>{
+          if (err) console.log(err)
+          e.sender.send('selected-files',data, openFilePath)
+        })
+      }
     }
   })
 

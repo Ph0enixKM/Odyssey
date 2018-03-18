@@ -198,8 +198,11 @@ qs(".menu button#save-file")[0].addEventListener("click",()=>{
   ipcRenderer.send('save-file', JSON.stringify(BASE_FILE) )
 })
 
-// TODO: finishit
-ipcRenderer.on('selected-files',(event,source) =>{
+ipcRenderer.on('saved-file',(event,name)=>{
+  qs('.bar span')[0].textContent = name
+})
+
+ipcRenderer.on('selected-files',(event,source,name) =>{
   try{
     BASE_FILE = JSON.parse(source)
   }
@@ -214,15 +217,18 @@ ipcRenderer.on('selected-files',(event,source) =>{
       fonts : []
     }
   }
+  finally{
+    qs('.bar span')[0].textContent = name
 
-  curPage = 0
-  curChapter = 0
+    curPage = 0
+    curChapter = 0
 
-  pages = BASE_FILE.book[curChapter][1]
+    pages = BASE_FILE.book[curChapter][1]
 
-  textField.contentDocument.body.innerHTML = (pages[curPage] == undefined) ? "" : pages[curPage];
-  pages[curPage] = textField.contentDocument.body.innerHTML;
-  sbChapter.innerHTML = BASE_FILE.book[curChapter][0]
+    textField.contentDocument.body.innerHTML = (pages[curPage] == undefined) ? "" : pages[curPage];
+    pages[curPage] = textField.contentDocument.body.innerHTML;
+    sbChapter.innerHTML = BASE_FILE.book[curChapter][0]
+  }
 
 })
 

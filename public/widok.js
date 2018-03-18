@@ -394,6 +394,7 @@ chapter.bg.addEventListener("click",()=>{
     chapter.bg.style.display = "none"
     chapter.state = false
     chapter.off()
+    sbChapter.innerHTML = BASE_FILE.book[curChapter][0]
   },150)
 })
 
