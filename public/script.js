@@ -137,7 +137,11 @@ function turnRight(){
 
 function autosaveF(e){
     setTimeout(function () {
-      pages[curPage] = textField.contentDocument.body.innerHTML;
+      //When page is null then it means it's being deleted
+      if (pages[curPage] === null) {
+      } else {
+        pages[curPage] = textField.contentDocument.body.innerHTML;
+      }
 
       if (BASE_FILE.book[curChapter] != undefined) {
         BASE_FILE.book[curChapter][1] = pages

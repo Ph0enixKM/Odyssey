@@ -98,9 +98,11 @@ fv.on = ()=>{
 
   fv.pages = (pages.length == 0) ? [""] : pages
   fv.pages = fv.pages.map( data =>{
-    data = data.replace(/(<([^>]+)>)/ig,"");
-    return (data == null) ? data :
-              ( data.length > 50 ) ? data.slice(0,50)+"..." : data.slice(0,50)
+    if (data != null) {
+      data = data.replace(/(<([^>]+)>)/ig,"");
+      return (data == null) ? data :
+                ( data.length > 50 ) ? data.slice(0,50)+"..." : data.slice(0,50)
+    }
   })
   let index = 1
   for (data of fv.pages) {
