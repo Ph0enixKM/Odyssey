@@ -188,6 +188,7 @@ right.addEventListener("click",turnRight);
   sbLetters = document.getElementsByClassName("letters")[0]
   sbChapter = document.getElementsByClassName("chapter")[0]
 
+ipcRenderer.send('check-if-opened-with-file')
 
 qs(".menu button#open-file")[0].addEventListener("click",()=>{
   ipcRenderer.send('open-file')
@@ -199,7 +200,20 @@ qs(".menu button#save-file")[0].addEventListener("click",()=>{
 
 // TODO: finishit
 ipcRenderer.on('selected-files',(event,source) =>{
-  BASE_FILE = JSON.parse(source)
+  try{
+    BASE_FILE = JSON.parse(source)
+  }
+  catch (e){
+    BASE_FILE = {
+      title : undefined,
+      author : undefined,
+      keywords : [],
+      book : [
+        ["Prolog", [source] ],
+      ],
+      fonts : []
+    }
+  }
 
   curPage = 0
   curChapter = 0
