@@ -32,7 +32,8 @@ var keys = {
   left: false,
   right: false,
   shift: false,
-  v: false
+  v: false,
+  click : {state : false, loc : []}
 };
 var prev = false;
 var position = 0;
@@ -239,6 +240,9 @@ var caret = textField.contentDocument.createElement("div");
 caret.className = "caret";
 var cs = caret.style;
 
+
+
+
 space = 19;
 
 
@@ -283,7 +287,9 @@ function BASE_FILE_UPDATE(key,val) {
 //Caret Key Mapping
 function mapKeys(dock){
   Object.keys(keys).map(function(key,index){
-    keys[key] = false;
+    if (typeof keys[key] != "object") {
+      keys[key] = false;
+    }
   });
   keys[dock] = true;
 }
@@ -312,6 +318,13 @@ textField.contentWindow.addEventListener("keydown",function(e){
       win.toggleDevTools()
   }
 });
+textField.contentWindow.addEventListener("mousedown", e =>{
+  keys.click.state = true
+  keys.click.loc = [e.x, e.y]
+})
+textField.contentWindow.addEventListener("mouseup",()=>{
+  keys.click.state = false
+})
 
 
 
@@ -594,7 +607,11 @@ function caretUpdate(){
 
 function negateKeys(){
   Object.keys(keys).map(function(key,index){
-    keys[key] = false;
+    if (typeof keys[key] != "object") {
+      keys[key] = false;
+    } else if (key == "click") {
+      keys[key].state = false
+    }
   })
 }
 
@@ -707,7 +724,6 @@ setInterval(function () {
   stickIntoBorders(cs.top);
   restrictions();
 
-
   firstLetterFix();
 
   //284 && 280 && 270
@@ -772,8 +788,7 @@ function getSelectionCoords(iframe) {
                 else{
 
                   //It's a value of CSS property (without CSS type)
-                  var csNum = cs.top.replace(cs.top.match(/px/),"");
-
+                  var csNum = cs.top.replace(cs.top.match(/px/),"")
 
                   if(keys.enter || keys.down || keys.right){
                     negateKeys();
@@ -812,6 +827,13 @@ function getSelectionCoords(iframe) {
                           (+textField.contentDocument.body.offsetWidth/2) :
                           textField.contentDocument.body.offsetWidth,
                       y: cs.top = parseInt(csNum)}
+                  } else if (keys.click.state) {
+                    let temp = keys.click.loc[1]
+                    temp -= temp % 19
+                    return{
+                      x : 0,
+                      y : temp
+                    }
                   }
                   else {
                     return{x: undefined, y: undefined}
@@ -823,7 +845,6 @@ function getSelectionCoords(iframe) {
     return { x: x, y: y };
 }
 function stickIntoBorders(location){
-  // TODO:jak nie ma heada, to ma być wraz ze stylem!
 
   if (parseInt(cs.top) > textField.contentDocument.body.offsetHeight + textField.offsetTop + 70 - 18) {
     cs.top = (parseInt(cs.top) - 18)+"px";
@@ -907,53 +928,78 @@ function restrictions() {
   }
 }
 
-
+function fontSizeReader(elem) {
+  switch (elem) {
+    case '7':
+    space = 57
+    fontSizes.value = 7;
+    break;
+    case '6':
+    space = 39
+    fontSizes.value = 6;
+    break;
+    case '5':
+    space = 29
+    fontSizes.value = 5;
+    break;
+    case '4':
+    space = 22
+    fontSizes.value = 4;
+    break;
+    case '3':
+    space = 18
+    fontSizes.value = 3;
+    break;
+    case '2':
+    space = 16
+    fontSizes.value = 2;
+    break;
+    case '1':
+    space = 12
+    fontSizes.value = 1;
+    break;
+    default:
+    space = 18
+    fontSizes.value = 3;
+    break;
+  }
+}
 
 function caretSize() {
   try {
     //The following variable can be null.
-    var selEl = textField.contentWindow.getSelection().anchorNode.parentElement;
+    var selEl = textField.contentWindow.getSelection().anchorNode.parentElement
+    let font
+    try{
+      font = (selEl.face != undefined) ?
+      selEl.face :
+      (selEl.parentElement.face != undefined) ?
+      selEl.parentElement.face :
+      (selEl.parentElement.parentElement.face != undefined) ?
+      selEl.parentElement.parentElement.face :
+      (selEl.parentElement.parentElement.parentElement.face != undefined) ?
+      selEl.parentElement.parentElement.parentElement.face :
+      "Lato"
+    } catch (e) {
+      font = "Lato"
+    }
 
+    console.log(font);
+    fonts.value = font
     //TagNames must be CAPITAL
     if (selEl.tagName == "FONT") {
-      switch (selEl.size) {
-        case '7':
-        space = 57
-        fontSizes.value = 7;
-        break;
-        case '6':
-        space = 39
-        fontSizes.value = 6;
-        break;
-        case '5':
-        space = 29
-        fontSizes.value = 5;
-        break;
-        case '4':
-        space = 22
-        fontSizes.value = 4;
-        break;
-        case '3':
-        space = 18
-        fontSizes.value = 3;
-        break;
-        case '2':
-        space = 16
-        fontSizes.value = 2;
-        break;
-        case '1':
-        space = 12
-        fontSizes.value = 1;
-        break;
-        default:
-        space = 18
-        fontSizes.value = 3;
-        break;
+        fontSizeReader(selEl.size)
+
+    } else if (selEl.tagName == "B" || selEl.tagName == "U" || selEl.tagName == "I") {
+
+      if(selEl.parentNode.tagName == "FONT"){
+        fontSizeReader(selEl.parentNode.size)
+      } else if (selEl.parentNode.tagName == "B" ||
+                 selEl.parentNode.tagName == "U" ||
+                 selEl.parentNode.tagName == "I") {
+        fontSizeReader(selEl.parentNode.parentNode.size)
       }
-      // console.log((selEl.parentElement.tagName == "FONT") ? selEl.parentElement.face : "Lato");
-      fonts.value = (selEl.face != "") ? selEl.face : (selEl.parentElement.tagName == "FONT") ? selEl.parentElement.face : "Lato"
-      console.log(fonts.value);
-    } else {
+    } else  {
       space = 18
       fontSizes.value = 3;
       fonts.value = "Lato"
