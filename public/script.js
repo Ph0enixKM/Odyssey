@@ -108,7 +108,6 @@ function turnLeft() {
 function turnRight(){
   if (textField.style.opacity == 1) { //Has the page turned on?
 
-    // console.log("right");
 
     //Animation
     textField.style.transform = "translate(-150%) scale(0.5)";
@@ -182,7 +181,22 @@ right = document.getElementsByClassName('move right')[0]
 left.addEventListener("click",turnLeft);
 right.addEventListener("click",turnRight);
 
+// QUESTION: It it really a good idea?
+textField.contentDocument.body.innerHTML = "&zwnj;"
 
+textField.contentDocument.documentElement.addEventListener("keydown",e => {
+  if (e.keyCode == 27) {
+    textField.contentDocument.body.blur()
+    window.focus()
+  }
+})
+
+window.addEventListener("keydown",e => {
+  if (e.keyCode == 13) {
+    window.blur()
+    textField.contentDocument.body.focus()
+  }
+})
 
   sbPages = document.getElementsByClassName("pages")[0]
   sbWords = document.getElementsByClassName("words")[0]
@@ -229,6 +243,11 @@ ipcRenderer.on('selected-files',(event,source,name) =>{
     textField.contentDocument.body.innerHTML = (pages[curPage] == undefined) ? "" : pages[curPage];
     pages[curPage] = textField.contentDocument.body.innerHTML;
     sbChapter.innerHTML = BASE_FILE.book[curChapter][0]
+
+    qs("input#keys")[0].value = BASE_FILE.keywords.join(" ")
+    qs("#all-keys p")[0].innerHTML = BASE_FILE.keywords.length
+    qs("input#title")[0].value = (BASE_FILE.title != undefined) ? BASE_FILE.title : ""
+    qs("input#author")[0].value = (BASE_FILE.author != undefined) ? BASE_FILE.author : ""
   }
 
 })
@@ -250,7 +269,7 @@ space = 19;
 qs("input#keys")[0].addEventListener('change',()=>{
   let attrib = (qs("input#keys")[0].value.length == 0) ? [] : qs("input#keys")[0].value.split(" ")
   qs("#all-keys p")[0].innerHTML = attrib.length
-  BASE_FILE_UPDATE("keys",attrib)
+  BASE_FILE_UPDATE("keywords",attrib)
 })
 
 qs("input#title")[0].addEventListener('change',()=>{
@@ -599,7 +618,6 @@ function caretInit(){
 function caretUpdate(){
   cs.top = caretLoc.y + textField.offsetTop + 70 - bodyContent.scrollTop;
   cs.left = caretLoc.x + textField.offsetLeft + 70;
-  // console.log(window.pageYOffset);
   cs.height = space;
 }
 
@@ -871,10 +889,8 @@ function restrictions() {
   if (!restrictions_start && textField.contentDocument.body.offsetHeight > 1123) {
     str = textField.contentDocument.body.innerHTML
     restrictions_start = true
-    // console.log("locked");
   } else if (textField.contentDocument.body.offsetHeight <= 1123) {
     restrictions_start = false
-    // console.log("unlocked");
   }
 
   let prevLetters = sbLetters
@@ -984,7 +1000,6 @@ function caretSize() {
       font = "Lato"
     }
 
-    console.log(font);
     fonts.value = font
     //TagNames must be CAPITAL
     if (selEl.tagName == "FONT") {
