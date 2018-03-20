@@ -96,6 +96,8 @@ fv.tools.childNodes[3].addEventListener("click",()=>{ //Delete Button
 
 //View Turned on
 fv.on = ()=>{
+  fv.btnBlocker.setAttribute("disabled",true)
+  fv.mergeBlocker.setAttribute("disabled",true)
 
   fv.pages = (pages.length == 0) ? [""] : pages
   fv.pages = fv.pages.map( data =>{
@@ -614,7 +616,6 @@ mergeSel.btn.addEventListener("click",()=>{
   fv.bg.style.opacity = 0
 
 
-  console.log(fv.sel);
   let x = fv.sel.slice() //Clone Array
   x.sort((a,b)=>{ return a.index - b.index }) //Incremential
 
@@ -624,7 +625,6 @@ mergeSel.btn.addEventListener("click",()=>{
     all_pgs += pages[p]
     pages[p] = null
   }
-  console.log(all_pgs)
 
   curPage = x[0].index-1
   pages[curPage] = all_pgs

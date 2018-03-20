@@ -36,6 +36,28 @@ app.on("ready", ()=>{
     })
   })
 
+  ipcMain.on('open-image',e =>{
+    dialog.showOpenDialog({
+      properties : ['openFile'],
+      filters : [
+        {name : 'All supported files', extensions : ["png","jpg","jpeg","jpe","tiff"]},
+        {name : 'PNG images', extensions : ["png"]},
+        {name : 'JPEG images', extensions : ["jpg","jpeg","jpe"]},
+        {name : 'TIFF images', extensions : ["tiff"]},
+        {name : 'All files', extensions : ["*"]},
+      ]
+    }, files =>{
+      if (files){ //e.sender.send('selected-files',files)
+
+        fs.readFile(files[0], (err,data)=>{
+          if (err) console.log(err)
+          e.sender.send('selected-image',data)
+        })
+
+      }
+    })
+  })
+
   ipcMain.on("save-file", (e,source) =>{
     dialog.showSaveDialog({
       options : {},

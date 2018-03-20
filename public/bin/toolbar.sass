@@ -491,6 +491,7 @@ canvas#move
         background-image: url("../arts/chapter.png")
         background-size: cover
         background-position: center
+        border-left: 2px #444 dashed
         &:hover
           background-color: #333
 
@@ -660,6 +661,25 @@ disabled[disabled="false"]
   z-index: 9
   user-select: none
   perspective: 500px
+
+  #insert
+    display: none
+    vertical-align: middle
+    #image
+      display: inline-block
+      width: 39px
+      height: 39px
+      margin: 5px
+      padding: 0 10px 0 10px
+      border: 1px solid $border
+      transition: 300ms
+      background-image: url("../arts/image.png")
+      background-position: center
+      background-size: contain
+      background-repeat: no-repeat
+      cursor: pointer
+      &:hover
+        background-color: #555
 
   #view
     display: none

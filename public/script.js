@@ -418,6 +418,9 @@ function addStyle() {
         word-wrap: break-word;
         height: 100%;
       }
+      body{
+        caret-color: transparent;
+      }
     </style>
     <link href="bin/toolbar.css" rel="stylesheet">
     `
@@ -513,27 +516,38 @@ function menuF() {
     document.querySelector('#ctx-menu').innerText = "Narzędzia"
     document.querySelector('#view').style.display = "none"
     document.querySelector('#tools').style.display = "inline-block"
+    document.querySelector('#insert').style.display = "none"
     document.querySelector('#pages').style.display = "none"
     document.querySelector('#project').style.display = "none"
   })
-
   ctxMenu.childNodes[3].addEventListener("click",()=>{
-    document.querySelector('#ctx-menu').innerText = "Widok"
-    document.querySelector('#view').style.display = "inline-block"
+    document.querySelector('#ctx-menu').innerText = "Wstawianie"
+    document.querySelector('#view').style.display = "none"
+    document.querySelector('#insert').style.display = "inline-block"
     document.querySelector('#tools').style.display = "none"
     document.querySelector('#pages').style.display = "none"
     document.querySelector('#project').style.display = "none"
   })
   ctxMenu.childNodes[5].addEventListener("click",()=>{
+    document.querySelector('#ctx-menu').innerText = "Widok"
+    document.querySelector('#view').style.display = "inline-block"
+    document.querySelector('#insert').style.display = "none"
+    document.querySelector('#tools').style.display = "none"
+    document.querySelector('#pages').style.display = "none"
+    document.querySelector('#project').style.display = "none"
+  })
+  ctxMenu.childNodes[7].addEventListener("click",()=>{
     document.querySelector('#ctx-menu').innerText = "Strony"
     document.querySelector('#view').style.display = "none"
+    document.querySelector('#insert').style.display = "none"
     document.querySelector('#tools').style.display = "none"
     document.querySelector('#pages').style.display = "inline-block"
     document.querySelector('#project').style.display = "none"
   })
-  ctxMenu.childNodes[7].addEventListener("click",()=>{
+  ctxMenu.childNodes[9].addEventListener("click",()=>{
     document.querySelector('#ctx-menu').innerText = "Projekt"
     document.querySelector('#view').style.display = "none"
+    document.querySelector('#insert').style.display = "none"
     document.querySelector('#tools').style.display = "none"
     document.querySelector('#pages').style.display = "none"
     document.querySelector('#project').style.display = "inline-block"

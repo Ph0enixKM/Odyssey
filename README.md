@@ -40,3 +40,4 @@ After couple of seconds an Odyssey window should appear.
 ## Features to add
 - Adding images
 - Printing & View of file to print
+- "\n" as new word
