@@ -40,10 +40,10 @@ app.on("ready", ()=>{
     dialog.showOpenDialog({
       properties : ['openFile'],
       filters : [
-        {name : 'All supported files', extensions : ["png","jpg","jpeg","jpe","tiff"]},
+        {name : 'All supported files', extensions : ["png","jpg","jpeg","jpe","gif"]},
         {name : 'PNG images', extensions : ["png"]},
         {name : 'JPEG images', extensions : ["jpg","jpeg","jpe"]},
-        {name : 'TIFF images', extensions : ["tiff"]},
+        {name : 'GIF images', extensions : ["gif"]},
         {name : 'All files', extensions : ["*"]},
       ]
     }, files =>{
