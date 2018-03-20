@@ -79,9 +79,6 @@ function turnLeft() {
       curPage = 0;
     } else {
 
-
-    // console.log("left");
-
     //Animation
     textField.style.transform = "translate(150%) scale(0.5)";
     textField.style.opacity = 0
@@ -915,7 +912,7 @@ function restrictions() {
   } else if (textField.contentDocument.body.offsetHeight > 1123) {
     str = restrictionsOptimal(1);
   }
-  else if(prevCheck && !strony.invoked) {
+  else if(prevCheck && !merge.invoked) {
     prevCheck = false;
     autosaveF();
     setTimeout(()=>{
@@ -924,7 +921,7 @@ function restrictions() {
       restOf = ""
       turnRight();
     },100)
-  } else if (prevCheck && strony.invoked) {
+  } else if (prevCheck && merge.invoked) {
     prevCheck = false;
 
     pages[curPage] = textField.contentDocument.body.innerHTML; //Autosave
@@ -934,11 +931,10 @@ function restrictions() {
     curPage++;
     textField.contentDocument.body.innerHTML = (pages[curPage] == undefined) ? "" : pages[curPage];
   } else {
-    if (strony.invoked) {
+    if (merge.invoked) {
       if (sbLetters == prevLetters) {
-        console.warn("closed");
-        strony.finished = true
-        strony.invoked = false
+        merge.finished = true
+        merge.invoked = false
       }
     }
   }

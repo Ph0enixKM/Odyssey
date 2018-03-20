@@ -1,4 +1,4 @@
-let strony = {
+let merge = {
   btn : qs('#merge-all')[0],
   loading : qs('#compiling')[0],
   innerMsg : qs('#compiling-cont p')[0],
@@ -8,11 +8,11 @@ let strony = {
 }
 
 
-strony.btn.addEventListener("click",()=>{
-  strony.loading.style.display = "inline-block"
-  strony.loading.style.opacity = 0
-  strony.gif.style.transform = "rotate(30deg) scale(0)"
-  strony.innerMsg.innerHTML = "Scalanie Stron"
+merge.btn.addEventListener("click",()=>{
+  merge.loading.style.display = "inline-block"
+  merge.loading.style.opacity = 0
+  merge.gif.style.transform = "rotate(30deg) scale(0)"
+  merge.innerMsg.innerHTML = "Scalanie Wszystkich Stron"
   //Merging
   let all = ""
   pages.map(item => {
@@ -27,23 +27,23 @@ strony.btn.addEventListener("click",()=>{
   //Change Page
   curPage = 0
   textField.contentDocument.body.innerHTML = (pages[curPage] == undefined) ? "" : pages[curPage]
-  strony.invoked = true
+  merge.invoked = true
 
   setTimeout(()=>{
-    strony.loading.style.opacity = 1
-    strony.gif.style.transform = "rotate(0deg) scale(1)"
+    merge.loading.style.opacity = 1
+    merge.gif.style.transform = "rotate(0deg) scale(1)"
   },300)
 })
 
 setInterval(()=>{
-  if (strony.finished) {
+  if (merge.finished) {
     setTimeout(()=>{
-      strony.loading.style.opacity = 0
-      strony.gif.style.transform = "rotate(30deg) scale(0)"
+      merge.loading.style.opacity = 0
+      merge.gif.style.transform = "rotate(30deg) scale(0)"
       setTimeout(()=>{
-        strony.loading.style.display = "none"
+        merge.loading.style.display = "none"
       },300)
     },500)
-    strony.finished = false
+    merge.finished = false
   }
 },200)

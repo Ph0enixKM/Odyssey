@@ -35,6 +35,7 @@ let shortcutOff = ()=>{
 let fv = {
   btn : qs("#full-view")[0],
   btnBlocker : qs("disabled#move")[0],
+  mergeBlocker : qs("disabled#merge")[0],
   bg : qs(".full-view")[0],
   docs : qs(".full-view .docs")[0],
   tools : qs(".fv-tools")[0],
@@ -158,14 +159,17 @@ fv.on = ()=>{
             if(sortedSel[sortedSel.indexOf(sel)+1] !== undefined){ // If it is not the last item
               if(sel.index == sortedSel[sortedSel.indexOf(sel)+1].index -1){
                 fv.btnBlocker.setAttribute("disabled",false)
+                fv.mergeBlocker.setAttribute("disabled",false)
               } else {
                 fv.btnBlocker.setAttribute("disabled",true)
+                fv.mergeBlocker.setAttribute("disabled",true)
                 break
               }
 
             } else {
               if (filteredSel.length == 1) {
                 fv.btnBlocker.setAttribute("disabled",true)
+                fv.mergeBlocker.setAttribute("disabled",true)
                 break
               }
             }
@@ -595,6 +599,58 @@ chapter.off = () => {
   chapter.edit.style.transform = "translate(0,-100px)"
   chapter.sel = undefined
 }
+
+let mergeSel = {
+  btn : qs('#merge-sel')[0],
+}
+
+mergeSel.btn.addEventListener("click",()=>{
+  merge.loading.style.display = "inline-block"
+  merge.loading.style.opacity = 0
+  merge.gif.style.transform = "rotate(30deg) scale(0)"
+  merge.innerMsg.innerHTML = "Scalanie Wybranych Stron"
+
+  // Turn off Full View
+  fv.bg.style.opacity = 0
+
+
+  console.log(fv.sel);
+  let x = fv.sel.slice() //Clone Array
+  x.sort((a,b)=>{ return a.index - b.index }) //Incremential
+
+  let all_pgs = ""
+
+  for (let p = x[0].index-1; p < x[0].index-1+x.length; p++) {
+    all_pgs += pages[p]
+    pages[p] = null
+  }
+  console.log(all_pgs)
+
+  curPage = x[0].index-1
+  pages[curPage] = all_pgs
+
+
+  textField.contentDocument.body.innerHTML = (pages[curPage] == undefined) ? "" : pages[curPage]
+
+  // x[x.length]
+
+  for (let p = 0; p < pages.length; p++) {
+    if (pages[p] === null) {
+      pages.splice(p,1)
+    }
+  }
+
+  merge.invoked = true
+
+
+  setTimeout(()=>{
+    merge.loading.style.opacity = 1
+    merge.gif.style.transform = "rotate(0deg) scale(1)"
+
+    fv.bg.style.display = "none"
+    fv.off()
+  },300)
+})
 
 // TODO: move from chapter to chapter + box selections
 

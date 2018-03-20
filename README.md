@@ -41,3 +41,4 @@ After couple of seconds an Odyssey window should appear.
 - Adding images
 - Merging selected pages
 - Printing & View of file to print
+- Page switch on shortcut
