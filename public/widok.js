@@ -632,8 +632,6 @@ mergeSel.btn.addEventListener("click",()=>{
 
   textField.contentDocument.body.innerHTML = (pages[curPage] == undefined) ? "" : pages[curPage]
 
-  // x[x.length]
-
   for (let p = 0; p < pages.length; p++) {
     if (pages[p] === null) {
       pages.splice(p,1)
@@ -653,5 +651,3 @@ mergeSel.btn.addEventListener("click",()=>{
 })
 
 // TODO: move from chapter to chapter + box selections
-
-// TODO: Tytułowanie stron

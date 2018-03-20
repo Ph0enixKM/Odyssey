@@ -5,6 +5,8 @@ let input = {
   v : false,
   a : false,
   move : { LMBRelease : false },
+  comma : false,
+  period : false,
 }
 
 
@@ -23,6 +25,12 @@ input.keydown = e => {
     case 65:
       input.a = true
       break;
+    case 188:
+      input.comma = true
+      break;
+    case 190:
+      input.period = true
+      break;
   }
 
 
@@ -40,6 +48,14 @@ input.keydown = e => {
       ctxMenu.style.opacity = 1
     },100)
   }
+  if (input.comma) {
+    input.comma = false
+    turnLeft()
+  }
+  if (input.period) {
+    input.period = false
+    turnRight()
+  }
 
 }
 
@@ -53,6 +69,12 @@ input.keyup = e => {
       break;
     case 65:
       input.a = false
+      break;
+    case 188:
+      input.comma = false
+      break;
+    case 190:
+      input.period = false
       break;
   }
 }
