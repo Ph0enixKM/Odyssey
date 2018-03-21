@@ -421,6 +421,14 @@ function addStyle() {
       body{
         caret-color: transparent;
       }
+      .image{
+        box-shadow: 0 0 10px black;
+        border: 1px transparent solid;
+        transition: 300ms;
+      }
+      .image:hover{
+        border: 1px orange solid;
+      }
     </style>
     <link href="bin/toolbar.css" rel="stylesheet">
     `
