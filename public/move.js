@@ -131,7 +131,7 @@ let construct = () => {
 
 
 }
-
+// QUESTION:  Czy ta funkcja jest używana?
 let calculate = () => {
   if (move.docsList.length > 1) { //If actually there is something
     let prev = null

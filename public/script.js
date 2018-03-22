@@ -290,11 +290,13 @@ function BASE_FILE_UPDATE(key,val) {
 
   document.getElementsByClassName('iframe')[0].addEventListener("scroll",()=>{
     cs.transition = "0ms";
+    insert.sizer.style.opacity = 0
 
     clearTimeout(scrolling);
 
     scrolling = setTimeout(()=>{
       cs.transition = "200ms";
+      insert.sizer.style.opacity = 1
     },66);
 
   },false)
@@ -422,11 +424,13 @@ function addStyle() {
         caret-color: transparent;
       }
       .image{
-        box-shadow: 0 0 10px black;
+        filter: grayscale(100%) brightness(70%);
         border: 1px transparent solid;
-        transition: 300ms;
+        transition: 200ms;
+        cursor: default;
       }
       .image:hover{
+        filter: grayscale(0) brightness(100%);
         border: 1px orange solid;
       }
     </style>
@@ -1023,13 +1027,15 @@ function caretSize() {
     if (selEl.tagName == "FONT") {
         fontSizeReader(selEl.size)
 
-    } else if (selEl.tagName == "B" || selEl.tagName == "U" || selEl.tagName == "I") {
+    } else if (selEl.tagName == "B" || selEl.tagName == "U" ||
+              selEl.tagName == "I" || selEl.tagName == "SPAN") {
 
       if(selEl.parentNode.tagName == "FONT"){
         fontSizeReader(selEl.parentNode.size)
       } else if (selEl.parentNode.tagName == "B" ||
                  selEl.parentNode.tagName == "U" ||
-                 selEl.parentNode.tagName == "I") {
+                 selEl.parentNode.tagName == "I" ||
+                 selEl.parentNode.tagName == "SPAN") {
         fontSizeReader(selEl.parentNode.parentNode.size)
       }
     } else  {
