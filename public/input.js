@@ -1,12 +1,19 @@
 let input = {
   keydown : new Function(),
   keyup : new Function(),
+  keydownIn : new Function(),
+  keyupIn : new Function(),
   shift : false,
   v : false,
   a : false,
+  bIn : false,
+  iIn : false,
+  uIn : false,
   move : { LMBRelease : false },
   comma : false,
   period : false,
+  ctrl : false,
+  ctrlIn : false,
 }
 
 
@@ -31,6 +38,10 @@ input.keydown = e => {
     case 190:
       input.period = true
       break;
+    case 17:
+      input.ctrl = true
+      break;
+
   }
 
 
@@ -57,6 +68,7 @@ input.keydown = e => {
     turnRight()
   }
 
+
 }
 
 input.keyup = e => {
@@ -75,6 +87,58 @@ input.keyup = e => {
       break;
     case 190:
       input.period = false
+      break;
+    case 17:
+      input.ctrl = false
+      break;
+
+  }
+}
+
+textField.contentWindow.addEventListener("keydown", e =>{ input.keydownIn(e) })
+textField.contentWindow.addEventListener("keyup", e =>{ input.keyupIn(e) })
+
+input.keydownIn = e => {
+  switch (e.keyCode) {
+    case 66:
+      input.bIn = true
+      break;
+    case 73:
+      input.iIn = true
+      break;
+    case 85:
+      input.uIn = true
+      break;
+    case 17:
+      input.ctrlIn = true
+      break;
+  }
+
+  // Methodical Section
+  if (input.ctrlIn && input.bIn) {
+    command("bold")
+  }
+  if (input.ctrlIn && input.iIn) {
+    command("italic")
+  }
+  if (input.ctrlIn && input.uIn) {
+    command("underline")
+  }
+}
+
+input.keyupIn = e => {
+  switch (e.keyCode) {
+    case 66:
+      input.bIn = false
+      break;
+    case 73:
+      input.iIn = false
+      break;
+    case 85:
+      input.uIn = false
+      break;
+    case 17:
+      input.ctrlIn = false
       break;
   }
 }
