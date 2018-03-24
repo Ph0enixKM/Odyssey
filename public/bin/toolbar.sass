@@ -14,6 +14,7 @@
   z-index: 10
   a
     display: inline-block
+    vertical-align: middle
     color: #aaa
     background-color: #222
     border: 1px solid #333
@@ -31,8 +32,15 @@
     cursor: pointer
     &:hover
       background-color: #333
+    &#reload
+      transition: 300ms
+      background-image: url("../arts/reload.png")
+      background-position: center
+      background-size: contain
+      background-repeat: no-repeat
   button
     display: inline-block
+    vertical-align: middle
     color: #aaa
     background-color: #222
     border: 1px solid #333
@@ -50,6 +58,32 @@
     cursor: pointer
     &:hover
       background-color: #333
+
+    &#settings
+      transition: 300ms
+      background-image: url("../arts/settings.png")
+      background-position: center
+      background-size: contain
+      background-repeat: no-repeat
+    &#open-file
+      transition: 300ms
+      background-image: url("../arts/open.png")
+      background-position: center
+      background-size: contain
+      background-repeat: no-repeat
+    &#save-file
+      transition: 300ms
+      background-image: url("../arts/saveAs.png")
+      background-position: center
+      background-size: contain
+      background-repeat: no-repeat
+    &#quick-save
+      transition: 300ms
+      background-image: url("../arts/save.png")
+      background-position: center
+      background-size: contain
+      background-repeat: no-repeat
+
 
 
 .sidebar
@@ -680,6 +714,7 @@ disabled[disabled="false"]
       cursor: pointer
       &:hover
         background-color: #555
+
 
   #view
     display: none

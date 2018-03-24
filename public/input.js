@@ -1,3 +1,5 @@
+textField = qs("iframe")[0] //Just to remind the compiler
+
 let input = {
   keydown : new Function(),
   keyup : new Function(),
