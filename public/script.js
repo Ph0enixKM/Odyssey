@@ -33,7 +33,7 @@ var keys = {
   right: false,
   shift: false,
   v: false,
-  click : {state : false, loc : []}
+  click : {state : false, loc : [],target : undefined}
 };
 var prev = false;
 var position = 0;
@@ -146,7 +146,20 @@ function autosaveF(e){
     },10)
 }
 
-
+let caretToEnd = ()=>{
+ if (keys.click.state && keys.click.target.tagName == "HTML") {
+   textField.contentDocument.body.innerHTML += `<end></end>`
+   var selection = textField.contentWindow.getSelection();
+   var range = textField.contentDocument.createRange();
+   range.selectNodeContents(textField.contentDocument.querySelector('end'));
+   selection.removeAllRanges();
+   selection.addRange(range);
+   setTimeout(()=>{
+     textField.contentDocument.querySelector("end").remove()
+   },200)
+ }
+}
+ //// TODO: Prevent from escaping when double click
 
 
 //Presets & initialisation
@@ -339,9 +352,11 @@ textField.contentWindow.addEventListener("keydown",function(e){
 textField.contentWindow.addEventListener("mousedown", e =>{
   keys.click.state = true
   keys.click.loc = [e.x, e.y]
+  keys.click.target = e.target
 })
 textField.contentWindow.addEventListener("mouseup",()=>{
   keys.click.state = false
+  keys.click.target = undefined
 })
 
 
@@ -422,6 +437,7 @@ function addStyle() {
       }
       body{
         caret-color: transparent;
+        display: inline-block;
       }
       .image{
         filter: grayscale(100%) brightness(70%);
@@ -569,12 +585,12 @@ function menuF() {
 //Initial Commands
 init();
 function init(){
-  textField.contentDocument.designMode = "On";
+  textField.contentDocument.designMode = "On"
 
   //Toolbar bindings:
-  (function(){
-    var id = document.getElementById.bind(document);
-    var tag = document.getElementsByTagName.bind(document);
+  ;(function(){
+    var id = document.getElementById.bind(document)
+    var tag = document.getElementsByTagName.bind(document)
 
     id("bold").addEventListener("click", ()=> command("bold"))
     id("italic").addEventListener("click",()=> command("italic"))
@@ -616,6 +632,9 @@ function init(){
 
 
     rest = "";
+
+
+
 
     //On change of body
     textField.contentWindow.addEventListener("keydown",autosaveF);
@@ -756,7 +775,6 @@ textField.contentDocument.documentElement.addEventListener("click",e=>{
 
 
 setInterval(function () {
-
   bodyBugFix();
 
   caretLoc.x = getSelectionCoords(textField).x;
@@ -766,6 +784,7 @@ setInterval(function () {
   restrictions();
 
   firstLetterFix();
+  caretToEnd()
 
   //284 && 280 && 270
   cs.top = (parseInt(cs.top) < 270  - bodyContent.scrollTop) ? 270 - bodyContent.scrollTop : cs.top - bodyContent.scrollTop;
