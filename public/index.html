@@ -5,6 +5,7 @@
     <title>Odyssey</title>
     <link href="bin/master.css" rel="stylesheet">
     <link href="bin/toolbar.css" rel="stylesheet">
+    <link href="bin/settings.css" rel="stylesheet">
   </head>
   <body>
 
@@ -14,7 +15,7 @@
       <div id="loading"></div>
     </div>
 
-    
+
     <div class="sidebar">
       <div class="chapter">Prolog</div>
       <div class="pages">1</div>
@@ -172,6 +173,40 @@
       <div id="compiling-cont">
         <p>Przetwarzanie</p>
         <img src="arts/loading.gif" width="640" height="360" id="compiling-gif">
+      </div>
+    </div>
+
+    <div class="settings">
+      <div class="setting">
+        <div class="tools">
+          <div class="general">
+            Ogólne
+          </div><div class="themes">
+            Wygląd
+          </div><div class="quit">
+            Wyjdź
+          </div>
+        </div>
+        <div id="options">
+          <div class="autosave">
+            <span>Autozapis</span>
+
+            <div class="checkbox-bg">
+              <div class="checkbox">
+                <input type="checkbox" id="one">
+                <label for="one"></label>
+              </div>
+            </div>
+            
+          </div>
+          <div class="img-quality">
+            <span>Jakość Obrazów</span>
+            <input type="range" min="0" max="1" step="0.01">
+          </div>
+        </div>
+      </div>
+      <div id="bg">
+
       </div>
     </div>
 
