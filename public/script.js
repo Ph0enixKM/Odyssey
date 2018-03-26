@@ -24,6 +24,7 @@ let BASE_FILE = {
 
 
 
+
 var keys = {
   enter: false,
   backsp: false,
@@ -46,7 +47,11 @@ var scrollPastEnd = true;
 
 var prevCheck = false, restOf="";
 
-
+let SETTINGS = {
+  autosave : qs('.autosave input')[0],
+  autosaveLabel : qs('.autosave label')[0],
+  imageQuality : qs('.img-quality input')[0]
+}
 
 
 function command(com){
@@ -132,6 +137,8 @@ function turnRight(){
   }
 }
 
+
+
 function autosaveF(e){
     setTimeout(function () {
       //When page is null then it means it's being deleted
@@ -179,6 +186,8 @@ bodyContent = document.getElementsByClassName('iframe')[0]
 
 menu = document.getElementsByClassName('menu')[0]
 ctxMenu = document.getElementsByClassName('menu')[1]
+
+settings = qs('.settings')[0]
 
 ctxLogo = document.getElementById('ctx-menu')
 logo = document.getElementById('logo');
@@ -274,7 +283,12 @@ var cs = caret.style;
 
 space = 19;
 
-
+qs('#settings')[0].addEventListener("click",()=>{
+  settings.style.display = "inline-block"
+  setTimeout(()=>{
+    settings.style.opacity = 1
+  },300)
+})
 
 qs("input#keys")[0].addEventListener('change',()=>{
   let attrib = (qs("input#keys")[0].value.length == 0) ? [] : qs("input#keys")[0].value.split(" ")
@@ -498,18 +512,26 @@ function menuF() {
     },300)
   })
 
+  settings.addEventListener("click",()=>{
+    settings.style.opacity = 0
+    setTimeout(()=>{
+      settings.style.display = "none"
+    },300)
+  })
+  qs('.settings .setting')[0].addEventListener("click", e =>{ e.stopPropagation() })
+
   window.addEventListener("keydown",(e)=>{ //Escape shortcut
     if (e.keyCode == 27) {
 
       menu.style.opacity = 0
+      ctxMenu.style.opacity = 0
+      settings.style.opacity = 0
       setTimeout(()=>{
         menu.style.display = "none"
+        ctxMenu.style.display = "none"
+        settings.style.display = "none"
       },300)
 
-      ctxMenu.style.opacity = 0
-      setTimeout(()=>{
-        ctxMenu.style.display = "none"
-      },300)
 
       if(!move.state && !chapter.state){  // Merge comes from another file
         document.querySelector('.full-view').style.opacity = 0
@@ -782,6 +804,7 @@ setInterval(function () {
   caretSize();
   stickIntoBorders(cs.top);
   restrictions();
+  settingsUpdate()
 
   firstLetterFix();
   caretToEnd()
@@ -816,6 +839,13 @@ function getSelectionCoordsPosition(elem) {
   }
 }
 
+
+function settingsUpdate() {
+  //Autosave
+  SETTINGS.autosaveLabel.title = SETTINGS.autosave.checked == true ? "Włączony" : "Wyłączony"
+  //Image Quality
+  SETTINGS.imageQuality.title = Math.round(SETTINGS.imageQuality.value*100)+"%"
+}
 
 function getSelectionCoords(iframe) {
     win = iframe;

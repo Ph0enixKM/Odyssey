@@ -5,14 +5,15 @@ tippy('[title]:not(disabled)',{
   animation : "shift-toward" ,
   arrow : true,
   arrowType : "sharp",
-  inertia : true
+  inertia : true,
+  dynamicTitle : true
 })
 tippy('disabled',{
   placement : "left",
   animation : "shift-toward",
   arrow : true,
   arrowType : "sharp",
-  inertia : true
+  inertia : true,
 })
 
 // SHORTCUT SECTION
