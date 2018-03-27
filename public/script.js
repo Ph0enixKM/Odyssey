@@ -42,16 +42,31 @@ var position = 0;
 var curPage = 0;
 var curChapter = 0;
 
-var autosave = true;
+var autobackup = true;
 var scrollPastEnd = true;
 
 var prevCheck = false, restOf="";
 
 let SETTINGS = {
+  autobackup : true,
+  imageQuality : 0.5
+}
+
+// If it's first time opened the app
+if (localStorage.getItem("settings") == null) {
+  localStorage.setItem("settings", JSON.stringify(SETTINGS))
+} else {
+  SETTINGS = JSON.parse(localStorage.getItem("settings"))
+}
+
+
+let settingsEl = {
   autosave : qs('.autosave input')[0],
   autosaveLabel : qs('.autosave label')[0],
   imageQuality : qs('.img-quality input')[0]
 }
+
+
 
 
 function command(com){
@@ -177,6 +192,8 @@ document.addEventListener("DOMContentLoaded",function(){
     qs(".iframe #down")[0].innerHTML += `<div id="dummy"></div>`
   }
 
+
+
 //Vars
 fonts = document.getElementsByTagName('select')[0]
 fontSizes = document.getElementsByTagName('select')[1]
@@ -270,8 +287,6 @@ ipcRenderer.on('selected-files',(event,source,name) =>{
   }
 
 })
-
-
 
 var caretLoc = { x: 0, y: 0 };
 var caret = textField.contentDocument.createElement("div");
@@ -382,11 +397,14 @@ textField.contentWindow.addEventListener("mouseup",()=>{
       cs.transform = "translate(-10px,0) scale(0)";
     })
 
-if (autosave) {
-  setInterval(()=>{
-    autosaveF()
-  },10)
-}
+setInterval(()=>{
+  autosaveF()
+},100)
+setInterval(()=>{
+  if (SETTINGS.autobackup) {
+    localStorage.setItem("backup",JSON.stringify(BASE_FILE))
+  }
+},1000)
 
 
 //ManuBar
@@ -516,6 +534,8 @@ function menuF() {
     settings.style.opacity = 0
     setTimeout(()=>{
       settings.style.display = "none"
+      //Save Settings
+      localStorage.setItem("settings", JSON.stringify(SETTINGS))
     },300)
   })
   qs('.settings .setting')[0].addEventListener("click", e =>{ e.stopPropagation() })
@@ -530,6 +550,8 @@ function menuF() {
         menu.style.display = "none"
         ctxMenu.style.display = "none"
         settings.style.display = "none"
+        //Save Settings
+        localStorage.setItem("settings", JSON.stringify(SETTINGS))
       },300)
 
 
@@ -842,10 +864,24 @@ function getSelectionCoordsPosition(elem) {
 
 function settingsUpdate() {
   //Autosave
-  SETTINGS.autosaveLabel.title = SETTINGS.autosave.checked == true ? "Włączony" : "Wyłączony"
+  settingsEl.autosaveLabel.title = settingsEl.autosave.checked == true ? "Włączony" : "Wyłączony"
   //Image Quality
-  SETTINGS.imageQuality.title = Math.round(SETTINGS.imageQuality.value*100)+"%"
+  settingsEl.imageQuality.title = Math.round(settingsEl.imageQuality.value*100)+"%"
 }
+settingsEl.autosave.addEventListener("change",()=>{
+    SETTINGS.autobackup = settingsEl.autosave.checked
+})
+settingsEl.imageQuality.addEventListener("change",()=>{
+    SETTINGS.imageQuality = settingsEl.imageQuality.value
+})
+
+settingsToElements()
+
+function settingsToElements () {
+  settingsEl.autosave.checked = SETTINGS.autobackup
+  settingsEl.imageQuality.value = SETTINGS.imageQuality
+}
+
 
 function getSelectionCoords(iframe) {
     win = iframe;
@@ -948,8 +984,6 @@ function restrictionsOptimal (wordSize){
     //Otherwise delete the last character
     textField.contentDocument.body.innerHTML = str.slice(0,-wordSize);
     str = str.slice(0,-wordSize);
-    console.log(str);
-    console.log(textField.contentDocument.body.innerHTML);
     return str
   // }
   //textContent

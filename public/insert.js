@@ -79,7 +79,7 @@ ipcRenderer.on("selected-image",(event,image)=>{
           insert.canvas.width = elem.width
           insert.canvas.height = elem.height
           insert.context().drawImage(elem,0,0,elem.width,elem.height)
-          let src = insert.canvas.toDataURL("image/jpeg",0.2)
+          let src = insert.canvas.toDataURL("image/jpeg",Number(SETTINGS.imageQuality))
           elem.src = src
           elem.loaded = true
         setTimeout(()=>{
