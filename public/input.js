@@ -1,65 +1,63 @@
-textField = qs("iframe")[0] //Just to remind the compiler
+textField = qs('iframe')[0] // Just to remind the compiler
 
 let input = {
-  keydown : new Function(),
-  keyup : new Function(),
-  keydownIn : new Function(),
-  keyupIn : new Function(),
-  shift : false,
-  v : false,
-  a : false,
-  bIn : false,
-  iIn : false,
-  uIn : false,
-  move : { LMBRelease : false },
-  comma : false,
-  period : false,
-  ctrl : false,
-  ctrlIn : false,
+  keydown: new Function(),
+  keyup: new Function(),
+  keydownIn: new Function(),
+  keyupIn: new Function(),
+  shift: false,
+  v: false,
+  a: false,
+  bIn: false,
+  iIn: false,
+  uIn: false,
+  move: { LMBRelease: false },
+  comma: false,
+  period: false,
+  ctrl: false,
+  ctrlIn: false
 }
 
-
-move.docs.addEventListener("mouseup", () => { input.move.LMBRelease = true })
-window.addEventListener("keydown", e =>{ input.keydown(e) })
-window.addEventListener("keyup", e =>{ input.keyup(e) })
+move.docs.addEventListener('mouseup', () => { input.move.LMBRelease = true })
+window.addEventListener('keydown', e => { input.keydown(e) })
+window.addEventListener('keyup', e => { input.keyup(e) })
 
 input.keydown = e => {
   switch (e.keyCode) {
     case 16:
       input.shift = true
-      break;
+      break
     case 86:
       input.v = true
-      break;
+      break
     case 65:
       input.a = true
-      break;
+      break
     case 188:
       input.comma = true
-      break;
+      break
     case 190:
       input.period = true
-      break;
+      break
     case 17:
       input.ctrl = true
-      break;
+      break
 
   }
 
-
-  //Methodical Part
-  if (input.shift && input.v && fv.bg.style.opacity == 0 && document.activeElement.tagName != "INPUT") {
-    fv.bg.style.display = "inline-block"
-    setTimeout(()=>{
+  // Methodical Part
+  if (input.shift && input.v && fv.bg.style.opacity == 0 && document.activeElement.tagName != 'INPUT') {
+    fv.bg.style.display = 'inline-block'
+    setTimeout(() => {
       fv.bg.style.opacity = 1
       fv.on()
-    },150)
+    }, 150)
   }
-  if (input.shift && input.a && ctxMenu.style.opacity == 0 && document.activeElement.tagName != "INPUT") {
-    ctxMenu.style.display = "inline-block"
-    setTimeout(()=>{
+  if (input.shift && input.a && ctxMenu.style.opacity == 0 && document.activeElement.tagName != 'INPUT') {
+    ctxMenu.style.display = 'inline-block'
+    setTimeout(() => {
       ctxMenu.style.opacity = 1
-    },100)
+    }, 100)
   }
   if (input.comma) {
     input.comma = false
@@ -69,62 +67,60 @@ input.keydown = e => {
     input.period = false
     turnRight()
   }
-
-
 }
 
 input.keyup = e => {
   switch (e.keyCode) {
     case 16:
       input.shift = false
-      break;
+      break
     case 86:
       input.v = false
-      break;
+      break
     case 65:
       input.a = false
-      break;
+      break
     case 188:
       input.comma = false
-      break;
+      break
     case 190:
       input.period = false
-      break;
+      break
     case 17:
       input.ctrl = false
-      break;
+      break
 
   }
 }
 
-textField.contentWindow.addEventListener("keydown", e =>{ input.keydownIn(e) })
-textField.contentWindow.addEventListener("keyup", e =>{ input.keyupIn(e) })
+textField.contentWindow.addEventListener('keydown', e => { input.keydownIn(e) })
+textField.contentWindow.addEventListener('keyup', e => { input.keyupIn(e) })
 
 input.keydownIn = e => {
   switch (e.keyCode) {
     case 66:
       input.bIn = true
-      break;
+      break
     case 73:
       input.iIn = true
-      break;
+      break
     case 85:
       input.uIn = true
-      break;
+      break
     case 17:
       input.ctrlIn = true
-      break;
+      break
   }
 
   // Methodical Section
   if (input.ctrlIn && input.bIn) {
-    command("bold")
+    command('bold')
   }
   if (input.ctrlIn && input.iIn) {
-    command("italic")
+    command('italic')
   }
   if (input.ctrlIn && input.uIn) {
-    command("underline")
+    command('underline')
   }
 }
 
@@ -132,15 +128,15 @@ input.keyupIn = e => {
   switch (e.keyCode) {
     case 66:
       input.bIn = false
-      break;
+      break
     case 73:
       input.iIn = false
-      break;
+      break
     case 85:
       input.uIn = false
-      break;
+      break
     case 17:
       input.ctrlIn = false
-      break;
+      break
   }
 }

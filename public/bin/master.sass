@@ -208,7 +208,7 @@ button,input,select,option
   animation: caret 1s infinite
   transform: translate(-10px,0) scale(0)
 
-[disabled]
+[disabled]:not([disabled=true]):not([disabled=false])
   user-select: none
   cursor: not-allowed !important
 

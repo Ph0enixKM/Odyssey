@@ -1,29 +1,26 @@
-﻿//Global Variables:
+// Global Variables:
 var fonts, fontSizes, textField,
-str, rest, pages, left, right, space, bodyContent, logo,
-menu, scrolling;
+  str, rest, pages, left, right, space, bodyContent, logo,
+  menu, scrolling
 
-//Require Electron
+// Require Electron
 const { remote } = require('electron')
 const PIXI = require('pixi.js')
 const { ipcRenderer } = require('electron')
 
 let qs = document.querySelectorAll.bind(document)
 
-var sbPages, sbWords, sbLetters, sbChapter;
+var sbPages, sbWords, sbLetters, sbChapter
 
 let BASE_FILE = {
-  title : undefined,
-  author : undefined,
-  keywords : [],
-  book : [
-    ["Prolog", [] ],
+  title: undefined,
+  author: undefined,
+  keywords: [],
+  book: [
+    ['Prolog', [] ]
   ],
-  fonts : []
+  fonts: []
 }
-
-
-
 
 var keys = {
   enter: false,
@@ -34,416 +31,400 @@ var keys = {
   right: false,
   shift: false,
   v: false,
-  click : {state : false, loc : [],target : undefined}
-};
-var prev = false;
-var position = 0;
+  click: {state: false, loc: [], target: undefined}
+}
+var prev = false
+var position = 0
 
-var curPage = 0;
-var curChapter = 0;
+var curPage = 0
+var curChapter = 0
 
-var autobackup = true;
-var scrollPastEnd = true;
+var autobackup = true
+var scrollPastEnd = true
 
-var prevCheck = false, restOf="";
+var prevCheck = false, restOf = ''
 
 let SETTINGS = {
-  autobackup : true,
-  imageQuality : 0.5
+  autobackup: true,
+  imageQuality: 0.5
 }
 
 // If it's first time opened the app
-if (localStorage.getItem("settings") == null) {
-  localStorage.setItem("settings", JSON.stringify(SETTINGS))
+if (localStorage.getItem('settings') == null) {
+  localStorage.setItem('settings', JSON.stringify(SETTINGS))
 } else {
-  SETTINGS = JSON.parse(localStorage.getItem("settings"))
+  SETTINGS = JSON.parse(localStorage.getItem('settings'))
 }
-
 
 let settingsEl = {
-  autosave : qs('.autosave input')[0],
-  autosaveLabel : qs('.autosave label')[0],
-  imageQuality : qs('.img-quality input')[0]
+  autosave: qs('.autosave input')[0],
+  autosaveLabel: qs('.autosave label')[0],
+  imageQuality: qs('.img-quality input')[0]
 }
 
-
-
-
-function command(com){
-  textField.contentDocument.execCommand(com,false,null);
+function command (com) {
+  textField.contentDocument.execCommand(com, false, null)
 }
 
-function font(){
+function font () {
   this.fontVal = fonts.options[fonts.selectedIndex].value
-  textField.contentDocument.execCommand("fontname",false,this.fontVal)
+  textField.contentDocument.execCommand('fontname', false, this.fontVal)
 }
 
-function fontSize(){
+function fontSize () {
   this.fontSizeVal = fontSizes.options[fontSizes.selectedIndex].value
-  textField.contentDocument.execCommand("fontSize",false,parseInt(this.fontSizeVal))
+  textField.contentDocument.execCommand('fontSize', false, parseInt(this.fontSizeVal))
 }
 
-function turnLeft() {
-  if (textField.style.opacity == 1) { //Has the page turned on?
-    if(curPage <= 0){
-      textField.style.transform = "translate(-30px)"
+function turnLeft () {
+  if (textField.style.opacity == 1) { // Has the page turned on?
+    if (curPage <= 0) {
+      textField.style.transform = 'translate(-30px)'
       setTimeout(function () {
-        textField.style.transform = "translate(20px)"
+        textField.style.transform = 'translate(20px)'
         setTimeout(function () {
-          textField.style.transform = "translate(-10px)"
+          textField.style.transform = 'translate(-10px)'
           setTimeout(function () {
-            textField.style.transform = "translate(0px)"
-          },100);
-        },100);
-      },100);
-      curPage = 0;
+            textField.style.transform = 'translate(0px)'
+          }, 100)
+        }, 100)
+      }, 100)
+      curPage = 0
     } else {
-
-    //Animation
-    textField.style.transform = "translate(150%) scale(0.5)";
-    textField.style.opacity = 0
-    setTimeout(function () {
-      textField.style.transform = "translate(-150%) scale(0.5)";
-
-      //Logic Section
-
-      curPage--;
-      textField.contentDocument.body.innerHTML = (pages[curPage] == undefined) ? "" : pages[curPage];
-
-
-      //Logic Section
-
+    // Animation
+      textField.style.transform = 'translate(150%) scale(0.5)'
+      textField.style.opacity = 0
       setTimeout(function () {
-        textField.style.transform = "translate(0) scale(1)";
-        textField.style.opacity = 1;
-      },150)
-    },150);
+        textField.style.transform = 'translate(-150%) scale(0.5)'
+
+      // Logic Section
+
+        curPage--
+        textField.contentDocument.body.innerHTML = (pages[curPage] == undefined) ? '' : pages[curPage]
+
+      // Logic Section
+
+        setTimeout(function () {
+          textField.style.transform = 'translate(0) scale(1)'
+          textField.style.opacity = 1
+        }, 150)
+      }, 150)
     }
   }
 }
 
-function turnRight(){
-  if (textField.style.opacity == 1) { //Has the page turned on?
+function turnRight () {
+  if (textField.style.opacity == 1) {
+ // Has the page turned on?
 
-
-    //Animation
-    textField.style.transform = "translate(-150%) scale(0.5)";
+    // Animation
+    textField.style.transform = 'translate(-150%) scale(0.5)'
     textField.style.opacity = 0
     setTimeout(function () {
-      textField.style.transform = "translate(150%) scale(0.5)";
+      textField.style.transform = 'translate(150%) scale(0.5)'
 
-      //Logic Section
+      // Logic Section
 
-      curPage++;
-      textField.contentDocument.body.innerHTML = (pages[curPage] == undefined) ? "" : pages[curPage];
+      curPage++
+      textField.contentDocument.body.innerHTML = (pages[curPage] == undefined) ? '' : pages[curPage]
 
-      sbPages.innerHTML = curPage + 1;
+      sbPages.innerHTML = curPage + 1
 
       sbWords.innerHTML = (textField.contentDocument.body.textContent.length == 1) ? 0 :
-        textField.contentDocument.body.textContent.split(" ").length;
+        textField.contentDocument.body.textContent.split(' ').length
 
-      //Logic Section
+      // Logic Section
 
       setTimeout(function () {
-        textField.style.transform = "translate(0) scale(1)";
-        textField.style.opacity = 1;
-      },150)
-    },150);
+        textField.style.transform = 'translate(0) scale(1)'
+        textField.style.opacity = 1
+      }, 150)
+    }, 150)
   }
 }
 
-
-
-function autosaveF(e){
-    setTimeout(function () {
-      //When page is null then it means it's being deleted
-      if (pages[curPage] === null) {
-      } else {
-        pages[curPage] = textField.contentDocument.body.innerHTML;
-      }
-
-      if (BASE_FILE.book[curChapter] != undefined) {
-        BASE_FILE.book[curChapter][1] = pages
-      }
-    },10)
-}
-
-let caretToEnd = ()=>{
- if (keys.click.state && keys.click.target.tagName == "HTML") {
-   textField.contentDocument.body.innerHTML += `<end></end>`
-   var selection = textField.contentWindow.getSelection();
-   var range = textField.contentDocument.createRange();
-   range.selectNodeContents(textField.contentDocument.querySelector('end'));
-   selection.removeAllRanges();
-   selection.addRange(range);
-   setTimeout(()=>{
-     textField.contentDocument.querySelector("end").remove()
-   },200)
- }
-}
- //// TODO: Prevent from escaping when double click
-
-
-//Presets & initialisation
-document.addEventListener("DOMContentLoaded",function(){
-
-  //If scroll past end enabled in settings
-  if (scrollPastEnd) {
-    qs(".iframe #down")[0].innerHTML += `<div id="dummy"></div>`
-  }
-
-
-
-//Vars
-fonts = document.getElementsByTagName('select')[0]
-fontSizes = document.getElementsByTagName('select')[1]
-textField = document.getElementsByTagName('iframe')[0]
-
-bodyContent = document.getElementsByClassName('iframe')[0]
-
-menu = document.getElementsByClassName('menu')[0]
-ctxMenu = document.getElementsByClassName('menu')[1]
-
-settings = qs('.settings')[0]
-
-ctxLogo = document.getElementById('ctx-menu')
-logo = document.getElementById('logo');
-
-//Left/right buttons
-left = document.getElementsByClassName('move left')[0]
-right = document.getElementsByClassName('move right')[0]
-
-
-left.addEventListener("click",turnLeft);
-right.addEventListener("click",turnRight);
-
-// QUESTION: It it really a good idea?
-textField.contentDocument.body.innerHTML = "&zwnj;"
-
-textField.contentDocument.documentElement.addEventListener("keydown",e => {
-  if (e.keyCode == 27) {
-    textField.contentDocument.body.blur()
-    window.focus()
-  }
-})
-
-window.addEventListener("keydown",e => {
-  if (e.keyCode == 13) {
-    window.blur()
-    textField.contentDocument.body.focus()
-  }
-})
-
-  sbPages = document.getElementsByClassName("pages")[0]
-  sbWords = document.getElementsByClassName("words")[0]
-  sbLetters = document.getElementsByClassName("letters")[0]
-  sbChapter = document.getElementsByClassName("chapter")[0]
-
-ipcRenderer.send('check-if-opened-with-file')
-
-qs(".menu button#open-file")[0].addEventListener("click",()=>{
-  ipcRenderer.send('open-file')
-})
-
-qs(".menu button#save-file")[0].addEventListener("click",()=>{
-  ipcRenderer.send('save-file', JSON.stringify(BASE_FILE) )
-})
-
-ipcRenderer.on('saved-file',(event,name)=>{
-  qs('.bar span')[0].textContent = name
-})
-
-ipcRenderer.on('selected-files',(event,source,name) =>{
-  try{
-    BASE_FILE = JSON.parse(source)
-  }
-  catch (e){
-    BASE_FILE = {
-      title : undefined,
-      author : undefined,
-      keywords : [],
-      book : [
-        ["Prolog", [source] ],
-      ],
-      fonts : []
+function autosaveF (e) {
+  setTimeout(function () {
+      // When page is null then it means it's being deleted
+    if (pages[curPage] === null) {
+    } else {
+      pages[curPage] = textField.contentDocument.body.innerHTML
     }
+
+    if (BASE_FILE.book[curChapter] != undefined) {
+      BASE_FILE.book[curChapter][1] = pages
+    }
+  }, 10)
+}
+
+let caretToEnd = () => {
+  if (!keys.click.state)
+    allow = true
+
+  if (keys.click.state && keys.click.target.tagName == 'HTML' && allow) {
+    allow = false
+    textField.contentDocument.body.innerHTML += `<end></end>`
+    var selection = textField.contentWindow.getSelection()
+    var range = textField.contentDocument.createRange()
+    range.selectNodeContents(textField.contentDocument.querySelector('end'))
+    selection.removeAllRanges()
+    selection.addRange(range)
+    setTimeout(() => {
+      for (let i = 0; i < textField.contentDocument.querySelectorAll('end').length; i++) {
+        textField.contentDocument.querySelectorAll('end')[i].remove()
+      }
+    }, 100)
   }
-  finally{
+}
+let caretLastDoubleClick = e => {
+    if (e.target.tagName == 'HTML') {
+      setTimeout(()=>{
+        var selection = textField.contentWindow.getSelection()
+        var range = textField.contentDocument.createRange()
+        let nodes = textField.contentDocument.body.childNodes
+        let lastItem = textField.contentDocument.body.childNodes.length-1
+        lastItem = ( nodes[lastItem].tagName == "END") ? lastItem-1 : lastItem
+        range.selectNodeContents(nodes[lastItem])
+        selection.removeAllRanges()
+        selection.addRange(range)
+      },20)
+    }
+}
+
+
+// Presets & initialisation
+document.addEventListener('DOMContentLoaded', function () {
+  // If scroll past end enabled in settings
+  if (scrollPastEnd) {
+    qs('.iframe #down')[0].innerHTML += `<div id="dummy"></div>`
+  }
+
+// Vars
+  fonts = document.getElementsByTagName('select')[0]
+  fontSizes = document.getElementsByTagName('select')[1]
+  textField = document.getElementsByTagName('iframe')[0]
+
+  bodyContent = document.getElementsByClassName('iframe')[0]
+
+  menu = document.getElementsByClassName('menu')[0]
+  ctxMenu = document.getElementsByClassName('menu')[1]
+
+  settings = qs('.settings')[0]
+
+  ctxLogo = document.getElementById('ctx-menu')
+  logo = document.getElementById('logo')
+
+// Left/right buttons
+  left = document.getElementsByClassName('move left')[0]
+  right = document.getElementsByClassName('move right')[0]
+
+  left.addEventListener('click', turnLeft)
+  right.addEventListener('click', turnRight)
+
+  textField.contentDocument.documentElement.addEventListener('keydown', e => {
+    if (e.keyCode == 27) {
+      textField.contentDocument.body.blur()
+      window.focus()
+    }
+  })
+
+  window.addEventListener('keydown', e => {
+    if (e.keyCode == 13) {
+      window.blur()
+      textField.contentDocument.body.focus()
+    }
+  })
+
+  sbPages = document.getElementsByClassName('pages')[0]
+  sbWords = document.getElementsByClassName('words')[0]
+  sbLetters = document.getElementsByClassName('letters')[0]
+  sbChapter = document.getElementsByClassName('chapter')[0]
+
+  ipcRenderer.send('check-if-opened-with-file')
+
+  qs('.menu button#open-file')[0].addEventListener('click', () => {
+    ipcRenderer.send('open-file')
+  })
+
+  qs('.menu button#save-file')[0].addEventListener('click', () => {
+    ipcRenderer.send('save-file', JSON.stringify(BASE_FILE))
+  })
+
+  ipcRenderer.on('saved-file', (event, name) => {
     qs('.bar span')[0].textContent = name
+  })
 
-    curPage = 0
-    curChapter = 0
+  ipcRenderer.on('selected-files', (event, source, name) => {
+    try {
+      BASE_FILE = JSON.parse(source)
+    } catch (e) {
+      BASE_FILE = {
+        title: undefined,
+        author: undefined,
+        keywords: [],
+        book: [
+        ['Prolog', [source] ]
+        ],
+        fonts: []
+      }
+    } finally {
+      qs('.bar span')[0].textContent = name
 
-    pages = BASE_FILE.book[curChapter][1]
+      curPage = 0
+      curChapter = 0
 
-    textField.contentDocument.body.innerHTML = (pages[curPage] == undefined) ? "" : pages[curPage];
-    pages[curPage] = textField.contentDocument.body.innerHTML;
-    sbChapter.innerHTML = BASE_FILE.book[curChapter][0]
+      pages = BASE_FILE.book[curChapter][1]
 
-    qs("input#keys")[0].value = BASE_FILE.keywords.join(" ")
-    qs("#all-keys p")[0].innerHTML = BASE_FILE.keywords.length
-    qs("input#title")[0].value = (BASE_FILE.title != undefined) ? BASE_FILE.title : ""
-    qs("input#author")[0].value = (BASE_FILE.author != undefined) ? BASE_FILE.author : ""
-  }
+      textField.contentDocument.body.innerHTML = (pages[curPage] == undefined) ? '' : pages[curPage]
+      pages[curPage] = textField.contentDocument.body.innerHTML
+      sbChapter.innerHTML = BASE_FILE.book[curChapter][0]
 
-})
+      qs('input#keys')[0].value = BASE_FILE.keywords.join(' ')
+      qs('#all-keys p')[0].innerHTML = BASE_FILE.keywords.length
+      qs('input#title')[0].value = (BASE_FILE.title != undefined) ? BASE_FILE.title : ''
+      qs('input#author')[0].value = (BASE_FILE.author != undefined) ? BASE_FILE.author : ''
+    }
+  })
 
-var caretLoc = { x: 0, y: 0 };
-var caret = textField.contentDocument.createElement("div");
-caret.className = "caret";
-var cs = caret.style;
+  var caretLoc = { x: 0, y: 0 }
+  var caret = textField.contentDocument.createElement('div')
+  caret.className = 'caret'
+  var cs = caret.style
 
+  space = 19
 
+  textField.contentDocument.documentElement.addEventListener('dblclick', caretLastDoubleClick)
 
+  qs('#settings')[0].addEventListener('click', () => {
+    settings.style.display = 'inline-block'
+    setTimeout(() => {
+      settings.style.opacity = 1
+    }, 300)
+  })
 
-space = 19;
+  qs('input#keys')[0].addEventListener('change', () => {
+    let attrib = (qs('input#keys')[0].value.length == 0) ? [] : qs('input#keys')[0].value.split(' ')
+    qs('#all-keys p')[0].innerHTML = attrib.length
+    BASE_FILE_UPDATE('keywords', attrib)
+  })
 
-qs('#settings')[0].addEventListener("click",()=>{
-  settings.style.display = "inline-block"
-  setTimeout(()=>{
-    settings.style.opacity = 1
-  },300)
-})
+  qs('input#title')[0].addEventListener('change', () => {
+    BASE_FILE_UPDATE('title', qs('input#title')[0].value)
+  })
 
-qs("input#keys")[0].addEventListener('change',()=>{
-  let attrib = (qs("input#keys")[0].value.length == 0) ? [] : qs("input#keys")[0].value.split(" ")
-  qs("#all-keys p")[0].innerHTML = attrib.length
-  BASE_FILE_UPDATE("keywords",attrib)
-})
+  qs('input#author')[0].addEventListener('change', () => {
+    BASE_FILE_UPDATE('author', qs('input#author')[0].value)
+  })
 
-qs("input#title")[0].addEventListener('change',()=>{
-  BASE_FILE_UPDATE("title",qs("input#title")[0].value)
-})
-
-qs("input#author")[0].addEventListener('change',()=>{
-  BASE_FILE_UPDATE("author",qs("input#author")[0].value)
-})
-
-// TODO: Function changing credentials based on BASE_FILE
-
-function BASE_FILE_UPDATE(key,val) {
-  if (key == "book") {
-    console.log("...")
-    //Do it differentaly
-  } else {
+  function BASE_FILE_UPDATE (key, val) {
     BASE_FILE[key] = val
   }
-}
 
-  document.getElementsByClassName('iframe')[0].addEventListener("scroll",()=>{
-    cs.transition = "0ms";
+  document.getElementsByClassName('iframe')[0].addEventListener('scroll', () => {
+    cs.transition = '0ms'
     insert.sizer.style.opacity = 0
 
-    clearTimeout(scrolling);
+    clearTimeout(scrolling)
 
-    scrolling = setTimeout(()=>{
-      cs.transition = "200ms";
+    scrolling = setTimeout(() => {
+      cs.transition = '200ms'
       insert.sizer.style.opacity = 1
-    },66);
+    }, 66)
+  }, false)
 
-  },false)
-
-
-//Caret Key Mapping
-function mapKeys(dock){
-  Object.keys(keys).map(function(key,index){
-    if (typeof keys[key] != "object") {
-      keys[key] = false;
-    }
-  });
-  keys[dock] = true;
-}
-textField.contentWindow.addEventListener("keydown",function(e){
-  switch (e.keyCode) {
-    case 13: //Enter
-      mapKeys("enter");
-      break;
-    case 8: //Backsp
-      mapKeys("backsp");
-      break;
-    case 38: //Up
-      mapKeys("up");
-      break;
-    case 40: //Down
-      mapKeys("down");
-      break;
-    case 37: //Left
-      mapKeys("left");
-      break;
-    case 39: //Right
-      mapKeys("right");
-      break;
-    case 123:
-      var win = remote.getCurrentWindow()
-      win.toggleDevTools()
-  }
-});
-textField.contentWindow.addEventListener("mousedown", e =>{
-  keys.click.state = true
-  keys.click.loc = [e.x, e.y]
-  keys.click.target = e.target
-})
-textField.contentWindow.addEventListener("mouseup",()=>{
-  keys.click.state = false
-  keys.click.target = undefined
-})
-
-
-
-    textField.contentDocument.getElementsByTagName('body')[0].addEventListener("focus",function () {
-      cs.transform = "translate(0,0) scale(1)";
-    })
-    textField.contentDocument.getElementsByTagName('body')[0].addEventListener("focusout",function () {
-      cs.transform = "translate(-10px,0) scale(0)";
-    })
-
-setInterval(()=>{
-  autosaveF()
-},100)
-setInterval(()=>{
-  if (SETTINGS.autobackup) {
-    localStorage.setItem("backup",JSON.stringify(BASE_FILE))
-  }
-},1000)
-
-
-//ManuBar
-function menuBar() {
-
-    var cl = document.getElementsByClassName.bind(document);
-    var win = remote.getCurrentWindow();
-
-    cl("minimize")[0].addEventListener("click",()=>{
-      console.log(win);
-      win.minimize();
-    });
-    cl("maximize")[0].addEventListener("click",()=>{
-      if (win.isMaximized()) win.unmaximize();
-      else win.maximize();
-    });
-    cl("exit")[0].addEventListener("click",()=>{
-      win.close();
-      if (process.platform != "darwin") {
-        app.quit();
+// Caret Key Mapping
+  function mapKeys (dock) {
+    Object.keys(keys).map(function (key, index) {
+      if (typeof keys[key] !== 'object') {
+        keys[key] = false
       }
     })
+    keys[dock] = true
+  }
+  textField.contentWindow.addEventListener('keydown', function (e) {
+    switch (e.keyCode) {
+      case 13: // Enter
+        mapKeys('enter')
+        break
+      case 8: // Backsp
+        mapKeys('backsp')
+        break
+      case 38: // Up
+        mapKeys('up')
+        break
+      case 40: // Down
+        mapKeys('down')
+        break
+      case 37: // Left
+        mapKeys('left')
+        break
+      case 39: // Right
+        mapKeys('right')
+        break
+      case 123:
+        var win = remote.getCurrentWindow()
+        win.toggleDevTools()
+    }
+  })
+  textField.contentWindow.addEventListener('mousedown', e => {
+    keys.click.state = true
+    keys.click.loc = [e.x, e.y]
+    keys.click.target = e.target
+  })
+  textField.contentWindow.addEventListener('mouseup', () => {
+    keys.click.state = false
+    keys.click.target = undefined
+  })
 
-}
+  textField.contentDocument.getElementsByTagName('body')[0].addEventListener('focus', function () {
+    cs.transform = 'translate(0,0) scale(1)'
+  })
+  textField.contentDocument.getElementsByTagName('body')[0].addEventListener('focusout', function () {
+    cs.transform = 'translate(-10px,0) scale(0)'
+  })
 
-function fadeAll() {
-  var all = document.getElementById('all');
-  setTimeout(()=>{
-    all.style.opacity = 0;
-    setTimeout(()=>{
-      all.style.display = "none";
-    },500)
-  },(Math.random()*1000)+500)
-}
+  setInterval(() => {
+    autosaveF()
+  }, 100)
+  setInterval(() => {
+    if (SETTINGS.autobackup) {
+      localStorage.setItem('backup', JSON.stringify(BASE_FILE))
+    }
+  }, 1000)
 
+// ManuBar
+  function menuBar () {
+    var cl = document.getElementsByClassName.bind(document)
+    var win = remote.getCurrentWindow()
 
-function addStyle() {
+    cl('minimize')[0].addEventListener('click', () => {
+      console.log(win)
+      win.minimize()
+    })
+    cl('maximize')[0].addEventListener('click', () => {
+      if (win.isMaximized()) win.unmaximize()
+      else win.maximize()
+    })
+    cl('exit')[0].addEventListener('click', () => {
+      win.close()
+      if (process.platform != 'darwin') {
+        app.quit()
+      }
+    })
+  }
 
-  textField.contentDocument.head.innerHTML = `
+  function fadeAll () {
+    var all = document.getElementById('all')
+    setTimeout(() => {
+      all.style.opacity = 0
+      setTimeout(() => {
+        all.style.display = 'none'
+      }, 500)
+    }, (Math.random() * 1000) + 500)
+  }
+
+  function addStyle () {
+    textField.contentDocument.head.innerHTML = `
 
     <style>
       *::selection{
@@ -484,615 +465,588 @@ function addStyle() {
     </style>
     <link href="bin/toolbar.css" rel="stylesheet">
     `
-}
+  }
 
+  function delayAnchors () {
+    var anchors = document.getElementsByTagName('a')
+    for (let i of anchors) {
+      i.addEventListener('click', () => {
+        all.style.display = 'inline-block'
+        setTimeout(() => {
+          all.style.opacity = 1
+          setTimeout(() => {
+            window.location = i.href
+          }, 500)
+        }, 100)
+      })
+    }
+  }
 
-function delayAnchors() {
-  var anchors = document.getElementsByTagName('a');
-  for (let i of anchors){
-    i.addEventListener("click",()=>{
-      all.style.display = "inline-block"
-      setTimeout(()=>{
-        all.style.opacity = 1
-        setTimeout(()=>{
-          window.location = i.href
-        },500)
-      },100)
+  function menuF () {
+    logo.addEventListener('click', () => { // Open menu
+      menu.style.display = 'inline-block'
+      setTimeout(() => {
+        menu.style.opacity = 1
+      }, 100)
+    })
+    menu.addEventListener('click', () => { // Close Menu
+      menu.style.opacity = 0
+      setTimeout(() => {
+        menu.style.display = 'none'
+      }, 300)
+    })
+
+    ctxLogo.addEventListener('click', () => { // Open Context Menu
+      ctxMenu.style.display = 'inline-block'
+      setTimeout(() => {
+        ctxMenu.style.opacity = 1
+      }, 100)
+    })
+
+    ctxMenu.addEventListener('click', () => { // Close Context Menu
+      ctxMenu.style.opacity = 0
+      setTimeout(() => {
+        ctxMenu.style.display = 'none'
+      }, 300)
+    })
+
+    settings.addEventListener('click', () => {
+      settings.style.opacity = 0
+      setTimeout(() => {
+        settings.style.display = 'none'
+      // Save Settings
+        localStorage.setItem('settings', JSON.stringify(SETTINGS))
+      }, 300)
+    })
+    qs('.settings .setting')[0].addEventListener('click', e => { e.stopPropagation() })
+
+    window.addEventListener('keydown', (e) => { // Escape shortcut
+      if (e.keyCode == 27) {
+        menu.style.opacity = 0
+        ctxMenu.style.opacity = 0
+        settings.style.opacity = 0
+        setTimeout(() => {
+          menu.style.display = 'none'
+          ctxMenu.style.display = 'none'
+          settings.style.display = 'none'
+        // Save Settings
+          localStorage.setItem('settings', JSON.stringify(SETTINGS))
+        }, 300)
+
+        if (!move.state && !chapter.state) {  // Merge comes from another file
+          document.querySelector('.full-view').style.opacity = 0
+          setTimeout(() => {
+            document.querySelector('.full-view').style.display = 'none'
+            fv.off()
+          }, 300)
+        } else {
+        // Apply to move
+          document.querySelector('#move-bg').style.opacity = 0
+          setTimeout(() => {
+            document.querySelector('#move-bg').style.display = 'none'
+            move.state = false
+            move.off()
+          }, 150)
+
+        // Apply to chapter
+          document.querySelector('#chapter-bg').style.opacity = 0
+          setTimeout(() => {
+            document.querySelector('#chapter-bg').style.display = 'none'
+            chapter.state = false
+            chapter.off()
+          }, 150)
+        }
+      }
+    })
+
+    ctxLogo.addEventListener('mouseover', () => shortcutOn('SHIFT + A'))
+    ctxLogo.addEventListener('mouseout', shortcutOff)
+
+    ctxMenu.childNodes[1].addEventListener('click', () => {
+      document.querySelector('#ctx-menu').innerText = 'Narzędzia'
+      document.querySelector('#view').style.display = 'none'
+      document.querySelector('#tools').style.display = 'inline-block'
+      document.querySelector('#insert').style.display = 'none'
+      document.querySelector('#pages').style.display = 'none'
+      document.querySelector('#project').style.display = 'none'
+    })
+    ctxMenu.childNodes[3].addEventListener('click', () => {
+      document.querySelector('#ctx-menu').innerText = 'Wstawianie'
+      document.querySelector('#view').style.display = 'none'
+      document.querySelector('#insert').style.display = 'inline-block'
+      document.querySelector('#tools').style.display = 'none'
+      document.querySelector('#pages').style.display = 'none'
+      document.querySelector('#project').style.display = 'none'
+    })
+    ctxMenu.childNodes[5].addEventListener('click', () => {
+      document.querySelector('#ctx-menu').innerText = 'Widok'
+      document.querySelector('#view').style.display = 'inline-block'
+      document.querySelector('#insert').style.display = 'none'
+      document.querySelector('#tools').style.display = 'none'
+      document.querySelector('#pages').style.display = 'none'
+      document.querySelector('#project').style.display = 'none'
+    })
+    ctxMenu.childNodes[7].addEventListener('click', () => {
+      document.querySelector('#ctx-menu').innerText = 'Strony'
+      document.querySelector('#view').style.display = 'none'
+      document.querySelector('#insert').style.display = 'none'
+      document.querySelector('#tools').style.display = 'none'
+      document.querySelector('#pages').style.display = 'inline-block'
+      document.querySelector('#project').style.display = 'none'
+    })
+    ctxMenu.childNodes[9].addEventListener('click', () => {
+      document.querySelector('#ctx-menu').innerText = 'Projekt'
+      document.querySelector('#view').style.display = 'none'
+      document.querySelector('#insert').style.display = 'none'
+      document.querySelector('#tools').style.display = 'none'
+      document.querySelector('#pages').style.display = 'none'
+      document.querySelector('#project').style.display = 'inline-block'
     })
   }
-}
 
-function menuF() {
-  logo.addEventListener("click",()=>{ //Open menu
-    menu.style.display = "inline-block"
-    setTimeout(()=>{
-      menu.style.opacity = 1
-    },100)
-  })
-  menu.addEventListener("click",()=>{ //Close Menu
-    menu.style.opacity = 0
-    setTimeout(()=>{
-      menu.style.display = "none"
-    },300)
-  })
+// Initial Commands
+  init()
+  function init () {
+    textField.contentDocument.designMode = 'On'
 
-  ctxLogo.addEventListener("click",()=>{ //Open Context Menu
-    ctxMenu.style.display = "inline-block"
-    setTimeout(()=>{
-      ctxMenu.style.opacity = 1
-    },100)
-  })
-
-  ctxMenu.addEventListener("click",()=>{ //Close Context Menu
-    ctxMenu.style.opacity = 0
-    setTimeout(()=>{
-      ctxMenu.style.display = "none"
-    },300)
-  })
-
-  settings.addEventListener("click",()=>{
-    settings.style.opacity = 0
-    setTimeout(()=>{
-      settings.style.display = "none"
-      //Save Settings
-      localStorage.setItem("settings", JSON.stringify(SETTINGS))
-    },300)
-  })
-  qs('.settings .setting')[0].addEventListener("click", e =>{ e.stopPropagation() })
-
-  window.addEventListener("keydown",(e)=>{ //Escape shortcut
-    if (e.keyCode == 27) {
-
-      menu.style.opacity = 0
-      ctxMenu.style.opacity = 0
-      settings.style.opacity = 0
-      setTimeout(()=>{
-        menu.style.display = "none"
-        ctxMenu.style.display = "none"
-        settings.style.display = "none"
-        //Save Settings
-        localStorage.setItem("settings", JSON.stringify(SETTINGS))
-      },300)
-
-
-      if(!move.state && !chapter.state){  // Merge comes from another file
-        document.querySelector('.full-view').style.opacity = 0
-        setTimeout(()=>{
-          document.querySelector('.full-view').style.display = "none"
-          fv.off()
-        },300)
-      } else {
-        //Apply to move
-        document.querySelector('#move-bg').style.opacity = 0
-        setTimeout(()=>{
-          document.querySelector('#move-bg').style.display = "none"
-          move.state = false
-          move.off()
-        },150)
-
-        //Apply to chapter
-        document.querySelector('#chapter-bg').style.opacity = 0
-        setTimeout(()=>{
-          document.querySelector('#chapter-bg').style.display = "none"
-          chapter.state = false
-          chapter.off()
-        },150)
-      }
-    }
-  })
-
-  ctxLogo.addEventListener("mouseover",()=> shortcutOn("SHIFT + A"))
-  ctxLogo.addEventListener("mouseout", shortcutOff)
-
-  ctxMenu.childNodes[1].addEventListener("click",()=>{
-    document.querySelector('#ctx-menu').innerText = "Narzędzia"
-    document.querySelector('#view').style.display = "none"
-    document.querySelector('#tools').style.display = "inline-block"
-    document.querySelector('#insert').style.display = "none"
-    document.querySelector('#pages').style.display = "none"
-    document.querySelector('#project').style.display = "none"
-  })
-  ctxMenu.childNodes[3].addEventListener("click",()=>{
-    document.querySelector('#ctx-menu').innerText = "Wstawianie"
-    document.querySelector('#view').style.display = "none"
-    document.querySelector('#insert').style.display = "inline-block"
-    document.querySelector('#tools').style.display = "none"
-    document.querySelector('#pages').style.display = "none"
-    document.querySelector('#project').style.display = "none"
-  })
-  ctxMenu.childNodes[5].addEventListener("click",()=>{
-    document.querySelector('#ctx-menu').innerText = "Widok"
-    document.querySelector('#view').style.display = "inline-block"
-    document.querySelector('#insert').style.display = "none"
-    document.querySelector('#tools').style.display = "none"
-    document.querySelector('#pages').style.display = "none"
-    document.querySelector('#project').style.display = "none"
-  })
-  ctxMenu.childNodes[7].addEventListener("click",()=>{
-    document.querySelector('#ctx-menu').innerText = "Strony"
-    document.querySelector('#view').style.display = "none"
-    document.querySelector('#insert').style.display = "none"
-    document.querySelector('#tools').style.display = "none"
-    document.querySelector('#pages').style.display = "inline-block"
-    document.querySelector('#project').style.display = "none"
-  })
-  ctxMenu.childNodes[9].addEventListener("click",()=>{
-    document.querySelector('#ctx-menu').innerText = "Projekt"
-    document.querySelector('#view').style.display = "none"
-    document.querySelector('#insert').style.display = "none"
-    document.querySelector('#tools').style.display = "none"
-    document.querySelector('#pages').style.display = "none"
-    document.querySelector('#project').style.display = "inline-block"
-  })
-}
-
-//Initial Commands
-init();
-function init(){
-  textField.contentDocument.designMode = "On"
-
-  //Toolbar bindings:
-  ;(function(){
+  // Toolbar bindings:
+  ;(function () {
     var id = document.getElementById.bind(document)
     var tag = document.getElementsByTagName.bind(document)
 
-    id("bold").addEventListener("click", ()=> command("bold"))
-    id("italic").addEventListener("click",()=> command("italic"))
-    id("underline").addEventListener("click",()=> command("underline"))
-    tag("select")[0].addEventListener("change",()=> font())
-    tag("select")[1].addEventListener("change",()=> fontSize())
-    id("justify-left").addEventListener("click",()=> command("justifyLeft"))
-    id("justify-center").addEventListener("click",()=> command("justifyCenter"))
-    id("justify-right").addEventListener("click",()=> command("justifyRight"))
-    id("justify-full").addEventListener("click",()=> command("justifyFull"))
+    id('bold').addEventListener('click', () => command('bold'))
+    id('italic').addEventListener('click', () => command('italic'))
+    id('underline').addEventListener('click', () => command('underline'))
+    tag('select')[0].addEventListener('change', () => font())
+    tag('select')[1].addEventListener('change', () => fontSize())
+    id('justify-left').addEventListener('click', () => command('justifyLeft'))
+    id('justify-center').addEventListener('click', () => command('justifyCenter'))
+    id('justify-right').addEventListener('click', () => command('justifyRight'))
+    id('justify-full').addEventListener('click', () => command('justifyFull'))
+  })()
 
+    fadeAll()
+    menuBar()
+    delayAnchors()
+    menuF()
 
-  })();
+    addStyle()
 
-  fadeAll()
-  menuBar()
-  delayAnchors()
-  menuF()
+    pages = []
 
-    addStyle();
+    textField.contentDocument.body.style.color = '#ccc'
+    textField.contentDocument.body.style.fontFamily = 'Lato'
+    textField.contentDocument.body.style.margin = 0
+    textField.contentDocument.body.style.caretColor = 'transparent'
+    textField.contentDocument.body.style.width = '100%'
+    textField.contentDocument.body.style.wordWrap = 'break-word'
+    textField.contentDocument.body.style.height = 'auto'
 
-    pages = [];
+    textField.style.position = 'relative'
+    textField.style.opacity = 1
 
-    textField.contentDocument.body.style.color = "#ccc";
-    textField.contentDocument.body.style.fontFamily = "Lato";
-    textField.contentDocument.body.style.margin = 0;
-    textField.contentDocument.body.style.caretColor = "transparent";
-    textField.contentDocument.body.style.width = "100%";
-    textField.contentDocument.body.style.wordWrap = "break-word";
-    textField.contentDocument.body.style.height = "auto";
+    textField.contentDocument.body.innerHTML = '&zwnj;'
+    textField.contentDocument.body.style.display = 'inline-block'
 
+    rest = ''
 
-    textField.style.position = "relative";
-    textField.style.opacity = 1;
+    // On change of body
+    textField.contentWindow.addEventListener('keydown', autosaveF)
 
-    textField.contentDocument.body.innerHTML = "&zwnj;"
-    textField.contentDocument.body.style.display = "inline-block";
+    // TextField's text
+    var textHtml = textField.contentDocument.body.innerHTML
 
-
-
-    rest = "";
-
-
-
-
-    //On change of body
-    textField.contentWindow.addEventListener("keydown",autosaveF);
-
-    //TextField's text
-    var textHtml = textField.contentDocument.body.innerHTML;
-
-    caretInit();
-}
-
-//Caret Design
-function caretInit(){
-  cs.width = 3+"px";
-  cs.height = 20+"px";
-  cs.background = "rgba(200,200,200,0.5)";
-  cs.transition = "200ms";
-  cs.position = "absolute";
-  cs.display = "inline-block";
-
-  document.body.appendChild(caret);
-}
-
-function caretUpdate(){
-  cs.top = caretLoc.y + textField.offsetTop + 70 - bodyContent.scrollTop;
-  cs.left = caretLoc.x + textField.offsetLeft + 70;
-  cs.height = space;
-}
-
-
-
-function negateKeys(){
-  Object.keys(keys).map(function(key,index){
-    if (typeof keys[key] != "object") {
-      keys[key] = false;
-    } else if (key == "click") {
-      keys[key].state = false
-    }
-  })
-}
-
-function bodyBugFix(){
-  //Body bug fix
-  var bodies = textField.contentDocument.getElementsByTagName("body");
-  var whileIter = bodies.length-1; //While loop iterator
-  if (bodies.length > 1) {
-    content = "";
-    for (var i = 1; i < bodies.length; i++) {
-      content += bodies[i].innerHTML;
-    }
-
-    bodies[0].innerHTML += content;
-
-    while (bodies.length > 1) {
-      bodies[whileIter].remove();
-      whileIter--;
-    }
-
-      bodies[0].addEventListener("focus",function () {
-        cs.transform = "translate(0,0) scale(1)";
-      })
-      bodies[0].addEventListener("focusout",function () {
-        cs.transform = "translate(-10px,0) scale(0)";
-      })
-    addStyle();
+    caretInit()
   }
-}
 
-function updateSidebar(){
-  sbPages.innerHTML = curPage + 1;
+// Caret Design
+  function caretInit () {
+    cs.width = 3 + 'px'
+    cs.height = 20 + 'px'
+    cs.background = 'rgba(200,200,200,0.5)'
+    cs.transition = '200ms'
+    cs.position = 'absolute'
+    cs.display = 'inline-block'
 
-  sbWords.innerHTML = (textField.contentDocument.body.textContent.length == 1) ? 0 :
-    textField.contentDocument.body.textContent.split(" ").length;
-
-  sbLetters.innerHTML = textField.contentDocument.body.textContent.length -1;
-}
-
-function firstLetterFix() {
-  //Debugger - if nothing is being placed
-  //Just to show the wae to WYSIWYG editor
-
-  if (textField.contentDocument.body.innerHTML == "") {
-    var bdy = textField.contentDocument.getElementsByTagName('body')[0]
-    bdy.innerHTML = "&zwnj;"
-    var range = textField.contentDocument.createRange();
-    range.setStart(textField.contentDocument.body,1);
-    range.setEnd(textField.contentDocument.body,1);
-    var selection = textField.contentWindow.getSelection();
-    selection.removeAllRanges();
-    selection.addRange(range);
+    document.body.appendChild(caret)
   }
-}
 
-function headChecker() {
-    //Check if there are any heads inside
+  function caretUpdate () {
+    cs.top = caretLoc.y + textField.offsetTop + 70 - bodyContent.scrollTop + "px"
+    cs.left = caretLoc.x + textField.offsetLeft + 70 + "px"
+    cs.height = space + "px"
+  }
+
+  function negateKeys () {
+    Object.keys(keys).map(function (key, index) {
+      if (typeof keys[key] !== 'object') {
+        keys[key] = false
+      } else if (key == 'click') {
+        keys[key].state = false
+      }
+    })
+  }
+
+  function bodyBugFix () {
+  // Body bug fix
+    var bodies = textField.contentDocument.getElementsByTagName('body')
+    var whileIter = bodies.length - 1 // While loop iterator
+    if (bodies.length > 1) {
+      content = ''
+      for (var i = 1; i < bodies.length; i++) {
+        content += bodies[i].innerHTML
+      }
+
+      bodies[0].innerHTML += content
+
+      while (bodies.length > 1) {
+        bodies[whileIter].remove()
+        whileIter--
+      }
+
+      bodies[0].addEventListener('focus', function () {
+        cs.transform = 'translate(0,0) scale(1)'
+      })
+      bodies[0].addEventListener('focusout', function () {
+        cs.transform = 'translate(-10px,0) scale(0)'
+      })
+      addStyle()
+    }
+  }
+
+  function updateSidebar () {
+    sbPages.innerHTML = curPage + 1
+
+    sbWords.innerHTML = (textField.contentDocument.body.textContent.length == 1) ? 0 :
+    textField.contentDocument.body.textContent.split(' ').length
+
+    sbLetters.innerHTML = textField.contentDocument.body.textContent.length - 1
+  }
+
+  function firstLetterFix () {
+  // Debugger - if nothing is being placed
+  // Just to show the wae to WYSIWYG editor
+
+    if (textField.contentDocument.body.innerHTML == '') {
+      var bdy = textField.contentDocument.getElementsByTagName('body')[0]
+      bdy.innerHTML = '&zwnj;'
+      var range = textField.contentDocument.createRange()
+      range.setStart(textField.contentDocument.body, 1)
+      range.setEnd(textField.contentDocument.body, 1)
+      var selection = textField.contentWindow.getSelection()
+      selection.removeAllRanges()
+      selection.addRange(range)
+    }
+  }
+
+  function headChecker () {
+    // Check if there are any heads inside
     if (textField.contentDocument.getElementsByTagName('head').length == 0) {
-      var head = textField.contentDocument.createElement('head');
-      var html = textField.contentDocument.getElementsByTagName('html')[0];
-      html.innerHTML = '<head></head>';
-      addStyle();
-      caretInit();
+      var head = textField.contentDocument.createElement('head')
+      var html = textField.contentDocument.getElementsByTagName('html')[0]
+      html.innerHTML = '<head></head>'
+      addStyle()
+      caretInit()
 
-        textField.contentDocument.body.style.color = "#ccc";
-        textField.contentDocument.body.style.fontFamily = "Lato";
-        textField.contentDocument.body.style.margin = 0;
-        textField.contentDocument.body.style.caretColor = "transparent";
-        textField.contentDocument.body.style.width = "100%";
-        textField.contentDocument.body.style.wordWrap = "break-word";
+      textField.contentDocument.body.style.color = '#ccc'
+      textField.contentDocument.body.style.fontFamily = 'Lato'
+      textField.contentDocument.body.style.margin = 0
+      textField.contentDocument.body.style.caretColor = 'transparent'
+      textField.contentDocument.body.style.width = '100%'
+      textField.contentDocument.body.style.wordWrap = 'break-word'
 
-        textField.contentDocument.body.addEventListener("focus",function () {
-          cs.transform = "translate(0,0) scale(1)";
-        })
-        textField.contentDocument.body.addEventListener("focusout",function () {
-          cs.transform = "translate(-10px,0) scale(0)";
-        })
+      textField.contentDocument.body.addEventListener('focus', function () {
+        cs.transform = 'translate(0,0) scale(1)'
+      })
+      textField.contentDocument.body.addEventListener('focusout', function () {
+        cs.transform = 'translate(-10px,0) scale(0)'
+      })
     }
-}
+  }
 
-function checkForFloatingDivs () {
-  let els = textField.contentDocument.documentElement.childNodes;
-  let body = textField.contentDocument.body;
+  function checkForFloatingDivs () {
+    let els = textField.contentDocument.documentElement.childNodes
+    let body = textField.contentDocument.body
   // console.log(els);
-  for (i of els){
-    if (i.tagName == "DIV") {
-      body.prepend(i);
-    }
-  }
-}
-
-window.addEventListener("click",e=>{
-  cs.transform = "translate(10px,0) scale(0)"
-})
-
-
-textField.contentDocument.documentElement.addEventListener("click",e=>{
-  e.stopPropagation()
-  cs.transform = "translate(0,0) scale(1)"
-})
-
-
-setInterval(function () {
-  bodyBugFix();
-
-  caretLoc.x = getSelectionCoords(textField).x;
-  caretLoc.y = getSelectionCoords(textField).y;
-  caretSize();
-  stickIntoBorders(cs.top);
-  restrictions();
-  settingsUpdate()
-
-  firstLetterFix();
-  caretToEnd()
-
-  //284 && 280 && 270
-  cs.top = (parseInt(cs.top) < 270  - bodyContent.scrollTop) ? 270 - bodyContent.scrollTop : cs.top - bodyContent.scrollTop;
-
-  checkForFloatingDivs();
-
-  updateSidebar();
-  headChecker();
-  caretUpdate();
-}, 1);
-
-function getSelectionCoordsPosition(elem) {
-  switch (elem) {
-    case "left":
-      position = 0;
-      break;
-    case "center":
-      position = 1;
-      break;
-    case "right":
-      position = 2;
-      break;
-    case "justify":
-      position = 0;
-      break;
-    default: //And this won't occur
-      position = 0;
-      break;
-  }
-}
-
-
-function settingsUpdate() {
-  //Autosave
-  settingsEl.autosaveLabel.title = settingsEl.autosave.checked == true ? "Włączony" : "Wyłączony"
-  //Image Quality
-  settingsEl.imageQuality.title = Math.round(settingsEl.imageQuality.value*100)+"%"
-}
-settingsEl.autosave.addEventListener("change",()=>{
-    SETTINGS.autobackup = settingsEl.autosave.checked
-})
-settingsEl.imageQuality.addEventListener("change",()=>{
-    SETTINGS.imageQuality = settingsEl.imageQuality.value
-})
-
-settingsToElements()
-
-function settingsToElements () {
-  settingsEl.autosave.checked = SETTINGS.autobackup
-  settingsEl.imageQuality.value = SETTINGS.imageQuality
-}
-
-
-function getSelectionCoords(iframe) {
-    win = iframe;
-    var doc = win.contentDocument;
-    var sel = doc.selection, range, rects, rect;
-    var x = 0, y = 0;
-     if (doc.getSelection) {
-        sel = doc.getSelection();
-        if (sel.rangeCount) {
-            range = sel.getRangeAt(0).cloneRange();
-            if (range.getClientRects) {
-                range.collapse(true);
-                rects = range.getClientRects();
-
-                if (rects.length > 0) {
-                    rect = rects[0];
-
-                    y = rect.top;
-                    x = rect.left;
-                    prev = true;
-                    try{
-                      if(sel.anchorNode.parentElement.parentElement.tagName == "SPAN")
-                        getSelectionCoordsPosition(sel.anchorNode.parentElement.parentElement.parentElement.style.textAlign);
-                      else if (sel.anchorNode.parentElement.parentElement.tagName == "DIV")
-                        getSelectionCoordsPosition(sel.anchorNode.parentElement.parentElement.style.textAlign);
-                    } catch(e){
-                        position = 0
-                    }
-                }
-                else{
-
-                  //It's a value of CSS property (without CSS type)
-                  var csNum = cs.top.replace(cs.top.match(/px/),"")
-
-                  if(keys.enter || keys.down || keys.right){
-                    negateKeys();
-                    return {
-                      x : (position == 0)? 0 :
-                          (position == 1)?
-                          (+textField.contentDocument.body.offsetWidth/2) :
-                          textField.contentDocument.body.offsetWidth,
-                      y: cs.top = parseInt(csNum) + space}
-                  }
-                  else if (keys.left || keys.up) {
-                    negateKeys();
-                    return{
-                      x : (position == 0)? 0 :
-                        (position == 1)?
-                        (+textField.contentDocument.body.offsetWidth/2) :
-                        textField.contentDocument.body.offsetWidth,
-                      y: cs.top = parseInt(csNum) - space}
-                  }
-                  else if (keys.backsp && !prev) {
-                    negateKeys();
-                    return{
-                      x : (position == 0)? 0 :
-                          (position == 1)?
-                          (+textField.contentDocument.body.offsetWidth/2) :
-                          textField.contentDocument.body.offsetWidth,
-                      y: cs.top = parseInt(csNum) - space}
-                  }
-                  else if (keys.backsp && prev) {
-                    prev = false;
-                    negateKeys();
-
-                    return{
-                      x : (position == 0)? 0 :
-                          (position == 1)?
-                          (+textField.contentDocument.body.offsetWidth/2) :
-                          textField.contentDocument.body.offsetWidth,
-                      y: cs.top = parseInt(csNum)}
-                  } else if (keys.click.state) {
-                    let temp = keys.click.loc[1]
-                    temp -= temp % 19
-                    return{
-                      x : 0,
-                      y : temp
-                    }
-                  }
-                  else {
-                    return{x: undefined, y: undefined}
-                  }
-                }
-            }
-        }
-    }
-    return { x: x, y: y };
-}
-function stickIntoBorders(location){
-
-  if (parseInt(cs.top) > textField.contentDocument.body.offsetHeight + textField.offsetTop + 70 - 18) {
-    cs.top = (parseInt(cs.top) - 18)+"px";
-  }
-}
-
-function restrictionsOptimal (wordSize){
-  //Sprawdź, czy skończył poprawiać
-  prevCheck = true;
-  restOf = str.slice(str.length-wordSize,str.length) + restOf;
-    //Otherwise delete the last character
-    textField.contentDocument.body.innerHTML = str.slice(0,-wordSize);
-    str = str.slice(0,-wordSize);
-    return str
-  // }
-  //textContent
-}
-
-let restrictions_start = false
-function restrictions() {
-
-  if (!restrictions_start && textField.contentDocument.body.offsetHeight > 1123) {
-    str = textField.contentDocument.body.innerHTML
-    restrictions_start = true
-  } else if (textField.contentDocument.body.offsetHeight <= 1123) {
-    restrictions_start = false
-  }
-
-  let prevLetters = sbLetters
-
-  // 3 słowa przypadają na 1 pixel
-  if (textField.contentDocument.body.offsetHeight > 25000) {
-    str = restrictionsOptimal(25000-1123);
-  } else if (textField.contentDocument.body.offsetHeight > 10000) {
-    str = restrictionsOptimal(10000-1123);
-  } else if (textField.contentDocument.body.offsetHeight > 5000) {
-    str = restrictionsOptimal(5000-1123);
-  } else if (textField.contentDocument.body.offsetHeight > 3000) {
-    str = restrictionsOptimal(3000-1123);
-  } else if (textField.contentDocument.body.offsetHeight > 2000) {
-    str = restrictionsOptimal(2000-1123);
-  } else if (textField.contentDocument.body.offsetHeight > 1500) {
-    str = restrictionsOptimal(1700-1123);
-  } else if (textField.contentDocument.body.offsetHeight > 1300) {
-    str = restrictionsOptimal(1500-1123);
-  } else if (textField.contentDocument.body.offsetHeight > 1170) {
-    str = restrictionsOptimal(10);
-  } else if (textField.contentDocument.body.offsetHeight > 1123) {
-    str = restrictionsOptimal(1);
-  }
-  else if(prevCheck && !merge.invoked) {
-    prevCheck = false;
-    autosaveF();
-    setTimeout(()=>{
-
-      pages.splice(curPage+1,0,restOf);
-      restOf = ""
-      turnRight();
-    },100)
-  } else if (prevCheck && merge.invoked) {
-    prevCheck = false;
-
-    pages[curPage] = textField.contentDocument.body.innerHTML; //Autosave
-    pages.splice(curPage+1,0,restOf);
-    restOf = ""
-    //Turn Right
-    curPage++;
-    textField.contentDocument.body.innerHTML = (pages[curPage] == undefined) ? "" : pages[curPage];
-  } else {
-    if (merge.invoked) {
-      if (sbLetters == prevLetters) {
-        merge.finished = true
-        merge.invoked = false
+    for (i of els) {
+      if (i.tagName == 'DIV') {
+        body.prepend(i)
       }
     }
   }
-}
 
-function fontSizeReader(elem) {
-  switch (elem) {
-    case '7':
-    space = 57
-    fontSizes.value = 7;
-    break;
-    case '6':
-    space = 39
-    fontSizes.value = 6;
-    break;
-    case '5':
-    space = 29
-    fontSizes.value = 5;
-    break;
-    case '4':
-    space = 22
-    fontSizes.value = 4;
-    break;
-    case '3':
-    space = 18
-    fontSizes.value = 3;
-    break;
-    case '2':
-    space = 16
-    fontSizes.value = 2;
-    break;
-    case '1':
-    space = 12
-    fontSizes.value = 1;
-    break;
-    default:
-    space = 18
-    fontSizes.value = 3;
-    break;
+  window.addEventListener('click', e => {
+    cs.transform = 'translate(10px,0) scale(0)'
+  })
+
+  textField.contentDocument.documentElement.addEventListener('click', e => {
+    e.stopPropagation()
+    cs.transform = 'translate(0,0) scale(1)'
+  })
+
+  let allow = false // caretToEnd && getSelectionCoords
+  setInterval(function () {
+    bodyBugFix()
+
+    caretToEnd()
+    caretLoc.x = getSelectionCoords(textField).x
+    caretLoc.y = getSelectionCoords(textField).y
+    caretSize()
+    stickIntoBorders(cs.top)
+    restrictions()
+    settingsUpdate()
+
+    firstLetterFix()
+
+  // 284 && 280 && 270
+    cs.top = (parseInt(cs.top) < 270 - bodyContent.scrollTop) ? 270 - bodyContent.scrollTop : cs.top - bodyContent.scrollTop
+
+    checkForFloatingDivs()
+
+    updateSidebar()
+    headChecker()
+    caretUpdate()
+  }, 1)
+
+  function getSelectionCoordsPosition (elem) {
+    switch (elem) {
+      case 'left':
+        position = 0
+        break
+      case 'center':
+        position = 1
+        break
+      case 'right':
+        position = 2
+        break
+      case 'justify':
+        position = 0
+        break
+      default: // And this won't occur
+        position = 0
+        break
+    }
   }
-}
 
-function caretSize() {
-  try {
-    //The following variable can be null.
-    var selEl = textField.contentWindow.getSelection().anchorNode.parentElement
-    let font
-    try{
-      font = (selEl.face != undefined) ?
+  function settingsUpdate () {
+  // Autosave
+    settingsEl.autosaveLabel.title = settingsEl.autosave.checked == true ? 'Włączony' : 'Wyłączony'
+  // Image Quality
+    settingsEl.imageQuality.title = Math.round(settingsEl.imageQuality.value * 100) + '%'
+  }
+  settingsEl.autosave.addEventListener('change', () => {
+    SETTINGS.autobackup = settingsEl.autosave.checked
+  })
+  settingsEl.imageQuality.addEventListener('change', () => {
+    SETTINGS.imageQuality = settingsEl.imageQuality.value
+  })
+
+  settingsToElements()
+
+  function settingsToElements () {
+    settingsEl.autosave.checked = SETTINGS.autobackup
+    settingsEl.imageQuality.value = SETTINGS.imageQuality
+  }
+
+  function getSelectionCoords (iframe) {
+    win = iframe
+    var doc = win.contentDocument
+    var sel = doc.selection, range, rects, rect
+    var x = 0, y = 0
+    if (doc.getSelection) {
+      sel = doc.getSelection()
+      if (sel.rangeCount) {
+        range = sel.getRangeAt(0).cloneRange()
+        if (range.getClientRects) {
+          range.collapse(true)
+          rects = range.getClientRects()
+
+          if (rects.length > 0) {
+            rect = rects[0]
+
+            y = rect.top
+            x = rect.left
+            prev = true
+            try {
+              if (sel.anchorNode.parentElement.parentElement.tagName == 'SPAN') { getSelectionCoordsPosition(sel.anchorNode.parentElement.parentElement.parentElement.style.textAlign) } else if (sel.anchorNode.parentElement.parentElement.tagName == 'DIV') {
+                getSelectionCoordsPosition(sel.anchorNode.parentElement.parentElement.style.textAlign)
+              }
+            } catch (e) {
+              position = 0
+            }
+          } else {
+                  // It's a value of CSS property (without CSS type)
+            var csNum = cs.top.replace(cs.top.match(/px/), '')
+
+            if (keys.enter || keys.down || keys.right) {
+              negateKeys()
+              return {
+                x: (position == 0) ? 0 :
+                          (position == 1) ?
+                          (+textField.contentDocument.body.offsetWidth / 2) :
+                          textField.contentDocument.body.offsetWidth,
+                y: cs.top = parseInt(csNum) + space}
+            } else if (keys.left || keys.up) {
+              negateKeys()
+              return {
+                x: (position == 0) ? 0 :
+                        (position == 1) ?
+                        (+textField.contentDocument.body.offsetWidth / 2) :
+                        textField.contentDocument.body.offsetWidth,
+                y: cs.top = parseInt(csNum) - space}
+            } else if (keys.backsp && !prev) {
+              negateKeys()
+              return {
+                x: (position == 0) ? 0 :
+                          (position == 1) ?
+                          (+textField.contentDocument.body.offsetWidth / 2) :
+                          textField.contentDocument.body.offsetWidth,
+                y: cs.top = parseInt(csNum) - space}
+            } else if (keys.backsp && prev) {
+              prev = false
+              negateKeys()
+
+              return {
+              x: (position == 0) ? 0 :
+                          (position == 1) ?
+                          (+textField.contentDocument.body.offsetWidth / 2) :
+                          textField.contentDocument.body.offsetWidth,
+              y: cs.top = parseInt(csNum)}
+            } else if (keys.click.state && allow) {
+              let temp = keys.click.loc[1]
+              temp -= temp % 19
+              return {
+                   x: 0,
+                   y: temp
+                 }
+            } else {
+              return {x: undefined, y: undefined}
+            }
+          }
+        }
+      }
+    }
+    return { x: x, y: y }
+  }
+  function stickIntoBorders (location) {
+    if (parseInt(cs.top) > textField.contentDocument.body.offsetHeight + textField.offsetTop + 70 - 18) {
+      cs.top = (parseInt(cs.top) - 18) + 'px'
+    }
+  }
+
+  function restrictionsOptimal (wordSize) {
+  // Sprawdź, czy skończył poprawiać
+    prevCheck = true
+    restOf = str.slice(str.length - wordSize, str.length) + restOf
+    // Otherwise delete the last character
+    textField.contentDocument.body.innerHTML = str.slice(0, -wordSize)
+    str = str.slice(0, -wordSize)
+    return str
+  // }
+  // textContent
+  }
+
+  let restrictions_start = false
+  function restrictions () {
+    if (!restrictions_start && textField.contentDocument.body.offsetHeight > 1123) {
+      str = textField.contentDocument.body.innerHTML
+      restrictions_start = true
+    } else if (textField.contentDocument.body.offsetHeight <= 1123) {
+      restrictions_start = false
+    }
+
+    let prevLetters = sbLetters
+
+  // 3 słowa przypadają na 1 pixel
+    if (textField.contentDocument.body.offsetHeight > 25000) {
+      str = restrictionsOptimal(25000 - 1123)
+    } else if (textField.contentDocument.body.offsetHeight > 10000) {
+      str = restrictionsOptimal(10000 - 1123)
+    } else if (textField.contentDocument.body.offsetHeight > 5000) {
+      str = restrictionsOptimal(5000 - 1123)
+    } else if (textField.contentDocument.body.offsetHeight > 3000) {
+      str = restrictionsOptimal(3000 - 1123)
+    } else if (textField.contentDocument.body.offsetHeight > 2000) {
+      str = restrictionsOptimal(2000 - 1123)
+    } else if (textField.contentDocument.body.offsetHeight > 1500) {
+      str = restrictionsOptimal(1700 - 1123)
+    } else if (textField.contentDocument.body.offsetHeight > 1300) {
+      str = restrictionsOptimal(1500 - 1123)
+    } else if (textField.contentDocument.body.offsetHeight > 1170) {
+      str = restrictionsOptimal(10)
+    } else if (textField.contentDocument.body.offsetHeight > 1123) {
+      str = restrictionsOptimal(1)
+    } else if (prevCheck && !merge.invoked) {
+      prevCheck = false
+      autosaveF()
+      setTimeout(() => {
+        pages.splice(curPage + 1, 0, restOf)
+        restOf = ''
+        turnRight()
+      }, 100)
+    } else if (prevCheck && merge.invoked) {
+      prevCheck = false
+
+      pages[curPage] = textField.contentDocument.body.innerHTML // Autosave
+      pages.splice(curPage + 1, 0, restOf)
+      restOf = ''
+      // Turn Right
+      curPage++
+      textField.contentDocument.body.innerHTML = (pages[curPage] == undefined) ? '' : pages[curPage]
+    } else {
+      if (merge.invoked) {
+        if (sbLetters == prevLetters) {
+          merge.finished = true
+          merge.invoked = false
+        }
+      }
+    }
+  }
+
+  function fontSizeReader (elem) {
+    switch (elem) {
+      case '7':
+        space = 57
+        fontSizes.value = 7
+        break
+      case '6':
+        space = 39
+        fontSizes.value = 6
+        break
+      case '5':
+        space = 29
+        fontSizes.value = 5
+        break
+      case '4':
+        space = 22
+        fontSizes.value = 4
+        break
+      case '3':
+        space = 18
+        fontSizes.value = 3
+        break
+      case '2':
+        space = 16
+        fontSizes.value = 2
+        break
+      case '1':
+        space = 12
+        fontSizes.value = 1
+        break
+      default:
+        space = 18
+        fontSizes.value = 3
+        break
+    }
+  }
+
+  function caretSize () {
+    try {
+    // The following variable can be null.
+      var selEl = textField.contentWindow.getSelection().anchorNode.parentElement
+      let font
+      try {
+        font = (selEl.face != undefined) ?
       selEl.face :
       (selEl.parentElement.face != undefined) ?
       selEl.parentElement.face :
@@ -1100,47 +1054,41 @@ function caretSize() {
       selEl.parentElement.parentElement.face :
       (selEl.parentElement.parentElement.parentElement.face != undefined) ?
       selEl.parentElement.parentElement.parentElement.face :
-      "Lato"
-    } catch (e) {
-      font = "Lato"
-    }
-
-    fonts.value = font
-    //TagNames must be CAPITAL
-    if (selEl.tagName == "FONT") {
-        fontSizeReader(selEl.size)
-
-    } else if (selEl.tagName == "B" || selEl.tagName == "U" ||
-              selEl.tagName == "I" || selEl.tagName == "SPAN") {
-
-      if(selEl.parentNode.tagName == "FONT"){
-        fontSizeReader(selEl.parentNode.size)
-      } else if (selEl.parentNode.tagName == "B" ||
-                 selEl.parentNode.tagName == "U" ||
-                 selEl.parentNode.tagName == "I" ||
-                 selEl.parentNode.tagName == "SPAN") {
-        fontSizeReader(selEl.parentNode.parentNode.size)
+      'Lato'
+      } catch (e) {
+        font = 'Lato'
       }
-    } else  {
-      space = 18
-      fontSizes.value = 3;
-      fonts.value = "Lato"
+
+      fonts.value = font
+    // TagNames must be CAPITAL
+      if (selEl.tagName == 'FONT') {
+        fontSizeReader(selEl.size)
+      } else if (selEl.tagName == 'B' || selEl.tagName == 'U' ||
+              selEl.tagName == 'I' || selEl.tagName == 'SPAN') {
+        if (selEl.parentNode.tagName == 'FONT') {
+          fontSizeReader(selEl.parentNode.size)
+        } else if (selEl.parentNode.tagName == 'B' ||
+                 selEl.parentNode.tagName == 'U' ||
+                 selEl.parentNode.tagName == 'I' ||
+                 selEl.parentNode.tagName == 'SPAN') {
+          fontSizeReader(selEl.parentNode.parentNode.size)
+        }
+      } else {
+        space = 18
+        fontSizes.value = 3
+        fonts.value = 'Lato'
+      }
+    } catch (e) {
+    // Do not do anything
     }
-  } catch (e) {
-    //Do not do anything
   }
-}
 
-
-//Pasting text
-  textField.contentWindow.addEventListener("paste",(e)=>{
-    //Prevent from default pasting text
-    e.preventDefault();
-    //Take text from clipboard and execute command to paste the text
-    var normalizedText = textField.contentWindow.event.clipboardData.getData("text/plain");
-    textField.contentDocument.execCommand("insertHTML",false,normalizedText);
+// Pasting text
+  textField.contentWindow.addEventListener('paste', (e) => {
+    // Prevent from default pasting text
+    e.preventDefault()
+    // Take text from clipboard and execute command to paste the text
+    var normalizedText = textField.contentWindow.event.clipboardData.getData('text/plain')
+    textField.contentDocument.execCommand('insertHTML', false, normalizedText)
   })
-
-
-
-});
+})
