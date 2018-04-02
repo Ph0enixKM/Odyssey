@@ -54,5 +54,5 @@ let print = {
 }
 
 print.btn.addEventListener("click",()=>{
-  ipcRenderer.send("print-all",pages)
+  ipcRenderer.send("print",pages)
 })

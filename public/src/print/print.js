@@ -11,5 +11,21 @@ window.addEventListener('keydown', e => {
 })
 
 ipcRenderer.on('print-request', (event, src) => {
-  qs('body')[0].innerHTML = src
+  setTimeout(() => {
+    let i = 0
+    let win = remote.getCurrentWindow()
+
+    setInterval(() => {
+      if (i < src.length) {
+        // Print pages
+        qs('body')[0].innerHTML = src[i]
+        win.webContents.print({silent: true})
+        i++
+
+      } else {
+        // If no more pages
+        win.close()
+      }
+    }, 1000)
+  }, 200)
 })

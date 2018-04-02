@@ -82,25 +82,16 @@ app.on('ready', () => {
   win.loadURL("file://" + __dirname+'/public/index.html')
   win.setBackgroundColor('#222')
 
-  ipcMain.on('print-all', (e,src) => {
+  ipcMain.on('print', (e,src) => {
     //Instatiate new printing process
-    printWin = new BrowserWindow({width: 210*3, height: 297*3, show: true})
+    printWin = new BrowserWindow({width: 210*3, height: 297*3, show: false})
     printWin.setMenu(null)
     printWin.loadURL("file://" + __dirname+'/public/print.html')
 
     printWin.webContents.once("dom-ready", () => {
-      // printWin.toggleDevTools()
       printWin.webContents.send('print-request',src)
-      setTimeout(()=>{
-        printWin.webContents.print({silent: false})
-      },500)
     })
   })
-
-
-  // QUESTION: Printing can be also done using webContents
-  // console.log(win.webContents);
-  // WARNING: Zrób tak, żeby było osobne okno do wydruku :D
 
   ipcMain.on('check-if-opened-with-file', e => {
     if (process.platform == 'win32' && process.argv.length >= 2) {
