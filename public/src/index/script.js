@@ -946,6 +946,33 @@ document.addEventListener('DOMContentLoaded', function () {
   // textContent
   }
 
+  // QUESTION: Shall we do it this way
+  // let beforePrint = () => {
+  //   console.log("before");
+  //   textField.contentDocument.body.style.color = "blue"
+  // }
+  // let afterPrint = () => {
+  //   console.log("after");
+  //   textField.contentDocument.body.style.color = "#ccc"
+  // }
+  //
+  // beforePrint()
+  // var mediaQueryList = window.matchMedia('print');
+  // mediaQueryList.addListener(function(mql) {
+  //   if (mql.matches) {
+  //       beforePrint();
+  //   } else {
+  //       afterPrint();
+  //   }
+  // });
+  // window.onbeforeprint = beforePrint
+  //
+  // window.addEventListener("keydown", e =>{
+  //   if (e.keyCode == 80) {
+  //     textField.contentWindow.print()
+  //   }
+  // })
+
   let restrictions_start = false
   function restrictions () {
     if (!restrictions_start && textField.contentDocument.body.offsetHeight > 1123) {

@@ -1,9 +1,10 @@
 const electron = require('electron')
-const { app, BrowserWindow, ipcMain, dialog } = electron
+const { app, BrowserWindow, ipcMain, dialog, webFrame } = electron
 const fs = require('fs');
+const os = require('os');
 
 let win
-
+let printWin
 
 app.on("ready", ()=>{
   let {width, height} = electron.screen.getPrimaryDisplay().workAreaSize
@@ -77,16 +78,23 @@ app.on("ready", ()=>{
     })
   })
 
-
-
-
-
   win = new BrowserWindow({width, height, frame:false, show:false});
   // win.toggleDevTools();
   win.setMenu(null);
   win.loadURL("file://"+__dirname+"/public/index.html");
 
   win.setBackgroundColor("#222");
+
+
+
+  printWin = new BrowserWindow({width: 210, height: 297, show: false})
+  printWin.setMenu(null);
+  printWin.loadURL("file://"+__dirname+"/public/print.html");
+
+  // QUESTION: Printing can be also done using webContents
+  // console.log(win.webContents);
+  // WARNING: Zrób tak, żeby było osobne okno do wydruku :D
+
 
   ipcMain.on('check-if-opened-with-file',e =>{
     if (process.platform == 'win32' && process.argv.length >= 2) {
@@ -104,11 +112,19 @@ app.on("ready", ()=>{
   win.webContents.on("did-finish-load", ()=>{
     setTimeout(()=>{
       win.show();
+      // setTimeout(()=>{
+      //   win.webContents.print({silent:false},()=>{
+      //     console.log("printed");
+      //   })
+      // },5000)
     },50)
   })
 
   //Closing process
-  win.on("closed", ()=>{ win = null })
+  win.on("closed", ()=>{
+    win = null
+    printWin.close()
+  })
 })
 
 app.on('window-all-closed', ()=> {
