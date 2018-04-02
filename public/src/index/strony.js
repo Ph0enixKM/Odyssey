@@ -47,3 +47,12 @@ setInterval(()=>{
     merge.finished = false
   }
 },200)
+
+
+let print = {
+  btn : qs('#print')[0],
+}
+
+print.btn.addEventListener("click",()=>{
+  ipcRenderer.send("print-all",pages)
+})
