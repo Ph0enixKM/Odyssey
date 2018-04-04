@@ -75,8 +75,19 @@ app.on('ready', () => {
       }
     })
   })
-
-  win = new BrowserWindow({width, height, frame: false, show: false})
+  process.platform == "win32"
+    ? win = new BrowserWindow({
+      width,
+      height,
+      frame: false,
+      show: false,
+      icon:  __dirname + '/assets/icons/logo.ico'})
+    : win = new BrowserWindow({
+      width,
+      height,
+      frame: false,
+      show: false,
+      icon:  __dirname + '/assets/icons/logo.png'})
   // win.toggleDevTools()
   win.setMenu(null)
   win.loadURL("file://" + __dirname+'/public/index.html')
@@ -85,7 +96,7 @@ app.on('ready', () => {
   ipcMain.on('print', (e, src, silent) => {
     silent = silent == undefined ? false : true
     //Instatiate new printing process
-    printWin = new BrowserWindow({width: 210*3, height: 297*3, show: false})
+    let printWin = new BrowserWindow({width: 210*3, height: 297*3, show: false})
     printWin.setMenu(null)
     printWin.loadURL("file://" + __dirname+'/public/print.html')
     // printWin.toggleDevTools()

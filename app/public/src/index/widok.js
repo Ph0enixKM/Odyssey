@@ -17,23 +17,23 @@ tippy('disabled', {
 })
 
 // SHORTCUT SECTION
-let shortcut = qs('#shortcut')[0]
-let out
-let shortcutState = false
+window.shortcut = qs('#shortcut')[0]
+window.out = undefined // Is it important?
+window.shortcutState = false
 
-let shortcutOn = (type) => {
+window.shortcutOn = (type) => {
   shortcut.style.display = 'inline-block'
   shortcut.innerText = type
   shortcut.style.opacity = 1
 }
 
-let shortcutOff = () => {
+window.shortcutOff = () => {
   shortcut.style.opacity = 0
   shortcut.style.display = 'none'
 }
 
 // FULL VIEW SECTION
-let fv = {
+window.fv = {
   btn: qs('#full-view')[0],
   btnBlocker: qs('disabled#move')[0],
   mergeBlocker: qs('disabled#merge')[0],
@@ -66,7 +66,7 @@ fv.btn.addEventListener('mouseout', shortcutOff)
 fv.tools.addEventListener('click', e => e.stopPropagation()) // Prevent toolbar from closing
 
 fv.tools.childNodes[3].addEventListener('click', () => { // Delete Button
-  for (data of fv.sel) {
+  for (let data of fv.sel) {
     if (data !== undefined) {
       data.style.transform = 'translate(0,-50px)'
       data.style.opacity = 0
@@ -108,7 +108,7 @@ fv.on = () => {
     }
   })
   let index = 1
-  for (data of fv.pages) {
+  for (let data of fv.pages) {
     // Create Elements
     let doc = document.createElement('article')
     doc.className = 'doc'
@@ -147,12 +147,12 @@ fv.on = () => {
 
       let sortedSel = fv.sel.slice() // Clone Array
       sortedSel.sort((a, b) => { return a.index - b.index })
-      filteredSel = sortedSel.filter(d => { if (d != undefined) return d })
+      let filteredSel = sortedSel.filter(d => { if (d != undefined) return d })
 
       if (filteredSel.length > 0) {
         // Check whether you can open Chain Editor
 
-        for (sel of sortedSel) {
+        for (let sel of sortedSel) {
           if (sel !== undefined) {
             if (sortedSel[sortedSel.indexOf(sel) + 1] !== undefined) { // If it is not the last item
               if (sel.index == sortedSel[sortedSel.indexOf(sel) + 1].index - 1) {
@@ -191,7 +191,7 @@ fv.off = () => {
 // MOVE SECTION
 const moveModule = require('./src/index/move.js')
 
-let move = {
+window.move = {
   btn: qs('#move-btn')[0],
   bg: qs('#move-bg')[0],
   canvas: new Function(),
@@ -264,9 +264,9 @@ move.ok.addEventListener('mousedown', e => { // When you click on OK
     return item.index - 1
   })
 
-  pagesTemp = pages.slice()
+  let pagesTemp = pages.slice()
 
-  for (var i = sorted[0]; i < sorted[sorted.length - 1] + 1; i++) {
+  for (let i = sorted[0]; i < sorted[sorted.length - 1] + 1; i++) {
     pages[i] = pagesTemp[Array.from(move.docsList)[i - sorted[0]].index - 1]
   }
 
@@ -286,7 +286,7 @@ move.on = () => {
     return a.index - b.index
   })
   fv.bg.style.overflowY = 'hidden'  // Unanabling scrolling previous layer
-  for (data of fv.sel) {
+  for (let data of fv.sel) {
     if (data != undefined) {
       let doc = document.createElement('article')
       doc.className = 'doc-move'
@@ -312,7 +312,7 @@ move.on = () => {
       }
 
       doc.addEventListener('click', e => e.stopPropagation())
-      doc.addEventListener('mousedown', e => {
+      doc.addEventListener('mousedown', function (e) {
         e.stopPropagation()
         this.el = doc
         move.sel = (move.sel != undefined) ? move.sel : this.el
@@ -345,7 +345,7 @@ move.off = () => {
   fv.sel.sort((a, b) => { // Order all the selections
     return a.index - b.index
   })
-  for (c of move.curves) {
+  for (let c of move.curves) {
     c.clear()
   }
   fv.btnBlocker.setAttribute('disabled', true) // Turn off
@@ -355,7 +355,7 @@ move.off = () => {
 }
 
 // CHAPTER SECTION
-let chapter = {
+window.chapter = {
   btn: qs('#chapter-view')[0],
   bg: qs('#chapter-bg')[0],
   docs: qs('#chapter-docs')[0],
@@ -397,7 +397,7 @@ chapter.tools.addEventListener('click', e => {
 // Change Name
 chapter.input.addEventListener('change', () => {
   BASE_FILE.book[chapter.sel][0] = chapter.input.value
-  for (doc of chapter.docs.childNodes) {
+  for (let doc of chapter.docs.childNodes) {
     if (doc.tagName == 'DIV' && doc.index == chapter.sel) {
       doc.childNodes[0].innerText = chapter.input.value
     }
@@ -518,7 +518,7 @@ chapter.on = () => {
       }
     })
 
-    doc.addEventListener('click', e => {
+    doc.addEventListener('click',function (e) {
       this.el = (e.target.tagName == 'DIV') ? e.target : e.target.parentNode
       this.el.style.transform = 'scale(2)'
       this.el.style.opacity = 0
@@ -578,7 +578,8 @@ chapter.off = () => {
   chapter.sel = undefined
 }
 
-let mergeSel = {
+//Merge by selection section
+window.mergeSel = {
   btn: qs('#merge-sel')[0]
 }
 

@@ -1,4 +1,4 @@
-let merge = {
+window.merge = {
   btn : qs('#merge-all')[0],
   loading : qs('#compiling')[0],
   innerMsg : qs('#compiling-cont p')[0],
@@ -49,10 +49,12 @@ setInterval(()=>{
 },200)
 
 
-let print = {
+// Print section
+
+window.printReq = {
   btn : qs('#print')[0],
 }
 
-print.btn.addEventListener("click",()=>{
+printReq.btn.addEventListener("click",()=>{
   ipcRenderer.send("print",pages)
 })

@@ -13,7 +13,7 @@ window.addEventListener('keydown', e => {
 ipcRenderer.on('print-request', (event, src, silent) => {
     let i = 0
     let win = remote.getCurrentWindow()
-    for (page of src) {
+    for (let page of src) {
       document.body.innerHTML += `
         <article>
           ${page}

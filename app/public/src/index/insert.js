@@ -1,6 +1,6 @@
-textField = qs("iframe")[0] //Just to remind the compiler
+window.textField = qs("iframe")[0] //Just to remind the compiler
 
-const insert = {
+window.insert = {
   addImageBtn : qs("#insert #image")[0],
   sizer : qs("#sizer")[0],
   sel : undefined,

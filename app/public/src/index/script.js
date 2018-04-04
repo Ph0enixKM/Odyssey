@@ -1,18 +1,45 @@
 // Global Variables:
-var fonts, fontSizes, textField,
-  str, rest, pages, left, right, space, bodyContent, logo,
-  menu, scrolling
+(function(){
+  Object.assign(window,{
+    fonts  : undefined,
+    fontSizes  : undefined,
+    textField  : undefined,
+    str  : undefined,
+    rest  : undefined,
+    pages  : undefined,
+    left  : undefined,
+    right  : undefined,
+    space  : undefined,
+    bodyContent  : undefined,
+    logo  : undefined,
+    menu  : undefined,
+    scrolling  : undefined,
+    sbPages  : undefined,
+    sbWords  : undefined,
+    sbLetters  : undefined,
+    sbChapter  : undefined,
+    ctxMenu  : undefined,
+
+    prev : false,
+    position : 0,
+    curPage : 0,
+    curChapter : 0,
+    autobackup : true,
+    scrollPastEnd : true,
+    prevCheck : false,
+    restOf : ''
+  })
+})()
 
 // Require Electron
 const { remote } = require('electron')
 const PIXI = require('pixi.js')
 const { ipcRenderer } = require('electron')
 
-let qs = document.querySelectorAll.bind(document)
+window.qs = document.querySelectorAll.bind(document)
 
-var sbPages, sbWords, sbLetters, sbChapter
 
-let BASE_FILE = {
+window.BASE_FILE = {
   title: undefined,
   author: undefined,
   keywords: [],
@@ -22,7 +49,7 @@ let BASE_FILE = {
   fonts: []
 }
 
-var keys = {
+window.keys = {
   enter: false,
   backsp: false,
   up: false,
@@ -33,18 +60,8 @@ var keys = {
   v: false,
   click: {state: false, loc: [], target: undefined}
 }
-var prev = false
-var position = 0
 
-var curPage = 0
-var curChapter = 0
-
-var autobackup = true
-var scrollPastEnd = true
-
-var prevCheck = false, restOf = ''
-
-let SETTINGS = {
+window.SETTINGS = {
   autobackup: true,
   imageQuality: 0.5
 }
@@ -67,13 +84,13 @@ function command (com) {
 }
 
 function font () {
-  this.fontVal = fonts.options[fonts.selectedIndex].value
-  textField.contentDocument.execCommand('fontname', false, this.fontVal)
+  let fontVal = fonts.options[fonts.selectedIndex].value
+  textField.contentDocument.execCommand('fontname', false, fontVal)
 }
 
 function fontSize () {
-  this.fontSizeVal = fontSizes.options[fontSizes.selectedIndex].value
-  textField.contentDocument.execCommand('fontSize', false, parseInt(this.fontSizeVal))
+  let fontSizeVal = fontSizes.options[fontSizes.selectedIndex].value
+  textField.contentDocument.execCommand('fontSize', false, parseInt(fontSizeVal))
 }
 
 function turnLeft () {
@@ -207,16 +224,16 @@ document.addEventListener('DOMContentLoaded', function () {
   bodyContent = document.getElementsByClassName('iframe')[0]
 
   menu = document.getElementsByClassName('menu')[0]
-  ctxMenu = document.getElementsByClassName('menu')[1]
+  window.ctxMenu = document.getElementsByClassName('menu')[1]
 
-  settings = qs('.settings')[0]
+  window.settings = qs('.settings')[0]
 
-  ctxLogo = document.getElementById('ctx-menu')
-  logo = document.getElementById('logo')
+  window.ctxLogo = document.getElementById('ctx-menu')
+  window.logo = document.getElementById('logo')
 
 // Left/right buttons
-  left = document.getElementsByClassName('move left')[0]
-  right = document.getElementsByClassName('move right')[0]
+  window.left = document.getElementsByClassName('move left')[0]
+  window.right = document.getElementsByClassName('move right')[0]
 
   left.addEventListener('click', turnLeft)
   right.addEventListener('click', turnRight)
@@ -768,7 +785,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let els = textField.contentDocument.documentElement.childNodes
     let body = textField.contentDocument.body
   // console.log(els);
-    for (i of els) {
+    for (let i of els) {
       if (i.tagName == 'DIV') {
         body.prepend(i)
       }
@@ -784,7 +801,7 @@ document.addEventListener('DOMContentLoaded', function () {
     cs.transform = 'translate(0,0) scale(1)'
   })
 
-  let allow = false // caretToEnd && getSelectionCoords
+  window.allow = false // caretToEnd && getSelectionCoords
   setInterval(function () {
     bodyBugFix()
 
@@ -849,7 +866,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function getSelectionCoords (iframe) {
-    win = iframe
+    let win = iframe
     var doc = win.contentDocument
     var sel = doc.selection, range, rects, rect
     var x = 0, y = 0

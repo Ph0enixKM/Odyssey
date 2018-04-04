@@ -14,7 +14,7 @@ let construct = () => {
     if (item.tagName) return item
   })
 
-  // ///// CANVAS
+  /////// CANVAS
 
   // Bezier Curve Class Model
   class BezierCurve {
@@ -27,7 +27,7 @@ let construct = () => {
 
   // Initialising bezierCurves
   move.curves = []
-  for (d of docs) {
+  for (let d of docs) {
     if (docs.indexOf(d) == 0) continue
     move.curves.push(new BezierCurve())
   }
@@ -35,7 +35,7 @@ let construct = () => {
   // Docs Initialisation
   let row = 0
   let offset = false
-  for (data of move.docsList) {
+  for (let data of move.docsList) {
     if (data.tagName) {
       // Poukadaj
       data.style.left = move.bg.offsetWidth / 2 - data.offsetWidth / 2 - 100 + 200 * (+offset) + 'px'
@@ -59,7 +59,7 @@ let construct = () => {
       let vectors = []
       let vecList = []
 
-      for (doc of docs) {
+      for (let doc of docs) {
         if (prev != null) {
           // Lippy and Messy
           move.curves[docs.indexOf(doc) - 1].clear()
@@ -87,8 +87,8 @@ let construct = () => {
       if (input.move.LMBRelease) { // If released
         input.move.LMBRelease = false
 
-        matrixDocs = []
-        for (el of docs) {
+        let matrixDocs = []
+        for (let el of docs) {
           matrixDocs.push({
             el,
             val: el.offsetTop + (el.offsetHeight / 2)
