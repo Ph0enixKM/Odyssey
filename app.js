@@ -77,19 +77,20 @@ app.on('ready', () => {
   })
 
   win = new BrowserWindow({width, height, frame: false, show: false})
-  // win.toggleDevTools();
+  // win.toggleDevTools()
   win.setMenu(null)
   win.loadURL("file://" + __dirname+'/public/index.html')
   win.setBackgroundColor('#222')
 
-  ipcMain.on('print', (e,src) => {
+  ipcMain.on('print', (e, src, silent) => {
+    silent = silent == undefined ? false : true
     //Instatiate new printing process
     printWin = new BrowserWindow({width: 210*3, height: 297*3, show: false})
     printWin.setMenu(null)
     printWin.loadURL("file://" + __dirname+'/public/print.html')
-
+    // printWin.toggleDevTools()
     printWin.webContents.once("dom-ready", () => {
-      printWin.webContents.send('print-request',src)
+      printWin.webContents.send('print-request', src, silent)
     })
   })
 
@@ -110,18 +111,13 @@ app.on('ready', () => {
   win.webContents.on('did-finish-load', () => {
     setTimeout(() => {
       win.show()
-      // setTimeout(()=>{
-      //   win.webContents.print({silent:false},()=>{
-      //     console.log("printed");
-      //   })
-      // },5000)
     }, 50)
   })
 
   // Closing process
   win.on('closed', () => {
     win = null
-    printWin.close()
+    app.quit()
   })
 })
 

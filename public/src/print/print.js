@@ -10,22 +10,17 @@ window.addEventListener('keydown', e => {
   }
 })
 
-ipcRenderer.on('print-request', (event, src) => {
-  setTimeout(() => {
+ipcRenderer.on('print-request', (event, src, silent) => {
     let i = 0
     let win = remote.getCurrentWindow()
-
-    setInterval(() => {
-      if (i < src.length) {
-        // Print pages
-        qs('body')[0].innerHTML = src[i]
-        win.webContents.print({silent: true})
-        i++
-
-      } else {
-        // If no more pages
-        win.close()
-      }
-    }, 1000)
-  }, 200)
+    for (page of src) {
+      document.body.innerHTML += `
+        <article>
+          ${page}
+        </article>
+      `
+    }
+    setTimeout(()=>{
+      win.webContents.print({silent})
+    },10)
 })
