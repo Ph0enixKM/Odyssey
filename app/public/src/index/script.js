@@ -216,6 +216,11 @@ document.addEventListener('DOMContentLoaded', function () {
     qs('.iframe #down')[0].innerHTML += `<div id="dummy"></div>`
   }
 
+  // Electron compiling bug
+  if (document.body.childNodes[0].tagName != "DIV" ) {
+    document.body.childNodes[0].remove()
+  }
+
 // Vars
   fonts = document.getElementsByTagName('select')[0]
   fontSizes = document.getElementsByTagName('select')[1]
