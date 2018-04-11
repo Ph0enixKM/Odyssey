@@ -1,5 +1,5 @@
 {
-  "name": "odyssey",
+  "name": "Odyssey",
   "version": "1.3.6",
   "description": "Rich Text Editor designed for writers novelists and poets.",
   "main": "app/app.js",
@@ -9,7 +9,7 @@
     "build-win": "electron-forge package Odyssey --platform=win32 --arch=x64 --asar=true",
     "build-win32": "electron-forge package Odyssey --platform=win32 --arch=ia32 --asar=true",
     "build-unix": "electron-forge package Odyssey --platform=linux --arch=x64 --asar=true",
-    "build-unix32": "electron-packager . Odyssey --platform=linux --arch=ia32 --asar=true",
+    "build-unix32": "electron-forge package Odyssey --platform=linux --arch=ia32 --asar=true",
     "make": "electron-forge make",
     "publish": "electron-forge publish"
   },
@@ -46,28 +46,31 @@
         ]
       },
       "electronPackagerConfig": {
-        "packageManager": "yarn"
+        "packageManager": "yarn",
+        "icon": "app/assets/icons/logo.ico"
       },
       "electronWinstallerConfig": {
-        "name": "odyssey_alpha"
+        "name": "Odyssey"
       },
       "electronInstallerDebian": {},
       "electronInstallerRedhat": {},
       "github_repository": {
-        "owner": "",
+        "owner": "Paweł Karaś (Phoenix)",
         "name": ""
       },
       "windowsStoreConfig": {
         "packageName": "",
-        "name": "odyssey_alpha"
+        "name": "Odyssey"
       }
     }
   },
   "dependencies": {
+    "cargodb": "^1.0.2",
+    "electron": "^1.7.12",
     "electron-compile": "^6.4.2",
     "electron-squirrel-startup": "^1.0.0",
-    "electron": "^1.7.12",
-    "pixi.js": "^4.7.0"
+    "pixi.js": "^4.7.0",
+    "spell": "^1.0.0"
   },
   "devDependencies": {
     "electron-forge": "^5.1.1",

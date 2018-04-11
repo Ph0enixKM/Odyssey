@@ -75,19 +75,13 @@ app.on('ready', () => {
       }
     })
   })
-  process.platform == "win32"
-    ? win = new BrowserWindow({
-      width,
-      height,
-      frame: false,
-      show: false,
-      icon:  __dirname + '/assets/icons/logo.ico'})
-    : win = new BrowserWindow({
-      width,
-      height,
-      frame: false,
-      show: false,
-      icon:  __dirname + '/assets/icons/logo.png'})
+  win = new BrowserWindow({
+    width,
+    height,
+    frame: false,
+    show: false,
+    icon:  __dirname + '/assets/icons/logo.png'
+  })
   // win.toggleDevTools()
   win.setMenu(null)
   win.loadURL("file://" + __dirname+'/public/index.html')

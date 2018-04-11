@@ -35,9 +35,16 @@
 const { remote } = require('electron')
 const PIXI = require('pixi.js')
 const { ipcRenderer } = require('electron')
+const spellModule = require('spell')
+const fs = require('fs')
+const cargodb = require('cargodb');
+const path = require('path');
 
+
+const spell = spellModule()
 window.qs = document.querySelectorAll.bind(document)
-
+// Init Storage
+const storage = new cargodb('storage')
 
 window.BASE_FILE = {
   title: undefined,
@@ -206,6 +213,22 @@ let caretLastDoubleClick = e => {
         selection.addRange(range)
       },20)
     }
+}
+
+function spellLoad (callback) {
+  storage.getItem('dict',(err, item)=>{
+    // if (err) throw err // Should be off
+    if (item == undefined) {
+      fs.readFile(path.join(__dirname,'../assets/dicts/compiled/pl.json'),'utf-8',(err, data)=>{
+        if (err) throw err
+        spell.load(data)
+        callback()
+      })
+    } else {
+      spell.load(item)
+      callback()
+    }
+  })
 }
 
 
@@ -410,7 +433,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }, 100)
   setInterval(() => {
     if (SETTINGS.autobackup) {
-      localStorage.setItem('backup', JSON.stringify(BASE_FILE))
+      storage.setItem('backup', JSON.stringify(BASE_FILE))
     }
   }, 1000)
 
@@ -438,10 +461,14 @@ document.addEventListener('DOMContentLoaded', function () {
   function fadeAll () {
     var all = document.getElementById('all')
     setTimeout(() => {
-      all.style.opacity = 0
-      setTimeout(() => {
-        all.style.display = 'none'
-      }, 500)
+      spellLoad(()=>{
+        //After Load
+        all.style.opacity = 0
+        setTimeout(() => {
+          all.style.display = 'none'
+        }, 500)
+
+      })
     }, (Math.random() * 1000) + 500)
   }
 
@@ -829,6 +856,11 @@ document.addEventListener('DOMContentLoaded', function () {
     headChecker()
     caretUpdate()
   }, 1)
+
+  function spellCheck() {
+    // TODO: Finish it
+    spell.suggest()
+  }
 
   function getSelectionCoordsPosition (elem) {
     switch (elem) {
