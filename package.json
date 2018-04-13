@@ -68,6 +68,7 @@
     "cargodb": "^1.0.2",
     "electron": "^1.7.12",
     "electron-compile": "^6.4.2",
+    "electron-spellchecker": "^1.1.2",
     "electron-squirrel-startup": "^1.0.0",
     "pixi.js": "^4.7.0",
     "spell": "^1.0.0"
