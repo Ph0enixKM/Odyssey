@@ -35,13 +35,11 @@
 const { remote } = require('electron')
 const PIXI = require('pixi.js')
 const { ipcRenderer } = require('electron')
-const spellModule = require('spell')
 const fs = require('fs')
 const cargodb = require('cargodb');
 const path = require('path');
 
 
-const spell = spellModule()
 window.qs = document.querySelectorAll.bind(document)
 // Init Storage
 const storage = new cargodb('storage')
@@ -215,23 +213,6 @@ let caretLastDoubleClick = e => {
     }
 }
 
-function spellLoad (callback) {
-  storage.getItem('dict',(err, item)=>{
-    // if (err) throw err // Should be off
-    if (item == undefined) {
-      fs.readFile(path.join(__dirname,'../assets/dicts/compiled/pl.json'),'utf-8',(err, data)=>{
-        if (err) throw err
-        spell.load(data)
-        callback()
-      })
-    } else {
-      spell.load(item)
-      callback()
-    }
-  })
-}
-
-
 // Presets & initialisation
 document.addEventListener('DOMContentLoaded', function () {
   // If scroll past end enabled in settings
@@ -244,7 +225,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.body.childNodes[0].remove()
   }
 
-// Vars
+  // Vars
   fonts = document.getElementsByTagName('select')[0]
   fontSizes = document.getElementsByTagName('select')[1]
   textField = document.getElementsByTagName('iframe')[0]
@@ -259,7 +240,7 @@ document.addEventListener('DOMContentLoaded', function () {
   window.ctxLogo = document.getElementById('ctx-menu')
   window.logo = document.getElementById('logo')
 
-// Left/right buttons
+  // Left/right buttons
   window.left = document.getElementsByClassName('move left')[0]
   window.right = document.getElementsByClassName('move right')[0]
 
@@ -461,14 +442,10 @@ document.addEventListener('DOMContentLoaded', function () {
   function fadeAll () {
     var all = document.getElementById('all')
     setTimeout(() => {
-      spellLoad(()=>{
-        //After Load
-        all.style.opacity = 0
-        setTimeout(() => {
-          all.style.display = 'none'
-        }, 500)
-
-      })
+      all.style.opacity = 0
+      setTimeout(() => {
+        all.style.display = 'none'
+      }, 500)
     }, (Math.random() * 1000) + 500)
   }
 
@@ -856,11 +833,6 @@ document.addEventListener('DOMContentLoaded', function () {
     headChecker()
     caretUpdate()
   }, 1)
-
-  function spellCheck() {
-    // TODO: Finish it
-    spell.suggest()
-  }
 
   function getSelectionCoordsPosition (elem) {
     switch (elem) {
