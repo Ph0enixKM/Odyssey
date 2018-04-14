@@ -1,6 +1,6 @@
 {
   "name": "Odyssey",
-  "version": "1.3.6",
+  "version": "1.3.7",
   "description": "Rich Text Editor designed for writers novelists and poets.",
   "main": "app/app.js",
   "scripts": {

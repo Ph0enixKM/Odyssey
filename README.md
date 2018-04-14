@@ -5,14 +5,10 @@
 ## Odyssey is a rich text editor for writers, novelists and poets.
 It provides more natural way of designing documents,books,poems
 and treats page as a piece of paper...
-Feel free to try out current stable version (1.3.1). Do not hesitate to report any kind of bug. This helps me to develop Odyssey
+Feel free to try out current stable version (1.3.7). Do not hesitate to report any kind of bug. This helps me to develop Odyssey
 in a good direction.
 
-
-**Warning:**
-
-    Do not use the following version in serious documents because it lacks of a lot of major features.
-    I'm suspecting it to be ready to use around version 2.0.0.
+**This version is marked as stable**
 
 ## Instalation
 In order to install Odyssey using github, clone current project:
