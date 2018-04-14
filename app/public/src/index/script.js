@@ -247,6 +247,9 @@ document.addEventListener('DOMContentLoaded', function () {
   left.addEventListener('click', turnLeft)
   right.addEventListener('click', turnRight)
 
+  textField.contentDocument.documentElement.setAttribute("contenteditable",false)
+  textField.contentDocument.body.setAttribute("contenteditable",true)
+
   textField.contentDocument.documentElement.addEventListener('keydown', e => {
     if (e.keyCode == 27) {
       textField.contentDocument.body.blur()
@@ -408,6 +411,9 @@ document.addEventListener('DOMContentLoaded', function () {
   textField.contentDocument.getElementsByTagName('body')[0].addEventListener('focusout', function () {
     cs.transform = 'translate(-10px,0) scale(0)'
   })
+
+  // Add verification tag (more in bodyBugFix function)
+  textField.contentDocument.body.tag = true
 
   setInterval(() => {
     autosaveF()
@@ -667,12 +673,10 @@ document.addEventListener('DOMContentLoaded', function () {
     textField.contentDocument.body.style.width = '100%'
     textField.contentDocument.body.style.wordWrap = 'break-word'
     textField.contentDocument.body.style.height = 'auto'
+    textField.contentDocument.body.style.display = 'inline-block'
 
     textField.style.position = 'relative'
     textField.style.opacity = 1
-
-    textField.contentDocument.body.innerHTML = '&zwnj;'
-    textField.contentDocument.body.style.display = 'inline-block'
 
     rest = ''
 
@@ -713,56 +717,13 @@ document.addEventListener('DOMContentLoaded', function () {
     })
   }
 
-  function bodyBugFix () {
-  // Body bug fix
-    var bodies = textField.contentDocument.getElementsByTagName('body')
-    var whileIter = bodies.length - 1 // While loop iterator
-    if (bodies.length > 1) {
-      content = ''
-      for (var i = 1; i < bodies.length; i++) {
-        content += bodies[i].innerHTML
-      }
-
-      bodies[0].innerHTML += content
-
-      while (bodies.length > 1) {
-        bodies[whileIter].remove()
-        whileIter--
-      }
-
-      bodies[0].addEventListener('focus', function () {
-        cs.transform = 'translate(0,0) scale(1)'
-      })
-      bodies[0].addEventListener('focusout', function () {
-        cs.transform = 'translate(-10px,0) scale(0)'
-      })
-      addStyle()
-    }
-  }
-
   function updateSidebar () {
     sbPages.innerHTML = curPage + 1
 
     sbWords.innerHTML = (textField.contentDocument.body.textContent.length == 1) ? 0 :
     textField.contentDocument.body.textContent.split(' ').length
 
-    sbLetters.innerHTML = textField.contentDocument.body.textContent.length - 1
-  }
-
-  function firstLetterFix () {
-  // Debugger - if nothing is being placed
-  // Just to show the wae to WYSIWYG editor
-
-    if (textField.contentDocument.body.innerHTML == '') {
-      var bdy = textField.contentDocument.getElementsByTagName('body')[0]
-      bdy.innerHTML = '&zwnj;'
-      var range = textField.contentDocument.createRange()
-      range.setStart(textField.contentDocument.body, 1)
-      range.setEnd(textField.contentDocument.body, 1)
-      var selection = textField.contentWindow.getSelection()
-      selection.removeAllRanges()
-      selection.addRange(range)
-    }
+    sbLetters.innerHTML = textField.contentDocument.body.textContent.length
   }
 
   function headChecker () {
@@ -793,7 +754,6 @@ document.addEventListener('DOMContentLoaded', function () {
   function checkForFloatingDivs () {
     let els = textField.contentDocument.documentElement.childNodes
     let body = textField.contentDocument.body
-  // console.log(els);
     for (let i of els) {
       if (i.tagName == 'DIV') {
         body.prepend(i)
@@ -812,7 +772,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   window.allow = false // caretToEnd && getSelectionCoords
   setInterval(function () {
-    bodyBugFix()
+    // bodyBugFix()
 
     caretToEnd()
     caretLoc.x = getSelectionCoords(textField).x
@@ -822,7 +782,7 @@ document.addEventListener('DOMContentLoaded', function () {
     restrictions()
     settingsUpdate()
 
-    firstLetterFix()
+    // firstLetterFix()
 
   // 284 && 280 && 270
     cs.top = (parseInt(cs.top) < 270 - bodyContent.scrollTop) ? 270 - bodyContent.scrollTop : cs.top - bodyContent.scrollTop
@@ -971,33 +931,6 @@ document.addEventListener('DOMContentLoaded', function () {
   // }
   // textContent
   }
-
-  // QUESTION: Shall we do it this way
-  // let beforePrint = () => {
-  //   console.log("before");
-  //   textField.contentDocument.body.style.color = "blue"
-  // }
-  // let afterPrint = () => {
-  //   console.log("after");
-  //   textField.contentDocument.body.style.color = "#ccc"
-  // }
-  //
-  // beforePrint()
-  // var mediaQueryList = window.matchMedia('print');
-  // mediaQueryList.addListener(function(mql) {
-  //   if (mql.matches) {
-  //       beforePrint();
-  //   } else {
-  //       afterPrint();
-  //   }
-  // });
-  // window.onbeforeprint = beforePrint
-  //
-  // window.addEventListener("keydown", e =>{
-  //   if (e.keyCode == 80) {
-  //     textField.contentWindow.print()
-  //   }
-  // })
 
   let restrictions_start = false
   function restrictions () {
