@@ -31,6 +31,8 @@
   })
 })()
 
+// TODO: quicksave
+
 // Require Electron
 const { remote } = require('electron')
 const PIXI = require('pixi.js')
@@ -674,6 +676,8 @@ document.addEventListener('DOMContentLoaded', function () {
     textField.contentDocument.body.style.wordWrap = 'break-word'
     textField.contentDocument.body.style.height = 'auto'
     textField.contentDocument.body.style.display = 'inline-block'
+
+    textField.contentDocument.documentElement.style.cursor = 'text'
 
     textField.style.position = 'relative'
     textField.style.opacity = 1

@@ -53,7 +53,7 @@ qs("iframe")[0].contentDocument.documentElement.addEventListener("click",e =>{
   }
 })
 
-ipcRenderer.on("selected-image",(event,image)=>{
+ipcRenderer.on("selected-image",(event, arr)=>{
 
   merge.loading.style.display = "inline-block"
   merge.loading.style.opacity = 0
@@ -66,7 +66,7 @@ ipcRenderer.on("selected-image",(event,image)=>{
 
     // Show up image
     let elem = document.createElement("IMG")
-    elem.src = 'data:image/png;base64, ' + Buffer.from(image).toString('base64')
+    elem.src = 'data:image/png;base64, ' + Buffer.from(arr[0]).toString('base64')
     elem.width = textField.contentDocument.body.offsetWidth-4
     elem.className = "image"
     elem.state = false
@@ -76,21 +76,24 @@ ipcRenderer.on("selected-image",(event,image)=>{
 
     elem.onload = () =>{
       if (!elem.loaded) {
-          insert.canvas.width = elem.width
-          insert.canvas.height = elem.height
-          insert.context().drawImage(elem,0,0,elem.width,elem.height)
-          let src = insert.canvas.toDataURL("image/jpeg",Number(SETTINGS.imageQuality))
-          elem.src = src
-          elem.loaded = true
+
+        insert.canvas.width = elem.width
+        insert.canvas.height = elem.height
+        insert.context().drawImage(elem,0,0,elem.width,elem.height)
+        let src = arr[1].match(/.png$/)
+          ? insert.canvas.toDataURL("image/png")
+          : insert.canvas.toDataURL("image/jpeg",Number(SETTINGS.imageQuality))
+        elem.src = src
+        elem.loaded = true
+      setTimeout(()=>{
+        merge.loading.style.opacity = 0
+        merge.gif.style.transform = "rotate(30deg) scale(0)"
         setTimeout(()=>{
-          merge.loading.style.opacity = 0
-          merge.gif.style.transform = "rotate(30deg) scale(0)"
-          setTimeout(()=>{
-            merge.loading.style.display = "none"
-          },300)
-        },500)
-      }
+          merge.loading.style.display = "none"
+        },300)
+      },500)
     }
+  }
 
     // TODO: Make it more usable
     // elem.addEventListener("click",e =>{

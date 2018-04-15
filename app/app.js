@@ -52,7 +52,7 @@ app.on('ready', () => {
 
         fs.readFile(files[0], (err, data) => {
           if (err) console.log(err)
-          e.sender.send('selected-image', data)
+          e.sender.send('selected-image', [data, files[0]])
         })
       }
     })
