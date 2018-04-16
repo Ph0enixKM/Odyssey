@@ -1,27 +1,16 @@
-// SpellChecker Laod
-function spellLoad() {
-  // Require the electron spellchecker
-  const electronSpellchecker = require('electron-spellchecker');
+import {SpellCheckHandler, ContextMenuListener, ContextMenuBuilder} from 'electron-spellchecker';
 
-  // Retrieve required properties
-  const SpellCheckHandler = electronSpellchecker.SpellCheckHandler;
-  const ContextMenuListener = electronSpellchecker.ContextMenuListener;
-  const ContextMenuBuilder = electronSpellchecker.ContextMenuBuilder;
+window.spellCheckHandler = new SpellCheckHandler();
+window.spellCheckHandler.attachToInput();
 
-  // Configure the spellcheckhandler
-  textField.contentWindow.spellCheckHandler = new SpellCheckHandler();
-  textField.contentWindow.spellCheckHandler.attachToInput();
+window.spellCheckHandler.switchLanguage('pl-PL');
 
-  // Start off as "US English, America"
-  textField.contentWindow.spellCheckHandler.switchLanguage('pl-PL');
+let contextMenuBuilder = new ContextMenuBuilder(window.spellCheckHandler);
+console.log(contextMenuBuilder);
 
-  // Create the builder with the configured spellhandler
-  let contextMenuBuilder = new ContextMenuBuilder(textField.contentWindow.spellCheckHandler);
-
-  // Add context menu listener
-  // let contextMenuListener = new ContextMenuListener((info) => {
-  //   contextMenuBuilder.showPopupMenu(info)
-  // });
-  // TODO: https://www.npmjs.com/package/electron-spell-check-provider
-}
-spellLoad()
+let contextMenuListener = new ContextMenuListener((info) => {
+  // Display only inside editor
+  if (document.activeElement == textField) {
+    contextMenuBuilder.showPopupMenu(info);
+  }
+});

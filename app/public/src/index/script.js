@@ -681,7 +681,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     textField.style.position = 'relative'
     textField.style.opacity = 1
-
+    
     rest = ''
 
     // On change of body
