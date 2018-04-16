@@ -9,18 +9,19 @@ function spellLoad() {
   const ContextMenuBuilder = electronSpellchecker.ContextMenuBuilder;
 
   // Configure the spellcheckhandler
-  window.spellCheckHandler = new SpellCheckHandler();
-  window.spellCheckHandler.attachToInput();
+  textField.contentWindow.spellCheckHandler = new SpellCheckHandler();
+  textField.contentWindow.spellCheckHandler.attachToInput();
 
   // Start off as "US English, America"
-  window.spellCheckHandler.switchLanguage('pl-PL');
+  textField.contentWindow.spellCheckHandler.switchLanguage('pl-PL');
 
   // Create the builder with the configured spellhandler
-  let contextMenuBuilder = new ContextMenuBuilder(window.spellCheckHandler);
+  let contextMenuBuilder = new ContextMenuBuilder(textField.contentWindow.spellCheckHandler);
 
   // Add context menu listener
-  let contextMenuListener = new ContextMenuListener((info) => {
-      contextMenuBuilder.showPopupMenu(info);
-  });
+  // let contextMenuListener = new ContextMenuListener((info) => {
+  //   contextMenuBuilder.showPopupMenu(info)
+  // });
+  // TODO: https://www.npmjs.com/package/electron-spell-check-provider
 }
 spellLoad()
