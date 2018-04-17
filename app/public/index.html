@@ -99,7 +99,7 @@
       <a href="index.html" id="reload" onclick="return false" title="Odśwież dokument"></a>
       <button id="open-file" onclick="return false" title="Otwórz plik"></button>
       <button id="save-file" onclick="return false" title="Zapisz Plik"></button>
-      <button id="quick-save" onclick="return false" title="Nadpisz Plik" disabled></button>
+      <button id="quick-save" onclick="return false" title="Nadpisz Plik"></button>
       <button id="settings" title="Ustawienia"></button>
     </div>
 
@@ -187,21 +187,60 @@
         </div>
         <div id="options">
           <h1>Ogólne</h1>
+
           <div class="autosave">
             <span>Autozapis Kopii Zapasowej</span>
-
             <div class="checkbox-bg">
               <div class="checkbox">
                 <input type="checkbox" id="one" checked>
                 <label for="one" title="on"></label>
               </div>
             </div>
-
           </div>
+
           <div class="img-quality">
             <span>Jakość Wstawiania Obrazów JPG</span>
             <input type="range" min="0" max="1" step="0.01" value="0.5" title="50%">
           </div>
+
+
+          <div class="scroll-past-end">
+            <span>Przewijaj aż za stronę</span>
+            <div class="checkbox-bg">
+              <div class="checkbox">
+                <input type="checkbox" id="two">
+                <label for="two" title="on"></label>
+              </div>
+            </div>
+          </div>
+
+          <div class="choose-spell">
+            <span>Wybierz język słownika</span>
+            <select>
+              <option value="false"> - Turn Off - </option>
+              <option value="ar-AE">Arabic (شرف)</option>
+              <option value="bo-CN">Chinese (荣誉)</option>
+              <option value="cs-CZ">Czech (Čest)</option>
+              <option value="da-DK">Danish (ære)</option>
+              <option value="en-AU">English (Australia) (G'day)</option>
+              <option value="en-GB">English (United Kingdom) (Hello)</option>
+              <option value="en-US">English (United States) (Hi)</option>
+              <option value="fr-BE">French (Bonjour)</option>
+              <option value="de-DE">German (Hallo)</option>
+              <option value="hi-IN">Hindi (नमस्ते)</option>
+              <option value="id-ID">Indonesian (Halo)</option>
+              <option value="it-IT">Italian (Ciao)</option>
+              <option value="ja-JP">Japanese (こんにちは)</option>
+              <option value="nb-NO">Norwegian (Hallo)</option>
+              <option value="pl-PL" selected>Polish (Cześć)</option>
+              <option value="pt-BR">Portuguese (Olá)</option>
+              <option value="ru-RU">Russian (Здравствуйте)</option>
+              <option value="es-ES">Spanish (Hola)</option>
+              <option value="sv-SE">Swedish (Hallå)</option>
+              <option value="tr-TR">Turkish (Merhaba)</option>
+            </select>
+          </div>
+
         </div>
       </div>
       <div id="bg">

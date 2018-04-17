@@ -75,6 +75,30 @@ app.on('ready', () => {
       }
     })
   })
+
+  ipcMain.on('quick-save', (e,data)=>{
+    if (!data[0]) {
+      return dialog.showSaveDialog({
+        options: {},
+        filters: [
+          {name: 'Odyssey files', extensions: ['odyss']}
+        ]
+      },
+      file => {
+        if (file != undefined) {
+          fs.writeFile(file, data[1], err => {
+            if (err) throw err
+
+            e.sender.send('saved-file', file)
+          })
+      }})
+    }
+    fs.writeFile(data[0],data[1], err => {
+      if (err) throw err
+      e.sender.send('saved-file', data[0])
+    })
+  })
+
   win = new BrowserWindow({
     width,
     height,

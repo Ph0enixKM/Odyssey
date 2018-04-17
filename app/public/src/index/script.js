@@ -25,7 +25,6 @@
     curPage : 0,
     curChapter : 0,
     autobackup : true,
-    scrollPastEnd : true,
     prevCheck : false,
     restOf : ''
   })
@@ -70,7 +69,8 @@ window.keys = {
 
 window.SETTINGS = {
   autobackup: true,
-  imageQuality: 0.5
+  imageQuality: 0.5,
+  scrollPastEnd: false,
 }
 
 // If it's first time opened the app
@@ -83,7 +83,10 @@ if (localStorage.getItem('settings') == null) {
 let settingsEl = {
   autosave: qs('.autosave input')[0],
   autosaveLabel: qs('.autosave label')[0],
-  imageQuality: qs('.img-quality input')[0]
+  imageQuality: qs('.img-quality input')[0],
+  scrollPastEnd: qs('.scroll-past-end input')[0],
+  scrollPastEndLabel: qs('.scroll-past-end label')[0],
+  spell: qs('.choose-spell select')[0],
 }
 
 function command (com) {
@@ -218,7 +221,7 @@ let caretLastDoubleClick = e => {
 // Presets & initialisation
 document.addEventListener('DOMContentLoaded', function () {
   // If scroll past end enabled in settings
-  if (scrollPastEnd) {
+  if (SETTINGS.scrollPastEnd) {
     qs('.iframe #down')[0].innerHTML += `<div id="dummy"></div>`
   }
 
@@ -283,6 +286,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
   ipcRenderer.on('saved-file', (event, name) => {
     qs('.bar span')[0].textContent = name
+  })
+  qs('.menu button#quick-save')[0].addEventListener('click', () => {
+    let path = qs('.menubar .bar span')[0].innerHTML == '&lt;Brak tytułu&gt;'
+      ? false
+      : qs('.menubar .bar span')[0].innerHTML
+    ipcRenderer.send('quick-save',[path, JSON.stringify(BASE_FILE)])
   })
 
   ipcRenderer.on('selected-files', (event, source, name) => {
@@ -681,7 +690,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     textField.style.position = 'relative'
     textField.style.opacity = 1
-    
+
     rest = ''
 
     // On change of body
@@ -823,12 +832,27 @@ document.addEventListener('DOMContentLoaded', function () {
     settingsEl.autosaveLabel.title = settingsEl.autosave.checked == true ? 'Włączony' : 'Wyłączony'
   // Image Quality
     settingsEl.imageQuality.title = Math.round(settingsEl.imageQuality.value * 100) + '%'
+  // Scroll Past End
+    settingsEl.scrollPastEndLabel.title = settingsEl.scrollPastEnd.checked == true ? 'Włączony' : 'Wyłączony'
   }
+
   settingsEl.autosave.addEventListener('change', () => {
     SETTINGS.autobackup = settingsEl.autosave.checked
   })
   settingsEl.imageQuality.addEventListener('change', () => {
     SETTINGS.imageQuality = settingsEl.imageQuality.value
+  })
+  settingsEl.scrollPastEnd.addEventListener('change', () => {
+    SETTINGS.scrollPastEnd = settingsEl.scrollPastEnd.checked
+    if (SETTINGS.scrollPastEnd) {
+      qs('.iframe #down')[0].innerHTML += `<div id="dummy"></div>`
+    } else {
+      document.getElementById('dummy').remove()
+    }
+  })
+  settingsEl.spell.addEventListener('change', () => {
+    let selected = settingsEl.spell.options[settingsEl.spell.selectedIndex].value
+    window.spellCheckHandler.switchLanguage(selected)
   })
 
   settingsToElements()
@@ -836,6 +860,7 @@ document.addEventListener('DOMContentLoaded', function () {
   function settingsToElements () {
     settingsEl.autosave.checked = SETTINGS.autobackup
     settingsEl.imageQuality.value = SETTINGS.imageQuality
+    settingsEl.scrollPastEnd.checked = SETTINGS.scrollPastEnd
   }
 
   function getSelectionCoords (iframe) {

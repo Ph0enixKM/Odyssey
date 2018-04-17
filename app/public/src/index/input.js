@@ -15,7 +15,8 @@ window.input = {
   comma: false,
   period: false,
   ctrl: false,
-  ctrlIn: false
+  ctrlIn: false,
+  s: false
 }
 
 move.docs.addEventListener('mouseup', () => { input.move.LMBRelease = true })
@@ -42,7 +43,9 @@ input.keydown = e => {
     case 17:
       input.ctrl = true
       break
-
+    case 83:
+      input.s = true
+      break
   }
 
   // Methodical Part
@@ -67,6 +70,15 @@ input.keydown = e => {
     input.period = false
     turnRight()
   }
+  if (input.s && input.ctrl) {
+    // Negate keys
+    input.ctr = false
+    input.s = false
+    let path = qs('.menubar .bar span')[0].innerHTML == '&lt;Brak tytułu&gt;'
+      ? false
+      : qs('.menubar .bar span')[0].innerHTML
+    ipcRenderer.send('quick-save',[path, JSON.stringify(BASE_FILE)])
+  }
 }
 
 input.keyup = e => {
@@ -88,6 +100,9 @@ input.keyup = e => {
       break
     case 17:
       input.ctrl = false
+      break
+    case 83:
+      input.s = false
       break
 
   }

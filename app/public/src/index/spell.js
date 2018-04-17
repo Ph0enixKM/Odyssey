@@ -6,7 +6,6 @@ window.spellCheckHandler.attachToInput();
 window.spellCheckHandler.switchLanguage('pl-PL');
 
 let contextMenuBuilder = new ContextMenuBuilder(window.spellCheckHandler);
-console.log(contextMenuBuilder);
 
 let contextMenuListener = new ContextMenuListener((info) => {
   // Display only inside editor
