@@ -30,8 +30,6 @@
   })
 })()
 
-// TODO: quicksave
-
 // Require Electron
 const { remote } = require('electron')
 const PIXI = require('pixi.js')
@@ -71,6 +69,7 @@ window.SETTINGS = {
   autobackup: true,
   imageQuality: 0.5,
   scrollPastEnd: false,
+  spell: 'pl-PL',
 }
 
 // If it's first time opened the app
@@ -853,6 +852,7 @@ document.addEventListener('DOMContentLoaded', function () {
   settingsEl.spell.addEventListener('change', () => {
     let selected = settingsEl.spell.options[settingsEl.spell.selectedIndex].value
     window.spellCheckHandler.switchLanguage(selected)
+    SETTINGS.spell = selected
   })
 
   settingsToElements()
@@ -861,6 +861,10 @@ document.addEventListener('DOMContentLoaded', function () {
     settingsEl.autosave.checked = SETTINGS.autobackup
     settingsEl.imageQuality.value = SETTINGS.imageQuality
     settingsEl.scrollPastEnd.checked = SETTINGS.scrollPastEnd
+    for (let i = 0; i < settingsEl.spell.options.length; i++) {
+      if (settingsEl.spell.options[i].value == SETTINGS.spell)
+        settingsEl.spell.selectedIndex = i
+    }
   }
 
   function getSelectionCoords (iframe) {

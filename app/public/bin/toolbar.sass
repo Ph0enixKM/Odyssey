@@ -443,33 +443,47 @@ canvas#move
 #pages
   display: none
   vertical-align: middle
-  #merge-all
+  div
     display: inline-block
     width: 39px
     height: 39px
     margin: 5px
     border: 1px solid $border
     transition: 300ms
-    background-image: url("../arts/merge.png")
     background-position: center
     background-size: cover
     cursor: pointer
+    vertical-align: middle
     &:hover
       background-color: #555
-  #print
-    display: inline-block
-    width: 39px
-    height: 39px
-    margin: 5px
-    border: 1px solid $border
-    transition: 300ms
-    background-image: url("../arts/printer.png")
-    background-position: center
-    background-size: cover
-    cursor: pointer
-    &:hover
-      background-color: #555
-
+    &#merge-all
+      background-image: url("../arts/merge.png")
+    &#print
+      background-image: url("../arts/printer.png")
+    &#print-view
+      background-image: url("../arts/printView.png")
+      .toggle
+        position: relative
+        left: 50%
+        display: inline-block
+        height: 41px
+        width: 0
+        transition: 300ms
+        border: none
+        transform: translate(50%,-6px)
+        background: radial-gradient(#333,#222)
+        box-shadow: 0 0 0px rgb(255,180,0)
+      .toggle-on
+        position: relative
+        left: 50%
+        display: inline-block
+        height: 41px
+        width: 10px
+        transition: 300ms
+        border: none
+        transform: translate(50%,-6px)
+        background: radial-gradient(rgb(255,180,0),rgb(200,130,0))
+        box-shadow: 0 0 10px rgb(255,180,0)
 
 .full-view
   display: none

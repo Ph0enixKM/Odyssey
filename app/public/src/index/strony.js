@@ -53,8 +53,39 @@ setInterval(()=>{
 
 window.printReq = {
   btn : qs('#print')[0],
+  printView : qs('#print-view')[0],
+  printViewToggle : qs('#print-view .toggle')[0],
+  printViewState : false
 }
 
-printReq.btn.addEventListener("click",()=>{
-  ipcRenderer.send("print",pages)
+printReq.btn.addEventListener('click',()=>{
+  ipcRenderer.send('print',pages)
+})
+printReq.printView.addEventListener('click',()=>{
+  printReq.printViewState = !printReq.printViewState
+  if (printReq.printViewState) {
+    // Turn on toggle
+    printReq.printViewToggle.className = "toggle-on"
+
+    // Turn paper White
+    textField.style.background = 'white'
+    textField.contentDocument.body.style.color = 'black'
+    document.body.style.background = 'radial-gradient(#ccc,#222)'
+    qs('.caret')[0].style.visibility = 'hidden'
+
+    // Turn off Spell Checker
+    textField.contentDocument.body.setAttribute("contenteditable",false)
+  } else {
+    // Turn on toggle
+    printReq.printViewToggle.className = "toggle"
+
+    // Turn paper White
+    textField.style.background = '#444'
+    textField.contentDocument.body.style.color = '#aaa'
+    document.body.style.background = 'radial-gradient(#333,#222)'
+    qs('.caret')[0].style.visibility = 'visible'
+
+    // Turn off Spell Checker
+    textField.contentDocument.body.setAttribute("contenteditable",true)
+  }
 })
