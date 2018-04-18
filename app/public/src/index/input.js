@@ -12,6 +12,7 @@ window.input = {
   iIn: false,
   uIn: false,
   move: { LMBRelease: false },
+  digits: new Array(10),
   comma: false,
   period: false,
   ctrl: false,
@@ -47,6 +48,10 @@ input.keydown = e => {
       input.s = true
       break
   }
+  for (let i = 48; i < 58; i++) {
+    if (e.keyCode == i)
+      input.digits[i - 48] = true
+  }
 
   // Methodical Part
   if (input.shift && input.v && fv.bg.style.opacity == 0 && document.activeElement.tagName != 'INPUT') {
@@ -79,6 +84,44 @@ input.keydown = e => {
       : qs('.menubar .bar span')[0].innerHTML
     ipcRenderer.send('quick-save',[path, JSON.stringify(BASE_FILE)])
   }
+  // Numerical shortcuts
+  for (let i = 0; i < input.digits.length; i++) {
+    try {
+      if (qs('div.menu')[1].style.display == 'inline-block') {
+        if (input.digits[i]) {
+          qs('div.menu')[1].children[(i-1) % 10].click()
+          input.digits[i] = false
+        }
+      }
+
+      if (qs('#tools')[0].style.display == 'inline-block') {
+        if (input.digits[i]) {
+          qs('#tools')[0].children[(i-1) % 10].click()
+          input.digits[i] = false
+        }
+      } else if (qs('#insert')[0].style.display == 'inline-block') {
+        if (input.digits[i]) {
+          qs('#insert')[0].children[(i-1) % 10].click()
+          input.digits[i] = false
+        }
+      } else if (qs('#view')[0].style.display == 'inline-block') {
+        if (input.digits[i]) {
+          qs('#view')[0].children[(i-1) % 10].click()
+          input.digits[i] = false
+        }
+      } else if (qs('#pages')[0].style.display == 'inline-block') {
+        if (input.digits[i]) {
+          qs('#pages')[0].children[(i-1) % 10].click()
+          input.digits[i] = false
+        }
+      } else if (qs('#project')[0].style.display == 'inline-block') {
+        if (input.digits[i]) {
+          qs('#project')[0].children[(i-1) % 10].click()
+          input.digits[i] = false
+        }
+      }
+    } catch (e) { /* pass */ }
+  }
 }
 
 input.keyup = e => {
@@ -104,7 +147,10 @@ input.keyup = e => {
     case 83:
       input.s = false
       break
-
+  }
+  for (let i = 48; i < 58; i++) {
+    if (e.keyCode == i)
+      input.digits[i - 48] = false
   }
 }
 

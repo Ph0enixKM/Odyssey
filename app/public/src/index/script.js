@@ -19,6 +19,7 @@
     sbLetters  : undefined,
     sbChapter  : undefined,
     ctxMenu  : undefined,
+    ctxMenuIndex : 0,
 
     prev : false,
     position : 0,
@@ -604,6 +605,8 @@ document.addEventListener('DOMContentLoaded', function () {
     ctxLogo.addEventListener('mouseover', () => shortcutOn('SHIFT + A'))
     ctxLogo.addEventListener('mouseout', shortcutOff)
 
+
+    document.querySelector('#tools').style.display = 'inline-block'
     ctxMenu.childNodes[1].addEventListener('click', () => {
       document.querySelector('#ctx-menu').innerText = 'Narzędzia'
       document.querySelector('#view').style.display = 'none'
@@ -611,6 +614,7 @@ document.addEventListener('DOMContentLoaded', function () {
       document.querySelector('#insert').style.display = 'none'
       document.querySelector('#pages').style.display = 'none'
       document.querySelector('#project').style.display = 'none'
+      ctxMenuIndex = 0
     })
     ctxMenu.childNodes[3].addEventListener('click', () => {
       document.querySelector('#ctx-menu').innerText = 'Wstawianie'
@@ -619,6 +623,7 @@ document.addEventListener('DOMContentLoaded', function () {
       document.querySelector('#tools').style.display = 'none'
       document.querySelector('#pages').style.display = 'none'
       document.querySelector('#project').style.display = 'none'
+      ctxMenuIndex = 1
     })
     ctxMenu.childNodes[5].addEventListener('click', () => {
       document.querySelector('#ctx-menu').innerText = 'Widok'
@@ -627,6 +632,7 @@ document.addEventListener('DOMContentLoaded', function () {
       document.querySelector('#tools').style.display = 'none'
       document.querySelector('#pages').style.display = 'none'
       document.querySelector('#project').style.display = 'none'
+      ctxMenuIndex = 2
     })
     ctxMenu.childNodes[7].addEventListener('click', () => {
       document.querySelector('#ctx-menu').innerText = 'Strony'
@@ -635,6 +641,7 @@ document.addEventListener('DOMContentLoaded', function () {
       document.querySelector('#tools').style.display = 'none'
       document.querySelector('#pages').style.display = 'inline-block'
       document.querySelector('#project').style.display = 'none'
+      ctxMenuIndex = 3
     })
     ctxMenu.childNodes[9].addEventListener('click', () => {
       document.querySelector('#ctx-menu').innerText = 'Projekt'
@@ -643,6 +650,7 @@ document.addEventListener('DOMContentLoaded', function () {
       document.querySelector('#tools').style.display = 'none'
       document.querySelector('#pages').style.display = 'none'
       document.querySelector('#project').style.display = 'inline-block'
+      ctxMenuIndex = 4
     })
   }
 
