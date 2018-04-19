@@ -1067,27 +1067,23 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
+  function fontIterator (selEl) {
+    if (selEl == null || (selEl.tagName && selEl.tagName == "BODY")){
+      return 'Lato'
+    } else if (selEl.face && selEl.face != undefined) {
+      return selEl.face
+    } else {
+      return fontIterator(selEl.parentElement)
+    }
+  }
+
   function caretSize () {
     try {
     // The following variable can be null.
       var selEl = textField.contentWindow.getSelection().anchorNode.parentElement
-      let font
-      try {
-        font = (selEl.face != undefined) ?
-      selEl.face :
-      (selEl.parentElement.face != undefined) ?
-      selEl.parentElement.face :
-      (selEl.parentElement.parentElement.face != undefined) ?
-      selEl.parentElement.parentElement.face :
-      (selEl.parentElement.parentElement.parentElement.face != undefined) ?
-      selEl.parentElement.parentElement.parentElement.face :
-      'Lato'
-      } catch (e) {
-        font = 'Lato'
-      }
+      fonts.value = fontIterator(selEl)
 
-      fonts.value = font
-    // TagNames must be CAPITAL
+    // TagNames must be CAPITAL // TODO: Clean it up and make size to be a INPUT number
       if (selEl.tagName == 'FONT') {
         fontSizeReader(selEl.size)
       } else if (selEl.tagName == 'B' || selEl.tagName == 'U' ||

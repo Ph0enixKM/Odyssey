@@ -114,7 +114,7 @@ app.on('ready', () => {
   ipcMain.on('print', (e, src, silent) => {
     silent = silent == undefined ? false : true
     //Instatiate new printing process
-    let printWin = new BrowserWindow({width: 210*3, height: 297*3, show: false})
+    let printWin = new BrowserWindow({width: 794, height: 1122, show: false})
     printWin.setMenu(null)
     printWin.loadURL("file://" + __dirname+'/public/print.html')
     // printWin.toggleDevTools()

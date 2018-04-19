@@ -8,16 +8,13 @@ window.input = {
   shift: false,
   v: false,
   a: false,
-  bIn: false,
-  iIn: false,
-  uIn: false,
   move: { LMBRelease: false },
   digits: new Array(10),
   comma: false,
   period: false,
   ctrl: false,
-  ctrlIn: false,
-  s: false
+  s: false,
+  esc: false,
 }
 
 move.docs.addEventListener('mouseup', () => { input.move.LMBRelease = true })
@@ -47,6 +44,9 @@ input.keydown = e => {
     case 83:
       input.s = true
       break
+    case 27:
+      input.esc = true
+      break
   }
   for (let i = 48; i < 58; i++) {
     if (e.keyCode == i)
@@ -67,11 +67,11 @@ input.keydown = e => {
       ctxMenu.style.opacity = 1
     }, 100)
   }
-  if (input.comma) {
+  if (input.comma && document.activeElement.tagName == "BODY") {
     input.comma = false
     turnLeft()
   }
-  if (input.period) {
+  if (input.period && document.activeElement.tagName == "BODY") {
     input.period = false
     turnRight()
   }
@@ -116,8 +116,30 @@ input.keydown = e => {
         }
       } else if (qs('#project')[0].style.display == 'inline-block') {
         if (input.digits[i]) {
-          qs('#project')[0].children[(i-1) % 10].click()
           input.digits[i] = false
+          qs('#project')[0].children[(i-1) % 10].click()
+          if (
+              qs('#project')[0].children[(i-1) % 10].tagName == 'INPUT'
+              && document.activeElement == document.body
+            ){
+            setTimeout(()=>{
+              qs('#project')[0].children[(i-1) % 10].focus()
+            },10)
+          } else if (
+              qs('#project')[0].children[(i-1) % 10].children[0].tagName == 'INPUT'
+              && document.activeElement == document.body
+            ){
+            setTimeout(()=>{
+              qs('#project')[0].children[(i-1) % 10].children[0].focus()
+            },10)
+          }
+        }
+        if (input.esc) {
+          if (qs('#project')[0].children[(i-1) % 10].tagName == 'INPUT'){
+            qs('#project')[0].children[(i-1) % 10].blur()
+          } else if (qs('#project')[0].children[(i-1) % 10].children[0].tagName == 'INPUT') {
+            qs('#project')[0].children[(i-1) % 10].children[0].blur()
+          }
         }
       }
     } catch (e) { /* pass */ }
@@ -147,57 +169,12 @@ input.keyup = e => {
     case 83:
       input.s = false
       break
+    case 27:
+      input.esc = false
+      break
   }
   for (let i = 48; i < 58; i++) {
     if (e.keyCode == i)
       input.digits[i - 48] = false
-  }
-}
-
-textField.contentWindow.addEventListener('keydown', e => { input.keydownIn(e) })
-textField.contentWindow.addEventListener('keyup', e => { input.keyupIn(e) })
-
-input.keydownIn = e => {
-  switch (e.keyCode) {
-    case 66:
-      input.bIn = true
-      break
-    case 73:
-      input.iIn = true
-      break
-    case 85:
-      input.uIn = true
-      break
-    case 17:
-      input.ctrlIn = true
-      break
-  }
-
-  // Methodical Section
-  if (input.ctrlIn && input.bIn) {
-    command('bold')
-  }
-  if (input.ctrlIn && input.iIn) {
-    command('italic')
-  }
-  if (input.ctrlIn && input.uIn) {
-    command('underline')
-  }
-}
-
-input.keyupIn = e => {
-  switch (e.keyCode) {
-    case 66:
-      input.bIn = false
-      break
-    case 73:
-      input.iIn = false
-      break
-    case 85:
-      input.uIn = false
-      break
-    case 17:
-      input.ctrlIn = false
-      break
   }
 }
