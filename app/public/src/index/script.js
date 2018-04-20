@@ -41,8 +41,8 @@ const path = require('path');
 
 
 window.qs = document.querySelectorAll.bind(document)
-// Init Storage
 const storage = new cargodb('storage')
+PopUp.summon("Welcome back!")
 
 window.BASE_FILE = {
   title: undefined,
@@ -286,6 +286,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   ipcRenderer.on('saved-file', (event, name) => {
     qs('.bar span')[0].textContent = name
+    PopUp.summon('Saved File')
   })
   qs('.menu button#quick-save')[0].addEventListener('click', () => {
     let path = qs('.menubar .bar span')[0].innerHTML == '&lt;Brak tytułu&gt;'
