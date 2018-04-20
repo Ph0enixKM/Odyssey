@@ -53,6 +53,7 @@ window.BASE_FILE = {
   ],
   fonts: []
 }
+window.clearTemplate = JSON.parse(JSON.stringify(BASE_FILE))
 
 window.keys = {
   enter: false,
@@ -294,6 +295,18 @@ document.addEventListener('DOMContentLoaded', function () {
       : qs('.menubar .bar span')[0].innerHTML
     ipcRenderer.send('quick-save',[path, JSON.stringify(BASE_FILE)])
   })
+  console.log(menu.children[0]);
+  menu.children[0].addEventListener('click',()=>{
+    BASE_FILE = JSON.parse(JSON.stringify(clearTemplate))
+    pages = []
+    textField.contentDocument.body.innerHTML = ''
+    qs('.menubar .bar span')[0].innerHTML = '&lt;Brak tytułu&gt;'
+    PopUp.summon('Odnowiono miejsce pracy')
+    qs('input#keys')[0].value = ''
+    qs('#all-keys p')[0].innerHTML = 0
+    qs('input#title')[0].value = ''
+    qs('input#author')[0].value = ''
+  })
 
   ipcRenderer.on('selected-files', (event, source, name) => {
     try {
@@ -511,21 +524,6 @@ document.addEventListener('DOMContentLoaded', function () {
     `
   }
 
-  function delayAnchors () {
-    var anchors = document.getElementsByTagName('a')
-    for (let i of anchors) {
-      i.addEventListener('click', () => {
-        all.style.display = 'inline-block'
-        setTimeout(() => {
-          all.style.opacity = 1
-          setTimeout(() => {
-            window.location = i.href
-          }, 500)
-        }, 100)
-      })
-    }
-  }
-
   function menuF () {
     logo.addEventListener('click', () => { // Open menu
       menu.style.display = 'inline-block'
@@ -678,7 +676,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     fadeAll()
     menuBar()
-    delayAnchors()
     menuF()
 
     addStyle()
