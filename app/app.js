@@ -104,7 +104,7 @@ app.on('ready', () => {
     height,
     frame: false,
     show: false,
-    icon:  __dirname + '/assets/icons/logo.png'
+    icon:  __dirname + '/assets/icons/logo2.png'
   })
   // win.toggleDevTools()
   win.setMenu(null)

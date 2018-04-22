@@ -47,7 +47,7 @@
       },
       "electronPackagerConfig": {
         "packageManager": "yarn",
-        "icon": "app/assets/icons/logo.ico"
+        "icon": "app/assets/icons/logo2.ico"
       },
       "electronWinstallerConfig": {
         "name": "Odyssey"
