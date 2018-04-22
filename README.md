@@ -22,6 +22,7 @@ After that you should see a folder called "Odyssey". Open it up using the follow
 It's time to install all dependencies using NPM (If you don't have Node.js installed, you can grab it in the following site: https://nodejs.org/en/)
 
     $ npm install
+    $ npm install -g electron-forge yarn
 
 All of the dependencies should be installed. Now we can open up Odyssey.
 
