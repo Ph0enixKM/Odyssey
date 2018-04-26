@@ -373,10 +373,14 @@ document.addEventListener('DOMContentLoaded', function () {
   function BASE_FILE_UPDATE (key, val) {
     BASE_FILE[key] = val
   }
-
+  let scrollDif = 0
   document.getElementsByClassName('iframe')[0].addEventListener('scroll', () => {
     cs.transition = '0ms'
     insert.sizer.style.opacity = 0
+    // TODO:  UP Scroll
+    if (bodyContent.scrollTop != scrollDif) {
+      scrollDif = bodyContent.scrollTop - scrollDif
+    }
 
     clearTimeout(scrolling)
 
@@ -718,9 +722,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.body.appendChild(caret)
   }
-
+  let latestLocY = 0
+  let localScroll = 0
   function caretUpdate () {
-    cs.top = caretLoc.y + textField.offsetTop + 70 - bodyContent.scrollTop + "px"
+    // TODO: MID Scroll
+
+    // if (scrollDif != localScroll && caretLoc.y == null) {
+    //   localScroll = scrollDif
+    //   cs.top =  latestLocY + textField.offsetTop + 70 - bodyContent.scrollTop + "px"
+    // } else {
+    //   cs.top = caretLoc.y + textField.offsetTop + 70 - bodyContent.scrollTop + "px"
+    // }
+    cs.top =  latestLocY + textField.offsetTop + 70 - bodyContent.scrollTop + "px"
     cs.left = caretLoc.x + textField.offsetLeft + 70 + "px"
     cs.height = space + "px"
   }
@@ -795,6 +808,9 @@ document.addEventListener('DOMContentLoaded', function () {
     caretToEnd()
     caretLoc.x = getSelectionCoords(textField).x
     caretLoc.y = getSelectionCoords(textField).y
+    latestLocY = caretLoc.y != null ? caretLoc.y : latestLocY
+    // console.log(caretLoc);
+    // QUESTION: Why does it work only for mouse click?
     caretSize()
     stickIntoBorders(cs.top)
     restrictions()
@@ -872,7 +888,7 @@ document.addEventListener('DOMContentLoaded', function () {
         settingsEl.spell.selectedIndex = i
     }
   }
-
+let getLatestCoordsY = 0
   function getSelectionCoords (iframe) {
     let win = iframe
     var doc = win.contentDocument
@@ -889,7 +905,7 @@ document.addEventListener('DOMContentLoaded', function () {
           if (rects.length > 0) {
             rect = rects[0]
 
-            y = rect.top
+            y = getLatestCoordsY = rect.top
             x = rect.left
             prev = true
             try {
@@ -905,37 +921,48 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (keys.enter || keys.down || keys.right) {
               negateKeys()
+              latestLocY = getLatestCoordsY + space
+              getLatestCoordsY = latestLocY
               return {
-                x: (position == 0) ? 0 :
-                          (position == 1) ?
-                          (+textField.contentDocument.body.offsetWidth / 2) :
-                          textField.contentDocument.body.offsetWidth,
-                y: cs.top = parseInt(csNum) + space}
+                x: (position == 0)
+                  ? 0
+                  : (position == 1)
+                    ? (+textField.contentDocument.body.offsetWidth / 2)
+                    : textField.contentDocument.body.offsetWidth,
+                y: undefined}
+
             } else if (keys.left || keys.up) {
               negateKeys()
+              latestLocY = getLatestCoordsY - space
+              getLatestCoordsY = latestLocY
               return {
-                x: (position == 0) ? 0 :
-                        (position == 1) ?
-                        (+textField.contentDocument.body.offsetWidth / 2) :
-                        textField.contentDocument.body.offsetWidth,
-                y: cs.top = parseInt(csNum) - space}
+                x: (position == 0)
+                  ? 0
+                  : (position == 1)
+                    ? (+textField.contentDocument.body.offsetWidth / 2)
+                    : textField.contentDocument.body.offsetWidth,
+                y: undefined}
             } else if (keys.backsp && !prev) {
               negateKeys()
+              latestLocY = getLatestCoordsY - space
+              getLatestCoordsY = latestLocY
               return {
-                x: (position == 0) ? 0 :
-                          (position == 1) ?
-                          (+textField.contentDocument.body.offsetWidth / 2) :
-                          textField.contentDocument.body.offsetWidth,
-                y: cs.top = parseInt(csNum) - space}
+                x: (position == 0)
+                  ? 0
+                  : (position == 1)
+                    ? (+textField.contentDocument.body.offsetWidth / 2)
+                    : textField.contentDocument.body.offsetWidth,
+                y: undefined}
             } else if (keys.backsp && prev) {
               prev = false
               negateKeys()
-
+              latestLocY = getLatestCoordsY
               return {
-              x: (position == 0) ? 0 :
-                          (position == 1) ?
-                          (+textField.contentDocument.body.offsetWidth / 2) :
-                          textField.contentDocument.body.offsetWidth,
+              x: (position == 0)
+                ? 0
+                : (position == 1)
+                  ? (+textField.contentDocument.body.offsetWidth / 2)
+                  : textField.contentDocument.body.offsetWidth,
               y: cs.top = parseInt(csNum)}
             } else if (keys.click.state && allow) {
               let temp = keys.click.loc[1]

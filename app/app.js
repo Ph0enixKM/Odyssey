@@ -104,7 +104,8 @@ app.on('ready', () => {
     height,
     frame: false,
     show: false,
-    icon:  __dirname + '/assets/icons/logo2.png'
+    icon:  __dirname + '/assets/icons/logo2.png',
+    opacity: 1
   })
   // win.toggleDevTools()
   win.setMenu(null)
@@ -114,7 +115,7 @@ app.on('ready', () => {
   ipcMain.on('print', (e, src, silent) => {
     silent = silent == undefined ? false : true
     //Instatiate new printing process
-    let printWin = new BrowserWindow({width: 794, height: 1122, show: false})
+    let printWin = new BrowserWindow({width: 794, height: 1122, show: false, parent: win})
     printWin.setMenu(null)
     printWin.loadURL("file://" + __dirname+'/public/print.html')
     // printWin.toggleDevTools()
