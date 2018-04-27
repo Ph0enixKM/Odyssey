@@ -1,0 +1,60 @@
+{
+  "title" : "Odyssey",
+  "untitledDocument" : "Untitled",
+  "untitledChapter" : "Prologue",
+  "toolbar" : {
+    "menu" : "Menu",
+    "changeMode" : "Change mode",
+    "bold" : "Bold",
+    "italic" : "Italic",
+    "underline" : "Underline",
+    "font" : "Font",
+    "fontSize" : "fontSize",
+    "textPlacement" : "Text Placement",
+    "insertImage" : "Insert image",
+    "fullView" : "Full view",
+    "mergeAllPages" : "Merge all pages",
+    "printPages" : "Print pages",
+    "printPreview" : "Print preview",
+    "titleOfLiterature" : "Title of literature",
+    "titleOfLiteraturePlaceholder" : "<No title>",
+    "keywords" : "Keywords (space separated)",
+    "keywordsPlaceholder" : "<No keys>",
+    "author" : "Author",
+    "authorPlaceholder" : "<No author>"
+  },
+  "menu" : {
+    "renewDocument" : "Renew document",
+    "openFile" : "Open file",
+    "saveFileAs" : "Save file as",
+    "saveFile" : "Save file",
+    "settings" : "Settings"
+  },
+  "toolMenu" : {
+    "tools" : "Tools",
+    "insert" : "Insert",
+    "view" : "View",
+    "pages" : "Pages",
+    "project" : "Project"
+  },
+  "fv" : {
+    "warning" : "You have to select a sequence of cards in succession",
+    "allChapterView" : "All chapter view",
+    "chainEditor" : "Chain editor",
+    "chapters" : "Chapters",
+    "chapterName" : "Chapter name",
+    "deleteChapter" : "Delete chapter",
+  },
+  "settings" : {
+    "general" : "General",
+    "theme" : "Theme",
+    "on" : "On",
+    "off" : "Off",
+    "autosaveBackup" : "Autosave backup",
+    "JPGQuality" : "JPG image quality",
+    "scrollPastEnd" : "Scroll past end",
+    "chooseDictLang" : "Choose dictionary language"
+  },
+  "processing" : "Processing",
+
+}

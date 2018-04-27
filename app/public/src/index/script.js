@@ -21,7 +21,9 @@
     ctxMenu  : undefined,
     ctxMenuIndex : 0,
 
-    prev : false,
+    latestLocY : 0,
+    latestLocX : 0,
+
     position : 0,
     curPage : 0,
     curChapter : 0,
@@ -42,7 +44,7 @@ const path = require('path');
 
 window.qs = document.querySelectorAll.bind(document)
 const storage = new cargodb('storage')
-PopUp.summon("Welcome back!")
+PopUp.summon("Witaj z powrotem!")
 
 window.BASE_FILE = {
   title: undefined,
@@ -197,6 +199,15 @@ let caretToEnd = () => {
     range.selectNodeContents(textField.contentDocument.querySelector('end'))
     selection.removeAllRanges()
     selection.addRange(range)
+    // TODO: gimme a sec
+    range.collapse(true)
+    let rects = range.getClientRects()
+    if (rects.length > 0) {
+      let rect = rects[0]
+      latestLocY = rect.top
+      latestLocX = rect.left
+    }
+
     setTimeout(() => {
       for (let i = 0; i < textField.contentDocument.querySelectorAll('end').length; i++) {
         textField.contentDocument.querySelectorAll('end')[i].remove()
@@ -287,7 +298,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   ipcRenderer.on('saved-file', (event, name) => {
     qs('.bar span')[0].textContent = name
-    PopUp.summon('Saved File')
+    PopUp.summon('Zapisano Dokument')
   })
   qs('.menu button#quick-save')[0].addEventListener('click', () => {
     let path = qs('.menubar .bar span')[0].innerHTML == '&lt;Brak tytułu&gt;'
@@ -295,7 +306,6 @@ document.addEventListener('DOMContentLoaded', function () {
       : qs('.menubar .bar span')[0].innerHTML
     ipcRenderer.send('quick-save',[path, JSON.stringify(BASE_FILE)])
   })
-  console.log(menu.children[0]);
   menu.children[0].addEventListener('click',()=>{
     BASE_FILE = JSON.parse(JSON.stringify(clearTemplate))
     pages = []
@@ -377,7 +387,6 @@ document.addEventListener('DOMContentLoaded', function () {
   document.getElementsByClassName('iframe')[0].addEventListener('scroll', () => {
     cs.transition = '0ms'
     insert.sizer.style.opacity = 0
-    // TODO:  UP Scroll
     if (bodyContent.scrollTop != scrollDif) {
       scrollDif = bodyContent.scrollTop - scrollDif
     }
@@ -722,19 +731,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.body.appendChild(caret)
   }
-  let latestLocY = 0
-  let localScroll = 0
-  function caretUpdate () {
-    // TODO: MID Scroll
 
-    // if (scrollDif != localScroll && caretLoc.y == null) {
-    //   localScroll = scrollDif
-    //   cs.top =  latestLocY + textField.offsetTop + 70 - bodyContent.scrollTop + "px"
-    // } else {
-    //   cs.top = caretLoc.y + textField.offsetTop + 70 - bodyContent.scrollTop + "px"
-    // }
+  function caretUpdate () {
     cs.top =  latestLocY + textField.offsetTop + 70 - bodyContent.scrollTop + "px"
-    cs.left = caretLoc.x + textField.offsetLeft + 70 + "px"
+    cs.left = latestLocX + textField.offsetLeft + 70 + "px"
     cs.height = space + "px"
   }
 
@@ -803,26 +803,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
   window.allow = false // caretToEnd && getSelectionCoords
   setInterval(function () {
-    // bodyBugFix()
-
     caretToEnd()
-    caretLoc.x = getSelectionCoords(textField).x
-    caretLoc.y = getSelectionCoords(textField).y
-    latestLocY = caretLoc.y != null ? caretLoc.y : latestLocY
-    // console.log(caretLoc);
-    // QUESTION: Why does it work only for mouse click?
+    getSelectionCoords(textField)
     caretSize()
     stickIntoBorders(cs.top)
     restrictions()
     settingsUpdate()
 
-    // firstLetterFix()
-
-  // 284 && 280 && 270
+    // 284 && 280 && 270
     cs.top = (parseInt(cs.top) < 270 - bodyContent.scrollTop) ? 270 - bodyContent.scrollTop : cs.top - bodyContent.scrollTop
 
     checkForFloatingDivs()
-
     updateSidebar()
     headChecker()
     caretUpdate()
@@ -888,7 +879,9 @@ document.addEventListener('DOMContentLoaded', function () {
         settingsEl.spell.selectedIndex = i
     }
   }
+
 let getLatestCoordsY = 0
+let prev = false
   function getSelectionCoords (iframe) {
     let win = iframe
     var doc = win.contentDocument
@@ -901,13 +894,12 @@ let getLatestCoordsY = 0
         if (range.getClientRects) {
           range.collapse(true)
           rects = range.getClientRects()
-
           if (rects.length > 0) {
             rect = rects[0]
-
-            y = getLatestCoordsY = rect.top
-            x = rect.left
+            latestLocY = getLatestCoordsY = rect.top
+            latestLocX = rect.left
             prev = true
+
             try {
               if (sel.anchorNode.parentElement.parentElement.tagName == 'SPAN') { getSelectionCoordsPosition(sel.anchorNode.parentElement.parentElement.parentElement.style.textAlign) } else if (sel.anchorNode.parentElement.parentElement.tagName == 'DIV') {
                 getSelectionCoordsPosition(sel.anchorNode.parentElement.parentElement.style.textAlign)
@@ -916,69 +908,70 @@ let getLatestCoordsY = 0
               position = 0
             }
           } else {
-                  // It's a value of CSS property (without CSS type)
-            var csNum = cs.top.replace(cs.top.match(/px/), '')
 
             if (keys.enter || keys.down || keys.right) {
-              negateKeys()
+              prev = false
               latestLocY = getLatestCoordsY + space
+              let documentHeight = textField.contentDocument.body.offsetHeight
+              if ((keys.down || keys.right) && (latestLocY + space) > documentHeight) {
+                latestLocY = getLatestCoordsY
+              }
+              negateKeys()
               getLatestCoordsY = latestLocY
-              return {
-                x: (position == 0)
-                  ? 0
-                  : (position == 1)
-                    ? (+textField.contentDocument.body.offsetWidth / 2)
-                    : textField.contentDocument.body.offsetWidth,
-                y: undefined}
+              latestLocX = (position == 0)
+                ? 0
+                : (position == 1)
+                  ? (+textField.contentDocument.body.offsetWidth / 2)
+                  : textField.contentDocument.body.offsetWidth
 
             } else if (keys.left || keys.up) {
               negateKeys()
+              prev = false
               latestLocY = getLatestCoordsY - space
               getLatestCoordsY = latestLocY
-              return {
-                x: (position == 0)
-                  ? 0
-                  : (position == 1)
-                    ? (+textField.contentDocument.body.offsetWidth / 2)
-                    : textField.contentDocument.body.offsetWidth,
-                y: undefined}
+              latestLocX = (position == 0)
+                ? 0
+                : (position == 1)
+                  ? (+textField.contentDocument.body.offsetWidth / 2)
+                  : textField.contentDocument.body.offsetWidth
+
             } else if (keys.backsp && !prev) {
               negateKeys()
               latestLocY = getLatestCoordsY - space
               getLatestCoordsY = latestLocY
-              return {
-                x: (position == 0)
-                  ? 0
-                  : (position == 1)
-                    ? (+textField.contentDocument.body.offsetWidth / 2)
-                    : textField.contentDocument.body.offsetWidth,
-                y: undefined}
-            } else if (keys.backsp && prev) {
-              prev = false
-              negateKeys()
-              latestLocY = getLatestCoordsY
-              return {
-              x: (position == 0)
+              latestLocX = (position == 0)
                 ? 0
                 : (position == 1)
                   ? (+textField.contentDocument.body.offsetWidth / 2)
-                  : textField.contentDocument.body.offsetWidth,
-              y: cs.top = parseInt(csNum)}
+                  : textField.contentDocument.body.offsetWidth
+
+            } else if (keys.backsp && prev) {
+              negateKeys()
+              prev = false
+              latestLocY = getLatestCoordsY
+              latestLocX = (position == 0)
+                ? 0
+                : (position == 1)
+                  ? (+textField.contentDocument.body.offsetWidth / 2)
+                  : textField.contentDocument.body.offsetWidth
+
             } else if (keys.click.state && allow) {
+              prev = false
               let temp = keys.click.loc[1]
-              temp -= temp % 19
-              return {
-                   x: 0,
-                   y: temp
-                 }
+              latestLocY = temp - (temp % 19)
+              latestLocX = (position == 0)
+                ? 0
+                : (position == 1)
+                  ? (+textField.contentDocument.body.offsetWidth / 2)
+                  : textField.contentDocument.body.offsetWidth
+
             } else {
-              return {x: undefined, y: undefined}
+              prev = false
             }
           }
         }
       }
     }
-    return { x: x, y: y }
   }
   function stickIntoBorders (location) {
     if (parseInt(cs.top) > textField.contentDocument.body.offsetHeight + textField.offsetTop + 70 - 18) {
