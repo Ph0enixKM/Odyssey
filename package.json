@@ -66,10 +66,13 @@
   },
   "dependencies": {
     "cargodb": "^1.0.2",
+    "docx2html": "^1.1.0",
     "electron": "^1.7.12",
     "electron-compile": "^6.4.2",
     "electron-spellchecker": "^1.1.2",
     "electron-squirrel-startup": "^1.0.0",
+    "html-docx-js": "^0.3.1",
+    "mammoth" : "^1.4.5",
     "pixi.js": "^4.7.0"
   },
   "devDependencies": {

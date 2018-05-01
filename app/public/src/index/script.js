@@ -297,7 +297,9 @@ document.addEventListener('DOMContentLoaded', function () {
   })
 
   ipcRenderer.on('saved-file', (event, name) => {
-    qs('.bar span')[0].textContent = name
+    qs('.bar span')[0].textContent = (name == null)
+      ? qs('.bar span')[0].textContent
+      : name
     PopUp.summon('Zapisano Dokument')
   })
   qs('.menu button#quick-save')[0].addEventListener('click', () => {
@@ -332,7 +334,9 @@ document.addEventListener('DOMContentLoaded', function () {
         fonts: []
       }
     } finally {
-      qs('.bar span')[0].textContent = name
+      qs('.bar span')[0].textContent = (name == null)
+        ? qs('.bar span')[0].textContent
+        : name
 
       curPage = 0
       curChapter = 0

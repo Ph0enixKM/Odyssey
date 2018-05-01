@@ -40,7 +40,7 @@
 
 .menu a#reload {
   transition: 300ms;
-  background-image: url("../arts/reload.png");
+  background-image: url("../../arts/reload.png");
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;
@@ -73,7 +73,7 @@
 
 .menu button#settings {
   transition: 300ms;
-  background-image: url("../arts/settings.png");
+  background-image: url("../../arts/settings.png");
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;
@@ -81,7 +81,7 @@
 
 .menu button#open-file {
   transition: 300ms;
-  background-image: url("../arts/open.png");
+  background-image: url("../../arts/open.png");
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;
@@ -89,7 +89,7 @@
 
 .menu button#save-file {
   transition: 300ms;
-  background-image: url("../arts/saveAs.png");
+  background-image: url("../../arts/saveAs.png");
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;
@@ -97,7 +97,7 @@
 
 .menu button#quick-save {
   transition: 300ms;
-  background-image: url("../arts/save.png");
+  background-image: url("../../arts/save.png");
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;
@@ -219,7 +219,7 @@
   width: 50px;
   transition: 200ms;
   cursor: default;
-  background-image: url("../arts/minimize.png");
+  background-image: url("../../arts/minimize.png");
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;
@@ -240,7 +240,7 @@
   color: #aaa;
   transition: 200ms;
   cursor: default;
-  background-image: url("../arts/maximize.png");
+  background-image: url("../../arts/maximize.png");
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;
@@ -261,7 +261,7 @@
   color: #aaa;
   transition: 200ms;
   cursor: default;
-  background-image: url("../arts/exit.png");
+  background-image: url("../../arts/exit.png");
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;
@@ -357,7 +357,7 @@ canvas#move {
   word-wrap: break-word;
   border-radius: 0px;
   margin: 2vw 10vw 2vw 10vw;
-  background-image: url("../arts/chapterDoc.png");
+  background-image: url("../../arts/chapterDoc.png");
   background-size: 21mm 21mm;
   background-position: left top;
   background-repeat: no-repeat;
@@ -553,15 +553,15 @@ canvas#move {
 }
 
 #pages div#merge-all {
-  background-image: url("../arts/merge.png");
+  background-image: url("../../arts/merge.png");
 }
 
 #pages div#print {
-  background-image: url("../arts/printer.png");
+  background-image: url("../../arts/printer.png");
 }
 
 #pages div#print-view {
-  background-image: url("../arts/printView.png");
+  background-image: url("../../arts/printView.png");
 }
 
 #pages div#print-view .toggle {
@@ -652,7 +652,7 @@ canvas#move {
 }
 
 .full-view .fv-tools span#trash {
-  background-image: url("../arts/bin.png");
+  background-image: url("../../arts/bin.png");
   background-size: cover;
   background-position: center;
 }
@@ -662,7 +662,7 @@ canvas#move {
 }
 
 .full-view .fv-tools span#move-btn {
-  background-image: url("../arts/chain.png");
+  background-image: url("../../arts/chain.png");
   background-size: cover;
   background-position: center;
 }
@@ -672,7 +672,7 @@ canvas#move {
 }
 
 .full-view .fv-tools span#merge-sel {
-  background-image: url("../arts/mergeSel.png");
+  background-image: url("../../arts/mergeSel.png");
   background-size: cover;
   background-position: center;
 }
@@ -682,7 +682,7 @@ canvas#move {
 }
 
 .full-view .fv-tools span#chapter-view {
-  background-image: url("../arts/chapter.png");
+  background-image: url("../../arts/chapter.png");
   background-size: cover;
   background-position: center;
   border-left: 2px #444 dashed;
@@ -757,7 +757,7 @@ disabled[disabled="false"] {
   display: inline-block;
   width: 40px;
   height: 40px;
-  background-image: url("../arts/ok.png");
+  background-image: url("../../arts/ok.png");
   background-position: center;
   background-size: cover;
   transition: 300ms;
@@ -773,7 +773,7 @@ disabled[disabled="false"] {
   display: inline-block;
   width: 40px;
   height: 40px;
-  background-image: url("../arts/cancel.png");
+  background-image: url("../../arts/cancel.png");
   background-position: center;
   background-size: cover;
   transition: 300ms;
@@ -886,7 +886,7 @@ disabled[disabled="false"] {
   padding: 0;
   transition: 300ms;
   cursor: pointer;
-  background-image: url("../arts/bin.png");
+  background-image: url("../../arts/bin.png");
   background-size: cover;
   background-position: center;
 }
@@ -922,7 +922,7 @@ disabled[disabled="false"] {
   padding: 0 10px 0 10px;
   border: 1px solid #444;
   transition: 300ms;
-  background-image: url("../arts/image.png");
+  background-image: url("../../arts/image.png");
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;
@@ -946,7 +946,7 @@ disabled[disabled="false"] {
   padding: 0 10px 0 10px;
   border: 1px solid #444;
   transition: 300ms;
-  background-image: url("../arts/fullView.png");
+  background-image: url("../../arts/fullView.png");
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;
@@ -992,7 +992,7 @@ disabled[disabled="false"] {
   margin: 5px 5px 5px 10px;
   border: 1px solid #444;
   transition: 300ms;
-  background-image: url("../arts/alignLeft.png");
+  background-image: url("../../arts/alignLeft.png");
   background-position: center;
   background-size: cover;
   cursor: pointer;
@@ -1009,7 +1009,7 @@ disabled[disabled="false"] {
   margin: 5px;
   border: 1px solid #444;
   transition: 300ms;
-  background-image: url("../arts/alignCenter.png");
+  background-image: url("../../arts/alignCenter.png");
   background-position: center;
   background-size: cover;
   cursor: pointer;
@@ -1026,7 +1026,7 @@ disabled[disabled="false"] {
   margin: 5px;
   border: 1px solid #444;
   transition: 300ms;
-  background-image: url("../arts/alignRight.png");
+  background-image: url("../../arts/alignRight.png");
   background-position: center;
   background-size: cover;
   cursor: pointer;
@@ -1043,7 +1043,7 @@ disabled[disabled="false"] {
   margin: 5px;
   border: 1px solid #444;
   transition: 300ms;
-  background-image: url("../arts/alignJustify.png");
+  background-image: url("../../arts/alignJustify.png");
   background-position: center;
   background-size: cover;
   cursor: pointer;
@@ -1072,7 +1072,7 @@ disabled[disabled="false"] {
 
 .toolbar div#logo {
   display: inline-block;
-  background-image: url("../arts/logo2.png");
+  background-image: url("../../arts/logo2.png");
   background-position: center;
   background-size: contain;
   width: 50px;
@@ -1085,7 +1085,7 @@ disabled[disabled="false"] {
 .toolbar div#logo div {
   width: 100%;
   height: 100%;
-  background-image: url("../arts/logo2Hard.png");
+  background-image: url("../../arts/logo2Hard.png");
   background-position: center;
   background-size: cover;
   opacity: 0;
@@ -1173,5 +1173,5 @@ disabled[disabled="false"] {
 
 @font-face {
   font-family: Lato;
-  src: url("../arts/lato.ttf");
+  src: url("../../arts/lato.ttf");
 }

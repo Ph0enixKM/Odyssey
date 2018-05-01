@@ -2,6 +2,9 @@ const electron = require('electron')
 const { app, BrowserWindow, ipcMain, dialog, webFrame } = electron
 const fs = require('fs')
 const os = require('os')
+const path = require('path')
+const html2docx = require('html-docx-js')
+const mammoth = require('mammoth')
 
 let win
 
@@ -19,19 +22,38 @@ app.on('ready', () => {
     dialog.showOpenDialog({
       properties: ['openFile'],
       filters: [
+        {name: 'All files', extensions: ['*']},
         {name: 'Odyssey files', extensions: ['odyss']},
-        {name: 'Text files', extensions: ['txt']},
         {name: 'Microsoft Word document files', extensions: ['docx']},
-        {name: 'All files', extensions: ['*']}
+        {name: 'Text files', extensions: ['txt']}
       ]
     }, files => {
       if (files) {
-        // e.sender.send('selected-files',files)
 
-        fs.readFile(files[0], 'utf-8', (err, data) => {
-          if (err) console.log(err)
-          e.sender.send('selected-files', data, files[0])
-        })
+        if (path.extname(files[0]) == ".docx") {
+          mammoth.convertToHtml({path: files[0]})
+          .then(function(result){
+            // If docx is converted correctly
+            if (result.messages.length == 0) {
+              let converted = result.value
+              e.sender.send('selected-files', data, null)
+              // Otherwise
+            } else if (result.messages.length > 0) {
+              fs.readFile(files[0], "utf-8", (err, data) => {
+                if (err) console.log(err)
+                let content = /<body>([\s\S]*?)<\/body>/img.exec(data)[1]
+                e.sender.send('selected-files', content, null)
+              })
+            }
+          })
+
+        } else {
+          fs.readFile(files[0], 'utf-8', (err, data) => {
+            if (err) console.log(err)
+            e.sender.send('selected-files', data, files[0])
+          })
+        }
+
       }
     })
   })
@@ -48,8 +70,6 @@ app.on('ready', () => {
       ]
     }, files => {
       if (files) {
-        // e.sender.send('selected-files',files)
-
         fs.readFile(files[0], (err, data) => {
           if (err) console.log(err)
           e.sender.send('selected-image', [data, files[0]])
@@ -62,16 +82,50 @@ app.on('ready', () => {
     dialog.showSaveDialog({
       options: {},
       filters: [
-        {name: 'Odyssey files', extensions: ['odyss']}
+        {name: 'Odyssey files', extensions: ['odyss']},
+        {name: 'Microsoft Word document files', extensions: ['docx']}
       ]
     },
     file => {
       if (file != undefined) {
-        fs.writeFile(file, source, err => {
-          if (err) throw err
-
-          e.sender.send('saved-file', file)
-        })
+        switch (path.extname(file)) {
+          case '.odyss':
+            (function(){
+              // Write to odyssey
+              fs.writeFile(file, source, err => {
+                if (err) throw err
+                e.sender.send('saved-file', file)
+              })
+            })()
+            break;
+          case '.docx':
+            (function(){
+              // Write to MS Word
+              let docx = html2docx.asBlob(`
+                <!DOCTYPE html>
+                <html>
+                  <head></head>
+                  <body>
+                    ${
+                      (function(){
+                        let given = JSON.parse(source)
+                        let content = ''
+                        for (let page of given.book) {
+                          content += ( page[1] + "<br>" )
+                        }
+                        return content
+                      })()
+                    }
+                  </body>
+                </html>
+              `)
+              fs.writeFile(file, docx, err => {
+                if (err) throw err
+                e.sender.send('saved-file', null)
+              })
+            })()
+            break;
+        }
       }
     })
   })
