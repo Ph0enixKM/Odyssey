@@ -37,7 +37,7 @@ app.on('ready', () => {
             // If docx is converted incorrectly
             if (result.value == '') {
               fs.readFile(files[0], "utf-8", (err, data) => {
-                if (err) console.log(err)
+                if (err) throw err
                 let content = /<body>([\s\S]*?)<\/body>/img.exec(data)[1]
                 e.sender.send('selected-files', content, null)
               })
@@ -50,7 +50,7 @@ app.on('ready', () => {
 
         } else {
           fs.readFile(files[0], 'utf-8', (err, data) => {
-            if (err) console.log(err)
+            if (err) throw err
             e.sender.send('selected-files', data, files[0])
           })
         }
@@ -72,7 +72,7 @@ app.on('ready', () => {
     }, files => {
       if (files) {
         fs.readFile(files[0], (err, data) => {
-          if (err) console.log(err)
+          if (err) throw err
           e.sender.send('selected-image', [data, files[0]])
         })
       }
@@ -84,7 +84,8 @@ app.on('ready', () => {
       options: {},
       filters: [
         {name: 'Odyssey files', extensions: ['odyss']},
-        {name: 'Microsoft Word document files', extensions: ['docx']}
+        {name: 'Microsoft Word document files', extensions: ['docx']},
+        {name: 'PDF files', extensions: ['pdf']}
       ]
     },
     file => {
@@ -102,6 +103,7 @@ app.on('ready', () => {
           case '.docx':
             (function(){
               // Write to MS Word
+              // FIXME: Margins
               let docx = html2docx.asBlob(`
                 <!DOCTYPE html>
                 <html>
@@ -119,10 +121,22 @@ app.on('ready', () => {
                     }
                   </body>
                 </html>
-              `)
+              `, { /* margins */ })
               fs.writeFile(file, docx, err => {
                 if (err) throw err
                 e.sender.send('saved-file', null)
+              })
+            })()
+            break;
+          case '.pdf':
+            (function () {
+              //Instatiate new printing process
+              let pdfWin = new BrowserWindow({width: 794, height: 1122, show: true, parent: win})
+              pdfWin.setMenu(null)
+              pdfWin.loadURL("file://" + __dirname+'/public/print.html')
+              // printWin.toggleDevTools()
+              pdfWin.webContents.once("dom-ready", () => {
+                pdfWin.webContents.send('pdf-request', source, file)
               })
             })()
             break;
