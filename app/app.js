@@ -22,10 +22,11 @@ app.on('ready', () => {
     dialog.showOpenDialog({
       properties: ['openFile'],
       filters: [
-        {name: 'All files', extensions: ['*']},
+        {name: 'All supported files', extensions: ['odyss', 'docx', 'txt']},
         {name: 'Odyssey files', extensions: ['odyss']},
         {name: 'Microsoft Word document files', extensions: ['docx']},
-        {name: 'Text files', extensions: ['txt']}
+        {name: 'Text files', extensions: ['txt']},
+        {name: 'All files', extensions: ['*']}
       ]
     }, files => {
       if (files) {
@@ -33,17 +34,17 @@ app.on('ready', () => {
         if (path.extname(files[0]) == ".docx") {
           mammoth.convertToHtml({path: files[0]})
           .then(function(result){
-            // If docx is converted correctly
-            if (result.messages.length == 0) {
-              let converted = result.value
-              e.sender.send('selected-files', data, null)
-              // Otherwise
-            } else if (result.messages.length > 0) {
+            // If docx is converted incorrectly
+            if (result.value == '') {
               fs.readFile(files[0], "utf-8", (err, data) => {
                 if (err) console.log(err)
                 let content = /<body>([\s\S]*?)<\/body>/img.exec(data)[1]
                 e.sender.send('selected-files', content, null)
               })
+              // Otherwise
+            } else {
+              let data = result.value
+              e.sender.send('selected-files', data, null)
             }
           })
 

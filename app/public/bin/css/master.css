@@ -41,7 +41,7 @@ button, input, select, option {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-image: url("../arts/logo2.png");
+  background-image: url("../../arts/logo2.png");
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -54,7 +54,7 @@ button, input, select, option {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-image: url("../arts/logo2Hard.png");
+  background-image: url("../../arts/logo2Hard.png");
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -69,7 +69,7 @@ button, input, select, option {
   top: 50%;
   left: 50%;
   transform: translate(0%, -35%);
-  background-image: url("../arts/bLogo.png");
+  background-image: url("../../arts/bLogo.png");
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -126,7 +126,7 @@ button, input, select, option {
   height: 20px;
   border-radius: 10px;
   background-color: orange;
-  background-image: url("../arts/arrowDiagonalS.png");
+  background-image: url("../../arts/arrowDiagonalS.png");
   background-position: center;
   background-size: cover;
   position: absolute;
