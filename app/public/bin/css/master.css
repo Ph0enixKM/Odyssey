@@ -104,7 +104,61 @@ button, input, select, option {
   flex: 0 1 auto;
 }
 
-.iframe iframe {
+.iframe .resizer {
+  display: inline-block;
+  position: absolute;
+  top: 0px;
+  z-index: 10;
+  width: 210mm;
+  padding: 0 70px 0 70px;
+  height: 5px;
+  background-color: transparent;
+  transition: 100ms;
+}
+
+.iframe .resizer::before {
+  display: inline-block;
+  position: absolute;
+  left: 100%;
+  content: "";
+  width: 100vw;
+  height: 5px;
+  transform: translate(0, -5px);
+  background-color: transparent;
+  transition: 300ms;
+  border-bottom: 5px dotted transparent;
+}
+
+.iframe .resizer::after {
+  display: inline-block;
+  position: absolute;
+  left: 0;
+  content: "";
+  width: 100vw;
+  height: 5px;
+  transform: translate(-100%, -5px);
+  background-color: transparent;
+  transition: 300ms;
+  border-bottom: 5px dotted transparent;
+}
+
+.iframe .resizer:hover {
+  background-color: orange;
+}
+
+.iframe .resizer:hover::before {
+  border-bottom: 5px dotted #9b4100;
+}
+
+.iframe .resizer:hover::after {
+  border-bottom: 5px dotted #9b4100;
+}
+
+.iframe #iframe {
+  text-align: center;
+}
+
+.iframe #iframe iframe {
   padding: 70px;
   width: 210mm;
   height: 297mm;

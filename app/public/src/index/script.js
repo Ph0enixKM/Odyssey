@@ -24,6 +24,11 @@
     latestLocY : 0,
     latestLocX : 0,
 
+    margins : {
+      top : 70,
+      left : 70,
+      bottom : 70
+    },
     position : 0,
     curPage : 0,
     curChapter : 0,
