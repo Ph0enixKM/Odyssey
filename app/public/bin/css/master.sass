@@ -68,6 +68,52 @@ button,input,select,option
     background-repeat: no-repeat
     opacity: 0.5
 
+.resizer
+  display: inline-block
+  position: absolute
+  top: 0px
+  z-index: 10
+  width: 210mm
+  padding: 0 70px 0 70px
+  height: 5px
+  background-color: rgba(255,180,0,0.5)
+  transition: 100ms
+  z-index: 1
+  &.left
+    margin-top: 70px
+    width: 5px
+    height: 297mm
+    padding: 70px 0 70px 0
+  &::before
+    display: inline-block
+    position: absolute
+    left: 100%
+    content: ""
+    width: 100vw
+    height: 5px
+    transform: translate(0,-5px)
+    background-color: transparent
+    transition: 300ms
+    border-bottom: 5px dotted transparent
+    opacity: 0.5
+  &::after
+    display: inline-block
+    position: absolute
+    left: 0
+    content: ""
+    width: 100vw
+    height: 5px
+    transform: translate(-100%,-5px)
+    background-color: transparent
+    transition: 300ms
+    border-bottom: 5px dotted transparent
+    opacity: 0.5
+  &:hover
+    background-color: orange
+    &::before
+      border-bottom: 5px dotted orange - 100
+    &::after
+      border-bottom: 5px dotted orange - 100
 
 
 .iframe
@@ -89,44 +135,6 @@ button,input,select,option
     display: flex
     flex: 0 1 auto
 
-  .resizer
-    display: inline-block
-    position: absolute
-    top: 0px
-    z-index: 10
-    width: 210mm
-    padding: 0 70px 0 70px
-    height: 5px
-    background-color: transparent
-    transition: 100ms
-    &::before
-      display: inline-block
-      position: absolute
-      left: 100%
-      content: ""
-      width: 100vw
-      height: 5px
-      transform: translate(0,-5px)
-      background-color: transparent
-      transition: 300ms
-      border-bottom: 5px dotted transparent
-    &::after
-      display: inline-block
-      position: absolute
-      left: 0
-      content: ""
-      width: 100vw
-      height: 5px
-      transform: translate(-100%,-5px)
-      background-color: transparent
-      transition: 300ms
-      border-bottom: 5px dotted transparent
-    &:hover
-      background-color: orange
-      &::before
-        border-bottom: 5px dotted orange - 100
-      &::after
-        border-bottom: 5px dotted orange - 100
 
   #iframe
     text-align: center

@@ -76,6 +76,66 @@ button, input, select, option {
   opacity: 0.5;
 }
 
+.resizer {
+  display: inline-block;
+  position: absolute;
+  top: 0px;
+  z-index: 10;
+  width: 210mm;
+  padding: 0 70px 0 70px;
+  height: 5px;
+  background-color: rgba(255, 180, 0, 0.5);
+  transition: 100ms;
+  z-index: 1;
+}
+
+.resizer.left {
+  margin-top: 70px;
+  width: 5px;
+  height: 297mm;
+  padding: 70px 0 70px 0;
+}
+
+.resizer::before {
+  display: inline-block;
+  position: absolute;
+  left: 100%;
+  content: "";
+  width: 100vw;
+  height: 5px;
+  transform: translate(0, -5px);
+  background-color: transparent;
+  transition: 300ms;
+  border-bottom: 5px dotted transparent;
+  opacity: 0.5;
+}
+
+.resizer::after {
+  display: inline-block;
+  position: absolute;
+  left: 0;
+  content: "";
+  width: 100vw;
+  height: 5px;
+  transform: translate(-100%, -5px);
+  background-color: transparent;
+  transition: 300ms;
+  border-bottom: 5px dotted transparent;
+  opacity: 0.5;
+}
+
+.resizer:hover {
+  background-color: orange;
+}
+
+.resizer:hover::before {
+  border-bottom: 5px dotted #9b4100;
+}
+
+.resizer:hover::after {
+  border-bottom: 5px dotted #9b4100;
+}
+
 .iframe {
   margin-top: 90px;
   overflow-y: scroll;
@@ -102,56 +162,6 @@ button, input, select, option {
 .iframe #up {
   display: flex;
   flex: 0 1 auto;
-}
-
-.iframe .resizer {
-  display: inline-block;
-  position: absolute;
-  top: 0px;
-  z-index: 10;
-  width: 210mm;
-  padding: 0 70px 0 70px;
-  height: 5px;
-  background-color: transparent;
-  transition: 100ms;
-}
-
-.iframe .resizer::before {
-  display: inline-block;
-  position: absolute;
-  left: 100%;
-  content: "";
-  width: 100vw;
-  height: 5px;
-  transform: translate(0, -5px);
-  background-color: transparent;
-  transition: 300ms;
-  border-bottom: 5px dotted transparent;
-}
-
-.iframe .resizer::after {
-  display: inline-block;
-  position: absolute;
-  left: 0;
-  content: "";
-  width: 100vw;
-  height: 5px;
-  transform: translate(-100%, -5px);
-  background-color: transparent;
-  transition: 300ms;
-  border-bottom: 5px dotted transparent;
-}
-
-.iframe .resizer:hover {
-  background-color: orange;
-}
-
-.iframe .resizer:hover::before {
-  border-bottom: 5px dotted #9b4100;
-}
-
-.iframe .resizer:hover::after {
-  border-bottom: 5px dotted #9b4100;
 }
 
 .iframe #iframe {
