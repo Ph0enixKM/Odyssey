@@ -84,7 +84,7 @@ button, input, select, option {
   width: 210mm;
   padding: 0 70px 0 70px;
   height: 5px;
-  background-color: rgba(255, 180, 0, 0.5);
+  background-color: transparent;
   transition: 100ms;
   z-index: 1;
 }
@@ -94,6 +94,48 @@ button, input, select, option {
   width: 5px;
   height: 297mm;
   padding: 70px 0 70px 0;
+}
+
+.resizer.left::before {
+  display: inline-block;
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  content: "";
+  background-color: transparent;
+  transition: 300ms;
+  opacity: 0.5;
+  width: 5px;
+  height: 100vw;
+  transform: translate(-5px, -100%);
+  border-right: 5px dotted rgba(150, 80, 0, 0.3);
+  border-bottom: none;
+}
+
+.resizer.left::after {
+  display: inline-block;
+  position: absolute;
+  left: 0%;
+  top: 100%;
+  content: "";
+  background-color: transparent;
+  transition: 300ms;
+  opacity: 0.5;
+  width: 5px;
+  height: 100vw;
+  transform: translate(-5px, 0);
+  border-right: 5px dotted rgba(150, 80, 0, 0.3);
+  border-bottom: none;
+}
+
+.resizer.left:hover::before {
+  border-right: 5px dotted #9b4100;
+  border-bottom: none;
+}
+
+.resizer.left:hover::after {
+  border-right: 5px dotted #9b4100;
+  border-bottom: none;
 }
 
 .resizer::before {
@@ -106,7 +148,7 @@ button, input, select, option {
   transform: translate(0, -5px);
   background-color: transparent;
   transition: 300ms;
-  border-bottom: 5px dotted transparent;
+  border-bottom: 5px dotted rgba(150, 80, 0, 0.3);
   opacity: 0.5;
 }
 
@@ -120,12 +162,12 @@ button, input, select, option {
   transform: translate(-100%, -5px);
   background-color: transparent;
   transition: 300ms;
-  border-bottom: 5px dotted transparent;
+  border-bottom: 5px dotted rgba(150, 80, 0, 0.3);
   opacity: 0.5;
 }
 
 .resizer:hover {
-  background-color: orange;
+  background-color: rgba(250, 180, 0, 0.5);
 }
 
 .resizer:hover::before {

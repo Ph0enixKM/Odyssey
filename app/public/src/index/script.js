@@ -58,7 +58,7 @@ window.BASE_FILE = {
   book: [
     ['Prolog', [] ]
   ],
-  fonts: []
+  config: []
 }
 window.clearTemplate = JSON.parse(JSON.stringify(BASE_FILE))
 
@@ -336,7 +336,7 @@ document.addEventListener('DOMContentLoaded', function () {
         book: [
         ['Prolog', [source] ]
         ],
-        fonts: []
+        config: []
       }
     } finally {
       qs('.bar span')[0].textContent = (name == null)
@@ -477,7 +477,6 @@ document.addEventListener('DOMContentLoaded', function () {
     var win = remote.getCurrentWindow()
 
     cl('minimize')[0].addEventListener('click', () => {
-      console.log(win)
       win.minimize()
     })
     cl('maximize')[0].addEventListener('click', () => {
