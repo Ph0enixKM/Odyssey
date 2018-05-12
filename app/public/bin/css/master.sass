@@ -20,6 +20,8 @@ button,input,select,option
   width: 100%
   display: block
   flex: 0
+  position: relative
+  z-index: 3
   background: linear-gradient(transparent, #1a1a1a)
 
 #all
@@ -79,7 +81,7 @@ button,input,select,option
   background-color: transparent
   transition: 100ms
   z-index: 1
-  &.left
+  &.left, &.right
     margin-top: 70px
     width: 5px
     height: 297mm

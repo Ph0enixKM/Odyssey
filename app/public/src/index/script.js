@@ -27,6 +27,7 @@
     margins : {
       top : 70,
       left : 70,
+      right : 70,
       bottom : 70
     },
     position : 0,

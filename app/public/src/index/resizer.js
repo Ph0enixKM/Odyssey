@@ -2,6 +2,7 @@ window.resizer = {
   top : document.querySelector('.resizer.top'),
   bottom : document.querySelector('.resizer.bottom'),
   left : document.querySelector('.resizer.left'),
+  right : document.querySelector('.resizer.right'),
 
   offset : 30,
   update : new Function(),
@@ -19,6 +20,11 @@ resizer.update = (offset) => {
   resizer.left.style.left = textField.offsetLeft + margins.left + "px"
   resizer.left.style.transform = 'translate(-5px, 0)'
   resizer.left.style.marginTop = margins.top
+  // Right
+  resizer.right.style.top = textField.offsetTop - resizer.body.scrollTop - ((offset == 18) ? 22 : offset) - margins.top + "px"
+  resizer.right.style.left = textField.offsetLeft + textField.offsetWidth - margins.right + "px"
+  resizer.right.style.transform = 'translate(5px, 0)'
+  resizer.right.style.marginTop = margins.top
   // Bottom
   resizer.bottom.style.top = textField.offsetTop + textField.offsetHeight - resizer.body.scrollTop - offset - margins.bottom + "px"
   resizer.bottom.style.left = textField.offsetLeft + "px"
