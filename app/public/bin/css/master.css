@@ -339,6 +339,7 @@ button, input, select, option {
 .caret {
   animation: caret 1s infinite;
   transform: translate(-10px, 0) scale(0);
+  transform-style: preserve-3d;
 }
 
 [disabled]:not([disabled=true]):not([disabled=false]) {

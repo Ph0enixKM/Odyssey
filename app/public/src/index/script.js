@@ -734,7 +734,7 @@ document.addEventListener('DOMContentLoaded', function () {
     cs.width = 3 + 'px'
     cs.height = 20 + 'px'
     cs.background = 'rgba(200,200,200,0.5)'
-    cs.transition = '200ms'
+    cs.transition = 'left 200ms, transform 300ms'
     cs.position = 'absolute'
     cs.display = 'inline-block'
 
@@ -742,7 +742,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function caretUpdate () {
-    cs.top =  latestLocY + textField.offsetTop + 70 - bodyContent.scrollTop + "px"
+    cs.top =  (latestLocY + textField.offsetTop + 70 - bodyContent.scrollTop).toFixed() + "px"
     cs.left = latestLocX + textField.offsetLeft + 70 + "px"
     cs.height = space + "px"
   }
@@ -818,14 +818,13 @@ document.addEventListener('DOMContentLoaded', function () {
     stickIntoBorders(cs.top)
     restrictions()
     settingsUpdate()
-
-    // 284 && 280 && 270
-    cs.top = (parseInt(cs.top) < 270 - bodyContent.scrollTop) ? 270 - bodyContent.scrollTop : cs.top - bodyContent.scrollTop
-
     checkForFloatingDivs()
     updateSidebar()
     headChecker()
     caretUpdate()
+
+    // 284 && 280 && 270
+    cs.top = (parseInt(cs.top) < 270 - bodyContent.scrollTop) ? 270 - bodyContent.scrollTop : cs.top - bodyContent.scrollTop
   }, 1)
 
   function getSelectionCoordsPosition (elem) {
