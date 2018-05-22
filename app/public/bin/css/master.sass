@@ -5,7 +5,7 @@ body
   width: 100vw
   height: 100vh
   background-color: black
-  background: radial-gradient(#333,#222)
+  background: #222
   overflow-x: hidden
   text-align: center
   overflow: hidden
@@ -22,7 +22,6 @@ button,input,select,option
   flex: 0
   position: relative
   z-index: 3
-  background: linear-gradient(transparent, #1a1a1a)
 
 #all
   position: absolute
@@ -79,8 +78,8 @@ button,input,select,option
   padding: 0 70px 0 70px
   height: 5px
   background-color: transparent
-  transition: 100ms
   z-index: 1
+  transition: background-color 200ms
   &.left, &.right
     margin-top: 70px
     width: 5px
@@ -89,6 +88,7 @@ button,input,select,option
     &::before
       display: inline-block
       position: absolute
+      z-index: -5
       top: 0%
       left: 0%
       content: ""
@@ -98,9 +98,10 @@ button,input,select,option
       width: 5px
       height: 100vw
       transform: translate(-5px,-100%)
-      border-right: 5px dotted rgba(150,80,0,0.3)
+      border-right: 5px dashed rgba(150,80,0,0.3)
       border-bottom: none
     &::after
+      z-index: -5
       display: inline-block
       position: absolute
       left: 0%
@@ -112,18 +113,19 @@ button,input,select,option
       width: 5px
       height: 100vw
       transform: translate(-5px,0)
-      border-right: 5px dotted rgba(150,80,0,0.3)
+      border-right: 5px dashed rgba(150,80,0,0.3)
       border-bottom: none
     &:hover
       &::before
-        border-right: 5px dotted orange - 100
+        border-right: 5px dashed orange - 100
         border-bottom: none
       &::after
-        border-right: 5px dotted orange - 100
+        border-right: 5px dashed orange - 100
         border-bottom: none
   &::before
     display: inline-block
     position: absolute
+    z-index: -5
     left: 100%
     content: ""
     width: 100vw
@@ -131,11 +133,12 @@ button,input,select,option
     transform: translate(0,-5px)
     background-color: transparent
     transition: 300ms
-    border-bottom: 5px dotted rgba(150,80,0,0.3)
+    border-bottom: 5px dashed rgba(150,80,0,0.3)
     opacity: 0.5
   &::after
     display: inline-block
     position: absolute
+    z-index: -5
     left: 0
     content: ""
     width: 100vw
@@ -143,14 +146,14 @@ button,input,select,option
     transform: translate(-100%,-5px)
     background-color: transparent
     transition: 300ms
-    border-bottom: 5px dotted rgba(150,80,0,0.3)
+    border-bottom: 5px dashed rgba(150,80,0,0.3)
     opacity: 0.5
   &:hover
     background-color: rgba(250,180,0,0.5)
     &::before
-      border-bottom: 5px dotted orange - 100
+      border-bottom: 5px dashed orange - 100
     &::after
-      border-bottom: 5px dotted orange - 100
+      border-bottom: 5px dashed orange - 100
 
 
 .iframe
@@ -183,7 +186,7 @@ button,input,select,option
       user-select: none
       position: relative
       transition: 150ms
-      box-shadow: 0 0 100px #111
+      box-shadow: 0 0 64px #333
       margin: 100px 0 70px 0
       background-color: #444
       color: #aaa

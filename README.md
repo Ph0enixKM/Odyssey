@@ -35,7 +35,5 @@ Now you should see Electron in action.
 After couple of seconds an Odyssey window should appear.
 
 ## Features to add
-- Adding images
-- Printing & View of file to print
-- "\n" as new word in sbWord
 - better scaling images
+- margin resizers

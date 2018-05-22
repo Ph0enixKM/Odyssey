@@ -11,7 +11,8 @@ window.resizer = {
   mouseUp : new Function(),
   body : document.querySelector('.iframe'),
   scrolled : false,
-  time :- null, // It's a Time Interval
+  time : null, // It's a Time Interval
+  opacity : null, // It's a TimeOut
 
   x : 0,
   y : 0,
@@ -49,6 +50,7 @@ textField.contentWindow.addEventListener('mousemove', e => {
 
 resizer.body.addEventListener('scroll', () => {
   resizer.scrolled = true
+  resizer.top.style.opacity = resizer.left.style.opacity
   resizer.update(0)
 })
 
@@ -57,9 +59,7 @@ window.addEventListener('resize', () => {
 })
 
 resizer.top.addEventListener('mousedown', () => {
-  // margins.top = 0
   resizer.update(0)
-  console.log("up")
   resizer.sel = resizer.top
   resizer.sel.style.boxShadow = '0 0 0 100px orange inset'
   resizer.time = setInterval( () => {
@@ -68,11 +68,10 @@ resizer.top.addEventListener('mousedown', () => {
 })
 
 resizer.mouseUp = () => {
-  // margins.top = 0
   resizer.update(0)
-  console.log("down")
   clearInterval(resizer.time)
-  resizer.sel.style.boxShadow = '0 0 0 transparent inset'
+  if (resizer.sel != null)
+    resizer.sel.style.boxShadow = '0 0 0 transparent inset'
 }
 
 window.addEventListener('mouseup', resizer.mouseUp)
