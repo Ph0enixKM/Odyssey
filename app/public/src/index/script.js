@@ -26,10 +26,10 @@
     latestLocX : 0,
 
     margins : {
-      top : 0,
-      left : 0,
-      right : 0,
-      bottom : 0
+      top : 70,
+      left : 70,
+      right : 70,
+      bottom : 70
     },
     position : 0,
     curPage : 0,
@@ -39,6 +39,8 @@
     restOf : ''
   })
 })()
+
+// TODO: CTRL + Z Handler
 
 // Require Electron
 const { remote } = require('electron')
@@ -532,7 +534,7 @@ document.addEventListener('DOMContentLoaded', function () {
         overflow: hidden;
         word-wrap: break-word;
         height: 100%;
-        position: absolute;
+        position: relative;
       }
       body{
         caret-color: transparent;
@@ -926,11 +928,9 @@ let prev = false
 
             if (keys.enter || keys.down || keys.right) {
               prev = false
+              // if (keys.down) console.log(true)
               latestLocY = getLatestCoordsY + space
               let documentHeight = textField.contentDocument.body.offsetHeight
-              if ((keys.down || keys.right) && (latestLocY + space) > documentHeight) {
-                latestLocY = getLatestCoordsY
-              }
               negateKeys()
               getLatestCoordsY = latestLocY
               latestLocX = (position == 0)
@@ -1000,6 +1000,7 @@ let prev = false
   }
 
   function restrictionsOptimal (wordSize) {
+    console.log(true);
   // Sprawdź, czy skończył poprawiać
     prevCheck = true
     restOf = str.slice(str.length - wordSize, str.length) + restOf
@@ -1013,33 +1014,35 @@ let prev = false
 
   let restrictions_start = false
   function restrictions () {
-    if (!restrictions_start && textField.contentDocument.body.offsetHeight > 1123) {
+    let html = textField.contentDocument.documentElement
+    if (!restrictions_start && textField.contentDocument.body.offsetHeight > html.offsetHeight) {
+      console.log('start');
       str = textField.contentDocument.body.innerHTML
       restrictions_start = true
-    } else if (textField.contentDocument.body.offsetHeight <= 1123) {
+    } else if (textField.contentDocument.body.offsetHeight <= html.offsetHeight) {
       restrictions_start = false
     }
 
     let prevLetters = sbLetters
 
   // 3 słowa przypadają na 1 pixel
-    if (textField.contentDocument.body.offsetHeight > 25000) {
-      str = restrictionsOptimal(25000 - 1123)
-    } else if (textField.contentDocument.body.offsetHeight > 10000) {
-      str = restrictionsOptimal(10000 - 1123)
-    } else if (textField.contentDocument.body.offsetHeight > 5000) {
-      str = restrictionsOptimal(5000 - 1123)
-    } else if (textField.contentDocument.body.offsetHeight > 3000) {
-      str = restrictionsOptimal(3000 - 1123)
-    } else if (textField.contentDocument.body.offsetHeight > 2000) {
-      str = restrictionsOptimal(2000 - 1123)
-    } else if (textField.contentDocument.body.offsetHeight > 1500) {
-      str = restrictionsOptimal(1700 - 1123)
-    } else if (textField.contentDocument.body.offsetHeight > 1300) {
-      str = restrictionsOptimal(1500 - 1123)
-    } else if (textField.contentDocument.body.offsetHeight > 1170) {
+    if (textField.contentDocument.body.offsetHeight > html.offsetHeight+10000) {
+      str = restrictionsOptimal(25000)
+    } else if (textField.contentDocument.body.offsetHeight > html.offsetHeight+5000) {
+      str = restrictionsOptimal(10000)
+    } else if (textField.contentDocument.body.offsetHeight > html.offsetHeight+2000) {
+      str = restrictionsOptimal(5000)
+    } else if (textField.contentDocument.body.offsetHeight > html.offsetHeight+1000) {
+      str = restrictionsOptimal(3000)
+    } else if (textField.contentDocument.body.offsetHeight > html.offsetHeight+500) {
+      str = restrictionsOptimal(2000)
+    } else if (textField.contentDocument.body.offsetHeight > html.offsetHeight+200) {
+      str = restrictionsOptimal(1700)
+    } else if (textField.contentDocument.body.offsetHeight > html.offsetHeight+100) {
+      str = restrictionsOptimal(1500)
+    } else if (textField.contentDocument.body.offsetHeight > html.offsetHeight+50) {
       str = restrictionsOptimal(10)
-    } else if (textField.contentDocument.body.offsetHeight > 1123) {
+    } else if (textField.contentDocument.body.offsetHeight > html.offsetHeight) {
       str = restrictionsOptimal(1)
     } else if (prevCheck && !merge.invoked) {
       prevCheck = false
@@ -1145,11 +1148,11 @@ let prev = false
   }
 
 // Pasting text
-  textField.contentWindow.addEventListener('paste', (e) => {
+  textField.contentWindow.addEventListener('paste', e => {
     // Prevent from default pasting text
-    e.preventDefault()
-    // Take text from clipboard and execute command to paste the text
-    var normalizedText = textField.contentWindow.event.clipboardData.getData('text/plain')
-    textField.contentDocument.execCommand('insertHTML', false, normalizedText)
+    // e.preventDefault()
+    // // Take text from clipboard and execute command to paste the text
+    // var normalizedText = textField.contentWindow.event.clipboardData.getData('text/plain')
+    // textField.contentDocument.execCommand('insertHTML', false, normalizedText)
   })
 })

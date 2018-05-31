@@ -58,7 +58,6 @@ resizer.apply = () => {
   // Top + Bottom
   html.style.height = pageDefaults.height - (margins.top + margins.bottom) + 'px'
   html.style.top = margins.top + 'px'
-  console.log(pageDefaults.height)// - (margins.top + margins.bottom) + 'px');
   // Left + Right
   html.style.width = pageDefaults.width - (margins.left + margins.right) + 'px'
   html.style.left = margins.left + 'px'
@@ -99,7 +98,6 @@ resizer.mouseDown = (name) => {
   resizer.sel = resizer[name]
   resizer.sel.style.boxShadow = '0 0 0 100px orange inset'
   resizer.time = setInterval( () => {
-    console.log('on');
     if (name == 'top' || name == 'bottom')
       resizer[name].style.top = resizer.y
     if (name == 'left' || name == 'right')
