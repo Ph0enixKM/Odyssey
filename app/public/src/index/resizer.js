@@ -8,6 +8,7 @@ window.resizer = {
 
   offset : 30,
   update : new Function(),
+  apply : new Function(),
   mouseUp : new Function(),
   mouseDown : new Function(),
   body : document.querySelector('.iframe'),
@@ -19,34 +20,63 @@ window.resizer = {
   y : 0,
 }
 
-resizer.update = (offset) => {
+resizer.update = () => {
   // Top
-  resizer.top.style.top = textField.offsetTop - resizer.body.scrollTop - offset - 5 + margins.top + "px"
+  resizer.top.style.top = textField.offsetTop - resizer.body.scrollTop + margins.top + "px"
   resizer.top.style.left = textField.offsetLeft + "px"
   resizer.top.style.transform = 'translate(0,-5px)'
   // Left
-  resizer.left.style.top = textField.offsetTop - resizer.body.scrollTop - ((offset == 18) ? 22 : offset) - margins.top + "px"
+  resizer.left.style.top = textField.offsetTop - resizer.body.scrollTop - margins.top + "px"
   resizer.left.style.left = textField.offsetLeft + margins.left + "px"
   resizer.left.style.transform = 'translate(-5px, 0)'
   resizer.left.style.marginTop = margins.top
   // Right
-  resizer.right.style.top = textField.offsetTop - resizer.body.scrollTop - ((offset == 18) ? 22 : offset) - margins.top + "px"
-  resizer.right.style.left = textField.offsetLeft + textField.offsetWidth - margins.right + "px"
+  resizer.right.style.top = textField.offsetTop - resizer.body.scrollTop - margins.top + "px"
+  resizer.right.style.left = textField.offsetLeft + textField.offsetWidth - margins.right - 5 + "px"
   resizer.right.style.transform = 'translate(5px, 0)'
   resizer.right.style.marginTop = margins.top
   // Bottom
-  resizer.bottom.style.top = textField.offsetTop + textField.offsetHeight - resizer.body.scrollTop - offset - margins.bottom + "px"
+  resizer.bottom.style.top = textField.offsetTop + textField.offsetHeight - resizer.body.scrollTop - margins.bottom + "px"
   resizer.bottom.style.left = textField.offsetLeft + "px"
 }
-resizer.update(18)
+resizer.apply = () => {
+  switch (resizer.sel) {
+    case resizer.top:
+      margins.top = resizer.y - textField.offsetTop - 2 + resizer.body.scrollTop
+      break
+    case resizer.left:
+      margins.left = resizer.x - textField.offsetLeft
+      break
+    case resizer.bottom:
+      margins.bottom = textField.offsetTop + textField.offsetHeight - (resizer.y + resizer.body.scrollTop)
+      break
+    case resizer.right:
+      margins.right = textField.offsetLeft + textField.offsetWidth - resizer.x
+      break
+  }
+  let html = textField.contentDocument.documentElement
+  // Top + Bottom
+  html.style.height = pageDefaults.height - (margins.top + margins.bottom) + 'px'
+  html.style.top = margins.top + 'px'
+  console.log(pageDefaults.height)// - (margins.top + margins.bottom) + 'px');
+  // Left + Right
+  html.style.width = pageDefaults.width - (margins.left + margins.right) + 'px'
+  html.style.left = margins.left + 'px'
+
+  resizer.update()
+}
+window.onload = () => {
+  resizer.update()
+  resizer.apply()
+}
 
 textField.addEventListener('mousemove', e => {
   resizer.x = e.x
   resizer.y = e.y
 })
 textField.contentWindow.addEventListener('mousemove', e => {
-  resizer.x = e.x + textField.offsetLeft + margins.left
-  resizer.y = e.y + textField.offsetTop + margins.top - resizer.body.scrollTop
+  resizer.x = e.x + textField.offsetLeft
+  resizer.y = e.y + textField.offsetTop - resizer.body.scrollTop
 })
 
 resizer.body.addEventListener('scroll', () => {
@@ -69,6 +99,7 @@ resizer.mouseDown = (name) => {
   resizer.sel = resizer[name]
   resizer.sel.style.boxShadow = '0 0 0 100px orange inset'
   resizer.time = setInterval( () => {
+    console.log('on');
     if (name == 'top' || name == 'bottom')
       resizer[name].style.top = resizer.y
     if (name == 'left' || name == 'right')
@@ -80,8 +111,11 @@ resizer.mouseDown = (name) => {
 resizer.mouseUp = () => {
   resizer.update(0)
   clearInterval(resizer.time)
-  if (resizer.sel != null)
+  if (resizer.sel != null) {
     resizer.sel.style.boxShadow = '0 0 0 transparent inset'
+    resizer.apply(0)
+  }
+  resizer.sel = null
 }
 
 window.addEventListener('mouseup', resizer.mouseUp)

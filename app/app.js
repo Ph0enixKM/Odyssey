@@ -210,7 +210,7 @@ app.on('ready', () => {
   win.webContents.on('did-finish-load', () => {
     setTimeout(() => {
       win.show()
-    }, 50)
+    },50)
   })
 
   // Closing process

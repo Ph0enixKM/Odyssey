@@ -83,7 +83,6 @@ button, input, select, option {
   top: 0px;
   z-index: 10;
   width: 210mm;
-  padding: 0 70px 0 70px;
   height: 5px;
   background-color: transparent;
   z-index: 1;
@@ -91,10 +90,8 @@ button, input, select, option {
 }
 
 .resizer.left, .resizer.right {
-  margin-top: 70px;
   width: 5px;
   height: 297mm;
-  padding: 70px 0 70px 0;
 }
 
 .resizer.left::before, .resizer.right::before {
@@ -110,7 +107,7 @@ button, input, select, option {
   width: 5px;
   height: 100vw;
   transform: translate(-5px, -100%);
-  border-right: 5px dashed rgba(150, 80, 0, 0.3);
+  border-right: 5px dashed rgba(0, 0, 0, 0.3);
   border-bottom: none;
 }
 
@@ -127,7 +124,7 @@ button, input, select, option {
   width: 5px;
   height: 100vw;
   transform: translate(-5px, 0);
-  border-right: 5px dashed rgba(150, 80, 0, 0.3);
+  border-right: 5px dashed rgba(0, 0, 0, 0.3);
   border-bottom: none;
 }
 
@@ -152,7 +149,7 @@ button, input, select, option {
   transform: translate(0, -5px);
   background-color: transparent;
   transition: 300ms;
-  border-bottom: 5px dashed rgba(150, 80, 0, 0.3);
+  border-bottom: 5px dashed rgba(0, 0, 0, 0.3);
   opacity: 0.5;
 }
 
@@ -167,7 +164,7 @@ button, input, select, option {
   transform: translate(-100%, -5px);
   background-color: transparent;
   transition: 300ms;
-  border-bottom: 5px dashed rgba(150, 80, 0, 0.3);
+  border-bottom: 5px dashed rgba(0, 0, 0, 0.3);
   opacity: 0.5;
 }
 
@@ -216,7 +213,6 @@ button, input, select, option {
 }
 
 .iframe #iframe iframe {
-  padding: 70px;
   width: 210mm;
   height: 297mm;
   overflow: hidden;

@@ -20,15 +20,16 @@
     sbChapter  : undefined,
     ctxMenu  : undefined,
     ctxMenuIndex : 0,
+    pageDefaults : undefined,
 
     latestLocY : 0,
     latestLocX : 0,
 
     margins : {
-      top : 70,
-      left : 70,
-      right : 70,
-      bottom : 70
+      top : 0,
+      left : 0,
+      right : 0,
+      bottom : 0
     },
     position : 0,
     curPage : 0,
@@ -246,6 +247,11 @@ document.addEventListener('DOMContentLoaded', function () {
   // Electron compiling bug
   if (document.body.childNodes[0].tagName != "DIV" ) {
     document.body.childNodes[0].remove()
+  }
+
+  pageDefaults = {
+    width : textField.contentDocument.documentElement.offsetWidth,
+    height : textField.contentDocument.documentElement.offsetHeight
   }
 
   // Vars
@@ -526,6 +532,7 @@ document.addEventListener('DOMContentLoaded', function () {
         overflow: hidden;
         word-wrap: break-word;
         height: 100%;
+        position: absolute;
       }
       body{
         caret-color: transparent;
@@ -742,8 +749,8 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function caretUpdate () {
-    cs.top =  (latestLocY + textField.offsetTop + 70 - bodyContent.scrollTop).toFixed() + "px"
-    cs.left = latestLocX + textField.offsetLeft + 70 + "px"
+    cs.top =  (latestLocY + textField.offsetTop - bodyContent.scrollTop).toFixed() + "px"
+    cs.left = latestLocX + textField.offsetLeft + "px"
     cs.height = space + "px"
   }
 
@@ -823,8 +830,8 @@ document.addEventListener('DOMContentLoaded', function () {
     headChecker()
     caretUpdate()
 
-    // 284 && 280 && 270
-    cs.top = (parseInt(cs.top) < 270 - bodyContent.scrollTop) ? 270 - bodyContent.scrollTop : cs.top - bodyContent.scrollTop
+    // 284 && 280 && 270 && 200
+    cs.top = (parseInt(cs.top) < 200 - bodyContent.scrollTop) ? 200 - bodyContent.scrollTop : cs.top - bodyContent.scrollTop
   }, 1)
 
   function getSelectionCoordsPosition (elem) {
@@ -931,6 +938,7 @@ let prev = false
                 : (position == 1)
                   ? (+textField.contentDocument.body.offsetWidth / 2)
                   : textField.contentDocument.body.offsetWidth
+              latestLocX += margins.left
 
             } else if (keys.left || keys.up) {
               negateKeys()
@@ -942,6 +950,7 @@ let prev = false
                 : (position == 1)
                   ? (+textField.contentDocument.body.offsetWidth / 2)
                   : textField.contentDocument.body.offsetWidth
+              latestLocX += margins.left
 
             } else if (keys.backsp && !prev) {
               negateKeys()
@@ -952,6 +961,7 @@ let prev = false
                 : (position == 1)
                   ? (+textField.contentDocument.body.offsetWidth / 2)
                   : textField.contentDocument.body.offsetWidth
+              latestLocX += margins.left
 
             } else if (keys.backsp && prev) {
               negateKeys()
@@ -962,6 +972,7 @@ let prev = false
                 : (position == 1)
                   ? (+textField.contentDocument.body.offsetWidth / 2)
                   : textField.contentDocument.body.offsetWidth
+              latestLocX += margins.left
 
             } else if (keys.click.state && allow) {
               prev = false
@@ -972,6 +983,7 @@ let prev = false
                 : (position == 1)
                   ? (+textField.contentDocument.body.offsetWidth / 2)
                   : textField.contentDocument.body.offsetWidth
+              latestLocX += margins.left
 
             } else {
               prev = false
@@ -982,7 +994,7 @@ let prev = false
     }
   }
   function stickIntoBorders (location) {
-    if (parseInt(cs.top) > textField.contentDocument.body.offsetHeight + textField.offsetTop + 70 - 18) {
+    if (parseInt(cs.top) > textField.contentDocument.body.offsetHeight + textField.offsetTop + margins.top - 18) {
       cs.top = (parseInt(cs.top) - 18) + 'px'
     }
   }
