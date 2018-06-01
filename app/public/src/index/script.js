@@ -140,6 +140,9 @@ function turnLeft () {
     // Animation
       textField.style.transform = 'translate(150%) scale(0.5)'
       textField.style.opacity = 0
+      for (let obj of document.querySelectorAll('.resizer')) {
+        obj.style.opacity = 0
+      }
       setTimeout(function () {
         textField.style.transform = 'translate(-150%) scale(0.5)'
 
@@ -153,6 +156,9 @@ function turnLeft () {
         setTimeout(function () {
           textField.style.transform = 'translate(0) scale(1)'
           textField.style.opacity = 1
+          for (let obj of document.querySelectorAll('.resizer')) {
+            obj.style.opacity = 1
+          }
         }, 150)
       }, 150)
     }
@@ -166,6 +172,9 @@ function turnRight () {
     // Animation
     textField.style.transform = 'translate(-150%) scale(0.5)'
     textField.style.opacity = 0
+    for (let obj of document.querySelectorAll('.resizer')) {
+      obj.style.opacity = 0
+    }
     setTimeout(function () {
       textField.style.transform = 'translate(150%) scale(0.5)'
 
@@ -184,6 +193,9 @@ function turnRight () {
       setTimeout(function () {
         textField.style.transform = 'translate(0) scale(1)'
         textField.style.opacity = 1
+        for (let obj of document.querySelectorAll('.resizer')) {
+          obj.style.opacity = 1
+        }
       }, 150)
     }, 150)
   }
@@ -343,6 +355,18 @@ document.addEventListener('DOMContentLoaded', function () {
   ipcRenderer.on('selected-files', (event, source, name) => {
     try {
       BASE_FILE = JSON.parse(source)
+      if (!BASE_FILE.config || !BASE_FILE.config.margins) {
+        console.log('changed');
+        BASE_FILE.config = {
+          margins : {
+            top : 70,
+            left : 70,
+            right : 70,
+            bottom : 70
+          }
+        }
+      }
+      console.log(BASE_FILE.config.margins);
     } catch (e) {
       BASE_FILE = {
         title: undefined,
@@ -389,6 +413,17 @@ document.addEventListener('DOMContentLoaded', function () {
   var cs = caret.style
 
   space = 19
+
+  textField.contentWindow.addEventListener('keydown', e => {
+    if (e.ctrlKey && e.code == 'KeyS') {
+      PopUp.summon('Nie można zapisać, ponieważ jesteś w trybie pisania.'+
+      ' Wyjdź najpierw z trybu pisania klikając ESC')
+    }
+    if (e.ctrlKey && e.code == 'KeyO') {
+      PopUp.summon('Nie można otworzyć pliku, ponieważ jesteś w trybie pisania.'+
+      ' Wyjdź najpierw z trybu pisania klikając ESC')
+    }
+  })
 
   textField.contentDocument.documentElement.addEventListener('dblclick', caretLastDoubleClick)
 

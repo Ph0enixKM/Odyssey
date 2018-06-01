@@ -14,6 +14,7 @@ window.input = {
   period: false,
   ctrl: false,
   s: false,
+  o: false,
   esc: false,
 }
 
@@ -43,6 +44,9 @@ input.keydown = e => {
       break
     case 83:
       input.s = true
+      break
+    case 79:
+      input.o = true
       break
     case 27:
       input.esc = true
@@ -83,6 +87,12 @@ input.keydown = e => {
       ? false
       : qs('.menubar .bar span')[0].innerHTML
     ipcRenderer.send('quick-save',[path, JSON.stringify(BASE_FILE)])
+  }
+  if (input.o && input.ctrl) {
+    // Negate keys
+    input.ctr = false
+    input.o = false
+    ipcRenderer.send('open-file')
   }
   // Numerical shortcuts
   for (let i = 0; i < input.digits.length; i++) {
@@ -168,6 +178,9 @@ input.keyup = e => {
       break
     case 83:
       input.s = false
+      break
+    case 79:
+      input.o = true
       break
     case 27:
       input.esc = false

@@ -86,7 +86,7 @@ button, input, select, option {
   height: 5px;
   background-color: transparent;
   z-index: 1;
-  transition: background-color 200ms;
+  transition: background-color 200ms, opacity 300ms;
 }
 
 .resizer.left, .resizer.right {
