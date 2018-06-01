@@ -101,14 +101,12 @@ button, input, select, option {
   top: 0%;
   left: 0%;
   content: "";
-  background-color: transparent;
+  background: linear-gradient(transparent, #1a1a1a);
   transition: 300ms;
   opacity: 0.5;
   width: 5px;
-  height: 100vw;
-  transform: translate(-5px, -100%);
-  border-right: 5px dashed rgba(0, 0, 0, 0.3);
-  border-bottom: none;
+  height: 100px;
+  transform: translate(0, -100%);
 }
 
 .resizer.left::after, .resizer.right::after {
@@ -118,24 +116,20 @@ button, input, select, option {
   left: 0%;
   top: 100%;
   content: "";
-  background-color: transparent;
+  background: linear-gradient(0deg, transparent, #1a1a1a);
   transition: 300ms;
   opacity: 0.5;
   width: 5px;
-  height: 100vw;
-  transform: translate(-5px, 0);
-  border-right: 5px dashed rgba(0, 0, 0, 0.3);
-  border-bottom: none;
+  height: 100px;
+  transform: translate(0, 0);
 }
 
 .resizer.left:hover::before, .resizer.right:hover::before {
-  border-right: 5px dashed #9b4100;
-  border-bottom: none;
+  background: linear-gradient(transparent, #9b4100);
 }
 
 .resizer.left:hover::after, .resizer.right:hover::after {
-  border-right: 5px dashed #9b4100;
-  border-bottom: none;
+  background: linear-gradient(0deg, transparent, #9b4100);
 }
 
 .resizer::before {
@@ -144,12 +138,10 @@ button, input, select, option {
   z-index: -5;
   left: 100%;
   content: "";
-  width: 100vw;
+  width: 100px;
   height: 5px;
-  transform: translate(0, -5px);
-  background-color: transparent;
+  background: linear-gradient(-90deg, transparent, #1a1a1a);
   transition: 300ms;
-  border-bottom: 5px dashed rgba(0, 0, 0, 0.3);
   opacity: 0.5;
 }
 
@@ -159,12 +151,11 @@ button, input, select, option {
   z-index: -5;
   left: 0;
   content: "";
-  width: 100vw;
+  width: 100px;
   height: 5px;
-  transform: translate(-100%, -5px);
-  background-color: transparent;
+  transform: translate(-100%, 0);
+  background: linear-gradient(90deg, transparent, #1a1a1a);
   transition: 300ms;
-  border-bottom: 5px dashed rgba(0, 0, 0, 0.3);
   opacity: 0.5;
 }
 
@@ -173,11 +164,11 @@ button, input, select, option {
 }
 
 .resizer:hover::before {
-  border-bottom: 5px dashed #9b4100;
+  background: linear-gradient(-90deg, transparent, #9b4100);
 }
 
 .resizer:hover::after {
-  border-bottom: 5px dashed #9b4100;
+  background: linear-gradient(90deg, transparent, #9b4100);
 }
 
 .iframe {

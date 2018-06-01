@@ -62,7 +62,14 @@ window.BASE_FILE = {
   book: [
     ['Prolog', [] ]
   ],
-  config: []
+  config: {
+    margins : {
+      top : 70,
+      left : 70,
+      right : 70,
+      bottom : 70
+    }
+  }
 }
 window.clearTemplate = JSON.parse(JSON.stringify(BASE_FILE))
 
@@ -208,7 +215,6 @@ let caretToEnd = () => {
     range.selectNodeContents(textField.contentDocument.querySelector('end'))
     selection.removeAllRanges()
     selection.addRange(range)
-    // TODO: gimme a sec
     range.collapse(true)
     let rects = range.getClientRects()
     if (rects.length > 0) {
@@ -345,7 +351,14 @@ document.addEventListener('DOMContentLoaded', function () {
         book: [
         ['Prolog', [source] ]
         ],
-        config: []
+        config: {
+          margins : {
+            top : 70,
+            left : 70,
+            right : 70,
+            bottom : 70
+          }
+        }
       }
     } finally {
       qs('.bar span')[0].textContent = (name == null)
@@ -365,6 +378,8 @@ document.addEventListener('DOMContentLoaded', function () {
       qs('#all-keys p')[0].innerHTML = BASE_FILE.keywords.length
       qs('input#title')[0].value = (BASE_FILE.title != undefined) ? BASE_FILE.title : ''
       qs('input#author')[0].value = (BASE_FILE.author != undefined) ? BASE_FILE.author : ''
+      margins = BASE_FILE.config.margins
+      resizer.apply()
     }
   })
 
@@ -1008,7 +1023,6 @@ let prev = false
   }
 
   function restrictionsOptimal (wordSize) {
-    console.log(true);
   // Sprawdź, czy skończył poprawiać
     prevCheck = true
     restOf = str.slice(str.length - wordSize, str.length) + restOf
@@ -1024,7 +1038,6 @@ let prev = false
   function restrictions () {
     let html = textField.contentDocument.documentElement
     if (!restrictions_start && textField.contentDocument.body.offsetHeight > html.offsetHeight) {
-      console.log('start');
       str = textField.contentDocument.body.innerHTML
       restrictions_start = true
     } else if (textField.contentDocument.body.offsetHeight <= html.offsetHeight) {
@@ -1056,6 +1069,9 @@ let prev = false
       prevCheck = false
       autosaveF()
       setTimeout(() => {
+        restOf = restOf[restOf.length - 1] == '>'
+          ? restOf.slice(0,restOf.length-1)
+          : restOf
         pages.splice(curPage + 1, 0, restOf)
         restOf = ''
         turnRight()

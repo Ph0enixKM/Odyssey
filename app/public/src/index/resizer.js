@@ -22,21 +22,18 @@ window.resizer = {
 
 resizer.update = () => {
   // Top
-  resizer.top.style.top = textField.offsetTop - resizer.body.scrollTop + margins.top + "px"
+  resizer.top.style.top = textField.offsetTop - resizer.body.scrollTop + margins.top + 2.5 + "px"
   resizer.top.style.left = textField.offsetLeft + "px"
-  resizer.top.style.transform = 'translate(0,-5px)'
   // Left
   resizer.left.style.top = textField.offsetTop - resizer.body.scrollTop - margins.top + "px"
-  resizer.left.style.left = textField.offsetLeft + margins.left + "px"
-  resizer.left.style.transform = 'translate(-5px, 0)'
+  resizer.left.style.left = textField.offsetLeft + margins.left + 2.5 + "px"
   resizer.left.style.marginTop = margins.top
   // Right
   resizer.right.style.top = textField.offsetTop - resizer.body.scrollTop - margins.top + "px"
-  resizer.right.style.left = textField.offsetLeft + textField.offsetWidth - margins.right - 5 + "px"
-  resizer.right.style.transform = 'translate(5px, 0)'
+  resizer.right.style.left = textField.offsetLeft + textField.offsetWidth - margins.right - 2.5 + "px"
   resizer.right.style.marginTop = margins.top
   // Bottom
-  resizer.bottom.style.top = textField.offsetTop + textField.offsetHeight - resizer.body.scrollTop - margins.bottom + "px"
+  resizer.bottom.style.top = textField.offsetTop + textField.offsetHeight - resizer.body.scrollTop - margins.bottom - 2.5 + "px"
   resizer.bottom.style.left = textField.offsetLeft + "px"
 }
 resizer.apply = () => {
@@ -62,8 +59,12 @@ resizer.apply = () => {
   html.style.width = pageDefaults.width - (margins.left + margins.right) + 'px'
   html.style.left = margins.left + 'px'
 
+  // TODO: Update BASE_FILE config
+  BASE_FILE.config.margins = margins
+
   resizer.update()
 }
+// On load Stuff
 window.onload = () => {
   resizer.update()
   resizer.apply()
