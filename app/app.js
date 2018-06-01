@@ -173,7 +173,7 @@ app.on('ready', () => {
     height,
     frame: false,
     show: false,
-    icon:  __dirname + '/assets/icons/logo2.png',
+    icon:  __dirname + '/assets/icons/logo.png',
     opacity: 1
   })
   // win.toggleDevTools()
