@@ -227,6 +227,10 @@ button, input, select, option {
   vertical-align: middle;
 }
 
+.iframe #iframe iframe[name="clone"] {
+  background-color: #333;
+}
+
 .iframe #sizer {
   display: inline-block;
   width: 20px;

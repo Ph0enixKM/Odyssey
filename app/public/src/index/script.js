@@ -911,6 +911,7 @@ let prev = false
         if (range.getClientRects) {
           range.collapse(true)
           rects = range.getClientRects()
+          let documentHeight = textField.contentDocument.body.offsetHeight
           if (rects.length > 0) {
             rect = rects[0]
             latestLocY = getLatestCoordsY = rect.top
@@ -928,9 +929,10 @@ let prev = false
 
             if (keys.enter || keys.down || keys.right) {
               prev = false
-              // if (keys.down) console.log(true)
               latestLocY = getLatestCoordsY + space
-              let documentHeight = textField.contentDocument.body.offsetHeight
+              if ((keys.down || keys.right) && latestLocY > margins.top + documentHeight - space) {
+                latestLocY = getLatestCoordsY
+              }
               negateKeys()
               getLatestCoordsY = latestLocY
               latestLocX = (position == 0)
@@ -944,6 +946,9 @@ let prev = false
               negateKeys()
               prev = false
               latestLocY = getLatestCoordsY - space
+              if (latestLocY < margins.top) {
+                latestLocY = getLatestCoordsY
+              }
               getLatestCoordsY = latestLocY
               latestLocX = (position == 0)
                 ? 0
@@ -955,6 +960,9 @@ let prev = false
             } else if (keys.backsp && !prev) {
               negateKeys()
               latestLocY = getLatestCoordsY - space
+              if (latestLocY < margins.top) {
+                latestLocY = getLatestCoordsY
+              }
               getLatestCoordsY = latestLocY
               latestLocX = (position == 0)
                 ? 0
