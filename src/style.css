@@ -1,0 +1,49 @@
+body {
+  background-color: #333;
+}
+
+h1#welcome1 {
+  font-size: 50px;
+  color: white;
+  font-family: Lato;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  user-select: none;
+  text-align: center;
+  opacity: 0;
+  animation: welcome 3s;
+  animation-timing-function: ease-in-out;
+}
+
+div#cont {
+  opacity: 0;
+  transform: translate(0, 10vh);
+  transition: opacity 700ms, transform 700ms;
+}
+
+div#cont h2#welcome2 {
+  color: white;
+  font-family: Lato;
+  text-align: center;
+}
+
+@font-face {
+  src: url("src/lato.tff");
+}
+
+@keyframes welcome {
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
