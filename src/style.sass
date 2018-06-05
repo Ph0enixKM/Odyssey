@@ -1,5 +1,7 @@
 body
   background-color: #333
+  margin: 0
+  overflow-x: hidden
 
 h1#welcome1
   font-size: 50px
@@ -18,10 +20,83 @@ div#cont
   opacity: 0
   transform: translate(0,10vh)
   transition: opacity 700ms, transform 700ms
-  h2#welcome2
-    color: white
+  perspective: 1000px
+  text-align: center
+  position: relative
+  top: 90px
+  div.flex
+    display: flex
+    div#download
+      text-align: center
+      font-size: 20px
+      color: white
+      font-family: Lato
+      text-align: center
+      margin-bottom: 100px
+      flex: 1
+      vertical-align: middle
+      user-select: none
+      div
+        display: inline-block
+        position: relative
+        top: 50%
+        transform: translate(0,-50%)
+      button
+        background-color: #222
+        border: 1px solid #2a2a2a
+        color: white
+        padding: 25px
+        font-size: 25px
+        border-radius: 15px
+        cursor: pointer
+        transition: 300ms
+        outline: none
+        user-select: none
+        &:hover
+          background-color: #2a2a2a
+          box-shadow: 10px 0 0 #222, -10px 0 0 #222
+        span
+          vertical-align: middle
+          font-weight: 100
+        img
+          vertical-align: middle
+          width: 25px
+          height: 25px
+          margin-left: 10px
+    img#odyssey
+      vertical-align: middle
+      flex: 1
+      margin-top: 100px
+      display: inline-block
+      width: 90vh
+      height: 80vh
+      position: relative
+      z-index: 2
+      // left: 100%
+      transform: rotateY(10deg) rotateX(00deg) translate(25%,0)
+      box-shadow: -0px -0px 25px #1a1a1a, -50px -50px 15px #2a2a2a
+header
+  background-color: #2a2a2a
+  text-align: center
+  position: fixed
+  width: 100%
+  position: absolute
+  top: 0px
+  left: 0px
+  z-index: 10
+  img
+    display: inline-block
+    width: 75px
+    height: 75px
+    vertical-align: middle
+  p
+    display: inline-block
+    vertical-align: middle
     font-family: Lato
-    text-align: center
+    font-size: 50px
+    color: #aaa
+    margin: 15px 0 15px 0
+    user-select: none
 
 
 @font-face

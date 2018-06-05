@@ -1,15 +1,29 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="pl">
   <head>
     <meta charset="utf-8">
     <title></title>
     <link rel="stylesheet" href="src/style.css">
   </head>
-  <body>
-    <h1 id="welcome1">Witaj w Odysei</h1>
+  <body draggable="false" ondragstart="return false">
+    <h1 id="welcome1">Witaj przybyszu...</h1>
+    <header>
+      <img src="images/logo.png">
+      <p>Odyseja</p>
+    </header>
     <div id="cont">
-      <h2 id="welcome2">Nowy, Darmowy, Odjechany...</h2>
-      <h2 id="welcome2">Edytor Tekstu</h2>
+      <div class="flex">
+        <div id="download">
+          <div>
+            <h2>Wersja Alpha 1.3.1</h2>
+            <button onclick="location.href = 'https://github.com/Ph0enixKM/Odyssey/releases/download/1.3.1/Odyssey.1.3.1.rar'">
+              <span>Pobierz</span>
+              <img src="images/download.png">
+            </button>
+          </div>
+        </div>
+        <img src="images/odyssey.png" id="odyssey">
+      </div>
     </div>
     <script src="src/script.js" charset="utf-8"></script>
   </body>
