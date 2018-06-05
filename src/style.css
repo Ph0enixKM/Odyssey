@@ -6,6 +6,7 @@ body {
 
 h1#welcome1 {
   font-size: 50px;
+  font-weight: 100;
   color: white;
   font-family: Lato;
   position: absolute;
@@ -27,6 +28,7 @@ div#cont {
   text-align: center;
   position: relative;
   top: 90px;
+  font-weight: 100;
 }
 
 div#cont div.flex {
@@ -43,6 +45,7 @@ div#cont div.flex div#download {
   flex: 1;
   vertical-align: middle;
   user-select: none;
+  font-weight: 100;
 }
 
 div#cont div.flex div#download div {
@@ -117,6 +120,7 @@ header p {
   display: inline-block;
   vertical-align: middle;
   font-family: Lato;
+  font-weight: 100;
   font-size: 50px;
   color: #aaa;
   margin: 15px 0 15px 0;
