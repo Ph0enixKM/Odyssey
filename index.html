@@ -7,23 +7,57 @@
     <link rel="stylesheet" href="src/style.css">
   </head>
   <body draggable="false" ondragstart="return false">
-    <h1 id="welcome1">Witaj przybyszu...</h1>
     <header>
       <img src="images/logo.png">
       <p>Odyseja</p>
     </header>
+
     <div id="cont">
-      <div class="flex">
-        <div id="download">
+      <div id="bg"></div>
+      <div id="content">
+
+        <h1 id="title">Edytor tekstu stworzony specjalnie dla twojej wygody pisania</h1>
+
+        <div class="light top">
+          <h2 id="download">Wersja 1.3.1 <d>(αlpha)</d></h2>
+          <button id="download" onclick="location.href = 'https://github.com/Ph0enixKM/Odyssey/releases/download/1.3.1/Odyssey.1.3.1.rar'">
+            Pobierz
+            <!-- <img src="images/download.png"> -->
+            <img src="images/windows.png">
+          </button>
+        </div>
+        <div class="dark">
           <div>
-            <h2>Wersja Alpha 1.3.1</h2>
-            <button onclick="location.href = 'https://github.com/Ph0enixKM/Odyssey/releases/download/1.3.1/Odyssey.1.3.1.rar'">
-              <span>Pobierz</span>
-              <img src="images/download.png">
-            </button>
+            <h1 id="title">Przejdź na ciemną stronę mocy</h1>
+            <br>
+            <img src="images/darkTheme.png" class="mini">
+          </div>
+
+          <div class="top">
+            <h1 id="title">Manipuluj stronami w taki sposób jakby to była kartka papieru</h1>
+            <br>
+            <img src="images/pages.png" class="mini">
+          </div>
+
+          <div class="top">
+            <h1 id="title">Ciesz się własnym edytorem tekstu, za którego nie musisz nic płacić</h1>
+            <br>
+            <img src="images/laur.png" class="mini">
           </div>
         </div>
-        <img src="images/odyssey.png" id="odyssey">
+
+        <h1 id="title"> Kontakt w razie problemów i bugów</h1>
+        <side id="contact" class="bottom">
+          <div>
+            <img id="contact" src="images/profilowe.jpg">
+          </div>
+
+          <div>
+            <h3><d>Email:</d> pkaras.it@gmail.com</h2>
+            <h3><d>Facebook:</d> facebook.com/Ph0enixArts/</h2>
+          </div>
+        </side>
+
       </div>
     </div>
     <script src="src/script.js" charset="utf-8"></script>

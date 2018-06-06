@@ -2,91 +2,109 @@ body
   background-color: #333
   margin: 0
   overflow-x: hidden
-
-h1#welcome1
-  font-size: 50px
-  font-weight: 100
-  color: white
-  font-family: Lato
-  position: absolute
-  top: 50%
-  left: 50%
-  transform: translate(-50%,-50%)
   user-select: none
-  text-align: center
-  opacity: 0
-  animation: welcome 3s
-  animation-timing-function: ease-in-out
-div#cont
-  opacity: 0
-  transform: translate(0,10vh)
-  transition: opacity 700ms, transform 700ms
-  perspective: 1000px
-  text-align: center
-  position: relative
-  top: 90px
-  font-weight: 100
-  div.flex
-    display: flex
-    div#download
-      text-align: center
-      font-size: 20px
-      color: white
-      font-family: Lato
-      text-align: center
-      margin-bottom: 100px
-      flex: 1
-      vertical-align: middle
-      user-select: none
-      font-weight: 100
-      div
-        display: inline-block
-        position: relative
-        top: 50%
-        transform: translate(0,-50%)
-      button
-        background-color: #222
-        border: 1px solid #2a2a2a
-        color: white
-        padding: 25px
-        font-size: 25px
-        border-radius: 15px
-        cursor: pointer
-        transition: 300ms
-        outline: none
-        user-select: none
-        &:hover
-          background-color: #2a2a2a
-          box-shadow: 10px 0 0 #222, -10px 0 0 #222
-        span
-          vertical-align: middle
-          font-weight: 100
-        img
-          vertical-align: middle
-          width: 25px
-          height: 25px
-          margin-left: 10px
-    img#odyssey
-      vertical-align: middle
-      flex: 1
-      margin-top: 100px
+
+d
+  color: #222
+
+side
+  display: flex
+  div
+    flex: 1
+  &#contact
+    align-items: center
+    margin-top: 50px
+    position: relative
+    left: 50%
+    transform: translate(-50%,0)
+    width: 50vw
+    h3
+      margin-left: 30px
+  img#contact
+    border-radius: 50%
+    width: 100px
+.light
+  padding-top: 50px
+  padding-bottom: 50px
+  background-color: #444
+.dark
+  padding-top: 50px
+  padding-bottom: 50px
+  background-color: #222
+
+.mini
+  margin-top: 10px
+  margin-bottom: 10px
+  width: 30vw
+  border-radius: 25px
+
+.top
+  margin-top: 50px
+.bottom
+  margin-bottom: 50px
+
+#cont
+  #bg
+    display: inline-block
+    width: 100vw
+    height: 100vh
+    position: fixed
+    top: 0px
+    left: 0px
+    z-index: 0
+    background-size: cover
+    background-position: center center
+    background-image: url('../images/odyssey.png')
+  #content
+    font-weight: 100
+    position: relative
+    top: 100vh
+    z-index: 2
+    width: 100vw
+    height: 100%
+    background-color: #333
+    color: #ddd
+    font-family: Lato, Verdana, sans-serif
+    text-align: center
+    h1#title
       display: inline-block
-      width: 90vh
-      height: 80vh
-      position: relative
-      z-index: 2
-      // left: 100%
-      transform: rotateY(10deg) rotateX(00deg) translate(25%,0)
-      box-shadow: -0px -0px 25px #1a1a1a, -50px -50px 15px #2a2a2a
+      margin: 30px 30px 0 30px
+      padding: 10px
+      border-bottom: 4px #222 dashed
+    h2#download
+      font-size: 40px
+    button#download
+      color: white
+      border: none
+      background-color: #222
+      font-size: 25px
+      font-family: Lato, Verdana, sans-serif
+      font-weight: 100
+      padding: 20px
+      border-radius: 10px
+      transition: 300ms
+      cursor: pointer
+      box-shadow: 0 5px 20px #111
+      outline: none
+      vertical-align: middle
+      img
+        vertical-align: middle
+        margin-left: 10px
+        height: 25px
+      &:hover
+        box-shadow: 10px 0 #2a2a2a, -10px 0 #2a2a2a, 0 5px 20px #111, 10px 5px 20px #111, -10px 5px 20px #111
+
+
 header
   background-color: #2a2a2a
   text-align: center
   position: fixed
   width: 100%
-  position: absolute
   top: 0px
   left: 0px
   z-index: 10
+  box-shadow: 0 0 25px black
+  font-weight: 100
   img
     display: inline-block
     width: 75px
@@ -95,7 +113,7 @@ header
   p
     display: inline-block
     vertical-align: middle
-    font-family: Lato
+    font-family: Lato, Verdana, sans-serif
     font-weight: 100
     font-size: 50px
     color: #aaa
@@ -104,14 +122,9 @@ header
 
 
 @font-face
-  src: url("src/lato.tff")
+  font-family: Lato
+  src: url('lato.ttf')
 
-@keyframes welcome
-  0%
-    opacity: 0
-  25%
-    opacity: 1
-  75%
-    opacity: 1
-  100%
-    opacity: 0
+@font-face
+  font-family: Riffic
+  src: url('riffic.ttf')
