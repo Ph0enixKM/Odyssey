@@ -29,10 +29,11 @@ d3 {
 
 .havana {
   font-family: Havana !important;
+  font-size: 40px;
 }
 
-d1.havana {
-  font-size: 40px;
+.footer {
+  font-size: 18px;
 }
 
 copy {

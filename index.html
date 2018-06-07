@@ -9,7 +9,7 @@
   <body draggable="false" ondragstart="return false">
     <header>
       <img src="images/logo.png">
-      <p>Odyseja</p>
+      <p id="label">Odyseja</p>
     </header>
 
     <div id="cont">
@@ -21,31 +21,31 @@
         <div class="light top">
           <d2 id="download">Wersja 1.3.1 <d>(αlpha)</d></d2>
           <button id="download" onclick="location.href = 'https://github.com/Ph0enixKM/Odyssey/releases/download/1.3.1/Odyssey.1.3.1.rar'">
-            Pobierz
+            <span>Pobierz</span>
             <img src="images/windows.png">
           </button>
         </div>
         <div class="dark">
           <div>
-            <d1 id="title">Przejdź na ciemną stronę mocy, ciemny layout nie będzie męczyć twoich oczu</d1>
+            <d1 id="title" uno>Przejdź na ciemną stronę mocy, ciemny layout nie będzie męczyć twoich oczu</d1>
             <br>
             <img src="images/darkTheme.png" class="mini">
           </div>
 
           <div class="top">
-            <d1 id="title">Manipuluj stronami w taki sposób jakby to była kartka papieru</d1>
+            <d1 id="title" dos>Manipuluj stronami w taki sposób jakby to była kartka papieru</d1>
             <br>
             <img src="images/pages.png" class="mini">
           </div>
 
           <div class="top">
-            <d1 id="title">Ciesz się własnym edytorem tekstu, za którego nie musisz nic płacić</d1>
+            <d1 id="title" tres>Ciesz się własnym edytorem tekstu, za którego nie musisz nic płacić</d1>
             <br>
             <img src="images/laur.png" class="mini">
           </div>
         </div>
 
-        <d1 id="title" class="havana"> Kontakt w razie problemów i bugów</d1>
+        <d1 id="title" class="havana">Kontakt w razie problemów i bugów</d1>
         <side id="contact" class="bottom">
           <div>
             <img id="contact" src="images/profilowe.jpg">
@@ -58,11 +58,12 @@
         </side>
 
         <div class="light top">
-          <d3>Copyright © Wszelkie prawa zastrzeżone</d3>
+          <d3 class="footer">Copyright © Wszelkie prawa zastrzeżone</d3>
         </div>
 
       </div>
     </div>
+    <script src="src/english.js" charset="utf-8"></script>
     <script src="src/script.js" charset="utf-8"></script>
   </body>
 </html>
