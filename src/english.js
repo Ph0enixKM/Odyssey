@@ -6,7 +6,7 @@ const english = () => {
   }
 
   html('#label','Odyssey')
-  html('#title','A text editor created especially for your writing comfort')
+  html('#title','A text editor created especially for your writing <b>comfort</b>')
   qs('#download').innerHTML.split(' ').forEach((item, key) => {
     if (key != 0) ver += item + ' '
   })
