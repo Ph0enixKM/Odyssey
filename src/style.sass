@@ -4,7 +4,6 @@ body
   overflow-x: hidden
   user-select: none
 
-
 d
   color: #111
 d1
@@ -19,6 +18,23 @@ d3
   display: block
   font-size: 18px
   margin: 10px
+
+.havana
+  font-family: Havana !important
+d1.havana
+  font-size: 40px
+
+copy
+  user-select: text
+  &[onclick]
+    cursor: pointer
+    transition: 300ms
+    border-bottom: 3px dashed transparent
+    &:hover
+      border-bottom: 3px dashed #aaa
+  &::selection
+    background-color: rgba(250,120,0,0.5)
+    color: white
 
 side
   display: flex
@@ -77,7 +93,7 @@ side
     height: 100%
     background-color: #333
     color: #ddd
-    font-family: Lato, Verdana, sans-serif
+    font-family: Custom, Verdana, sans-serif
     text-align: center
     d1#title
       display: inline-block
@@ -91,7 +107,7 @@ side
       border: none
       background-color: #222
       font-size: 25px
-      font-family: Lato, Verdana, sans-serif
+      font-family: Custom, Verdana, sans-serif
       font-weight: 100
       padding: 20px
       border-radius: 10px
@@ -126,7 +142,7 @@ header
   p
     display: inline-block
     vertical-align: middle
-    font-family: Lato, Verdana, sans-serif
+    font-family: Custom, Verdana, sans-serif
     font-weight: 100
     font-size: 50px
     color: #aaa
@@ -135,9 +151,9 @@ header
 
 
 @font-face
-  font-family: Lato
+  font-family: Custom
   src: url('lato.ttf')
 
 @font-face
-  font-family: Riffic
-  src: url('riffic.ttf')
+  font-family: Havana
+  src: url('havana.ttf')

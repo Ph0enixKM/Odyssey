@@ -1,7 +1,3 @@
-node_modules/
-*.rar
-Odyssey-win32-x64/
-Odyssey-linux-x64/
-Odyssey-linux-ia32/
-notImportant/
+node_modules
+
 out/
