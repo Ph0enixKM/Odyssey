@@ -578,7 +578,7 @@ document.addEventListener('DOMContentLoaded', function () {
       }
       @font-face{
         font-family: Lato;
-        src: url("lato.ttf");
+        src: url("arts/lato.ttf");
       }
       html{
         overflow: hidden;
@@ -601,7 +601,7 @@ document.addEventListener('DOMContentLoaded', function () {
         border: 1px orange solid;
       }
     </style>
-    <link href="bin/toolbar.css" rel="stylesheet">
+    <link href="bin/css/toolbar.css" rel="stylesheet">
     `
   }
 
@@ -1167,11 +1167,54 @@ let prev = false
     }
   }
 
+  function fontSizeTextToNumber (name) {
+    switch (name) {
+      case 'xx-small':
+        return 1
+        break
+      case 'x-small':
+        return 2
+        break
+      case 'small':
+        return 3
+        break
+      case 'medium':
+        return 4
+        break
+      case 'large':
+        return 5
+        break
+      case 'x-large':
+        return 6
+        break
+      case 'xx-large':
+        return 7
+        break
+      default:
+        return name
+        break
+    }
+  }
+
   function fontIterator (selEl) {
     if (selEl == null || (selEl.tagName && selEl.tagName == "BODY")){
       return 'Lato'
     } else if (selEl.face && selEl.face != undefined) {
       return selEl.face
+    } else if (selEl.style.fontFamily && selEl.style.fontFamily != '') {
+      return selEl.style.fontFamily
+    } else {
+      return fontIterator(selEl.parentElement)
+    }
+  }
+
+  function sizeIterator (selEl) {
+    if (selEl == null || (selEl.tagName && selEl.tagName == "BODY")){
+      return 3
+    } else if (selEl.size && selEl.size != undefined) {
+      return selEl.size
+    } else if (selEl.style.fontSize && selEl.style.fontSize != '') {
+      return fontSizeTextToNumber(selEl.style.fontSize)
     } else {
       return fontIterator(selEl.parentElement)
     }
@@ -1184,23 +1227,25 @@ let prev = false
       fonts.value = fontIterator(selEl)
 
     // TagNames must be CAPITAL // TODO: Clean it up and make size to be a INPUT number
-      if (selEl.tagName == 'FONT') {
-        fontSizeReader(selEl.size)
-      } else if (selEl.tagName == 'B' || selEl.tagName == 'U' ||
-              selEl.tagName == 'I' || selEl.tagName == 'SPAN') {
-        if (selEl.parentNode.tagName == 'FONT') {
-          fontSizeReader(selEl.parentNode.size)
-        } else if (selEl.parentNode.tagName == 'B' ||
-                 selEl.parentNode.tagName == 'U' ||
-                 selEl.parentNode.tagName == 'I' ||
-                 selEl.parentNode.tagName == 'SPAN') {
-          fontSizeReader(selEl.parentNode.parentNode.size)
-        }
-      } else {
-        space = 18
-        fontSizes.value = 3
-        fonts.value = 'Lato'
-      }
+      // if (selEl.tagName == 'FONT') {
+      //   fontSizeReader(selEl.size)
+      // } else if (selEl.tagName == 'B' || selEl.tagName == 'U' ||
+      //         selEl.tagName == 'I' || selEl.tagName == 'SPAN') {
+      //   if (selEl.parentNode.tagName == 'FONT') {
+      //     fontSizeReader(selEl.parentNode.size)
+      //   } else if (selEl.parentNode.tagName == 'B' ||
+      //            selEl.parentNode.tagName == 'U' ||
+      //            selEl.parentNode.tagName == 'I' ||
+      //            selEl.parentNode.tagName == 'SPAN') {
+      //     fontSizeReader(selEl.parentNode.parentNode.size)
+      //   }
+      // } else {
+      //   space = 18
+      //   fontSizes.value = 3
+      //   fonts.value = 'Lato'
+      // }
+      console.log(sizeIterator(selEl));
+      fontSizeReader(sizeIterator(selEl))
     } catch (e) {
     // Do not do anything
     }
