@@ -6,7 +6,25 @@ body {
 }
 
 d {
-  color: #222;
+  color: #111;
+}
+
+d1 {
+  display: block;
+  font-size: 30px;
+  margin: 30px;
+}
+
+d2 {
+  display: block;
+  font-size: 24px;
+  margin: 20px;
+}
+
+d3 {
+  display: block;
+  font-size: 18px;
+  margin: 10px;
 }
 
 side {
@@ -26,7 +44,7 @@ side#contact {
   width: 50vw;
 }
 
-side#contact h3 {
+side#contact d3 {
   margin-left: 30px;
 }
 
@@ -88,14 +106,14 @@ side img#contact {
   text-align: center;
 }
 
-#cont #content h1#title {
+#cont #content d1#title {
   display: inline-block;
   margin: 30px 30px 0 30px;
   padding: 10px;
   border-bottom: 4px #222 dashed;
 }
 
-#cont #content h2#download {
+#cont #content d2#download {
   font-size: 40px;
 }
 
