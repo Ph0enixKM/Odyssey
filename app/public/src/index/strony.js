@@ -59,7 +59,7 @@ window.printReq = {
 }
 
 printReq.btn.addEventListener('click',()=>{
-  ipcRenderer.send('print',pages)
+  ipcRenderer.send('print',{pages,margins})
 })
 printReq.printView.addEventListener('click',()=>{
   printReq.printViewState = !printReq.printViewState

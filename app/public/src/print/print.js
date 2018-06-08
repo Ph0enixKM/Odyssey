@@ -14,7 +14,21 @@ window.addEventListener('keydown', e => {
 ipcRenderer.on('print-request', (event, src, silent) => {
     let i = 0
     let win = remote.getCurrentWindow()
-    for (let page of src) {
+    // document.head.innerHTML +=
+    let style = document.createElement('style')
+    // FIXME: Change paddings to real element inside
+    style.innerHTML = `
+    article{
+      padding-top: ${src.margins.top}px;
+      padding-bottom: ${src.margins.bottom}px;
+      padding-left: ${src.margins.left}px;
+      padding-right: ${src.margins.right}px;
+    }
+    `
+    console.log(style.innerHTML);
+    document.head.appendChild(style)
+
+    for (let page of src.pages) {
       document.body.innerHTML += `
         <article>
           ${page}

@@ -4,7 +4,6 @@
     fonts  : undefined,
     fontSizes  : undefined,
     textField  : undefined,
-    str  : undefined,
     rest  : undefined,
     pages  : undefined,
     left  : undefined,
@@ -36,7 +35,9 @@
     curChapter : 0,
     autobackup : true,
     prevCheck : false,
-    restOf : ''
+    restOf : '',
+    str  : '',
+    prevBounds : null
   })
 })()
 
@@ -1057,78 +1058,42 @@ let prev = false
     }
   }
 
-  function restrictionsOptimal (wordSize) {
-  // Sprawdź, czy skończył poprawiać
-    prevCheck = true
-    restOf = str.slice(str.length - wordSize, str.length) + restOf
-    // Otherwise delete the last character
-    textField.contentDocument.body.innerHTML = str.slice(0, -wordSize)
-    str = str.slice(0, -wordSize)
-    return str
-  // }
-  // textContent
-  }
-
-  let restrictions_start = false
   function restrictions () {
+    let prevLetters = sbLetters
+    let content = textField.contentDocument.body
     let html = textField.contentDocument.documentElement
-    if (!restrictions_start && textField.contentDocument.body.offsetHeight > html.offsetHeight) {
-      str = textField.contentDocument.body.innerHTML
-      restrictions_start = true
-    } else if (textField.contentDocument.body.offsetHeight <= html.offsetHeight) {
-      restrictions_start = false
+
+    if (content.offsetHeight > (html.offsetHeight)) {
+      decreaseBounds(1)
+    }
+    else if (prevBounds && !merge.invoked) {
+      autosaveF()
+      prevBounds = false
+      setTimeout(() => {
+        pages.splice(curPage + 1, 0, restOf)
+
+        if (!merge.invoked) turnRight()
+        else { // Turn Page seemlessly
+          curPage++
+          textField.contentDocument.body.innerHTML = (pages[curPage] == undefined) ? '' : pages[curPage]
+        }
+        restOf = ''
+      },100)
+    } else if (merge.invoked && sbLetters == prevLetters) {
+      merge.finished = true
+      merge.invoked = false
     }
 
-    let prevLetters = sbLetters
-
-  // 3 słowa przypadają na 1 pixel
-    if (textField.contentDocument.body.offsetHeight > html.offsetHeight+10000) {
-      str = restrictionsOptimal(25000)
-    } else if (textField.contentDocument.body.offsetHeight > html.offsetHeight+5000) {
-      str = restrictionsOptimal(10000)
-    } else if (textField.contentDocument.body.offsetHeight > html.offsetHeight+2000) {
-      str = restrictionsOptimal(5000)
-    } else if (textField.contentDocument.body.offsetHeight > html.offsetHeight+1000) {
-      str = restrictionsOptimal(3000)
-    } else if (textField.contentDocument.body.offsetHeight > html.offsetHeight+500) {
-      str = restrictionsOptimal(2000)
-    } else if (textField.contentDocument.body.offsetHeight > html.offsetHeight+200) {
-      str = restrictionsOptimal(1700)
-    } else if (textField.contentDocument.body.offsetHeight > html.offsetHeight+100) {
-      str = restrictionsOptimal(1500)
-    } else if (textField.contentDocument.body.offsetHeight > html.offsetHeight+50) {
-      str = restrictionsOptimal(10)
-    } else if (textField.contentDocument.body.offsetHeight > html.offsetHeight) {
-      str = restrictionsOptimal(1)
-    } else if (prevCheck && !merge.invoked) {
-      prevCheck = false
-      autosaveF()
-      setTimeout(() => {
-        restOf = restOf[restOf.length - 1] == '>'
-          ? restOf.slice(0,restOf.length-1)
-          : restOf
-        pages.splice(curPage + 1, 0, restOf)
-        restOf = ''
-        turnRight()
-      }, 100)
-    } else if (prevCheck && merge.invoked) {
-      prevCheck = false
-
-      pages[curPage] = textField.contentDocument.body.innerHTML // Autosave
-      pages.splice(curPage + 1, 0, restOf)
-      restOf = ''
-      // Turn Right
-      curPage++
-      textField.contentDocument.body.innerHTML = (pages[curPage] == undefined) ? '' : pages[curPage]
-    } else {
-      if (merge.invoked) {
-        if (sbLetters == prevLetters) {
-          merge.finished = true
-          merge.invoked = false
-        }
-      }
+    function decreaseBounds(number) {
+      if (!prevBounds) str = content.innerHTML
+      prevBounds = true
+      restOf = str
+        .slice(str.length-1-number,str.length-1) + restOf
+      str = str.slice(0,-number)
+      content.innerHTML = str
     }
   }
+
 
   function fontSizeReader (elem) {
     switch (elem) {
@@ -1244,7 +1209,7 @@ let prev = false
       //   fontSizes.value = 3
       //   fonts.value = 'Lato'
       // }
-      console.log(sizeIterator(selEl));
+      // console.log(sizeIterator(selEl));
       fontSizeReader(sizeIterator(selEl))
     } catch (e) {
     // Do not do anything

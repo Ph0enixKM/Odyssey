@@ -87,11 +87,13 @@ button, input, select, option {
   background-color: transparent;
   z-index: 1;
   transition: background-color 200ms, opacity 300ms;
+  transform: translate(0, -5px);
 }
 
 .resizer.left, .resizer.right {
   width: 5px;
   height: 297mm;
+  transform: translate(-5px, 0);
 }
 
 .resizer.left::before, .resizer.right::before {

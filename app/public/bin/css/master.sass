@@ -79,9 +79,11 @@ button,input,select,option
   background-color: transparent
   z-index: 1
   transition: background-color 200ms, opacity 300ms
+  transform: translate(0,-5px)
   &.left, &.right
     width: 5px
     height: 297mm
+    transform: translate(-5px,0)
     &::before
       display: inline-block
       position: absolute
@@ -167,7 +169,6 @@ button,input,select,option
   #iframe
     text-align: center
     iframe
-      // padding: 70px
       width: 210mm
       height: 297mm
       overflow: hidden
