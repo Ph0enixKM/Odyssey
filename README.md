@@ -10,30 +10,4 @@ in a good direction.
 
 **This version is marked as stable**
 
-## Instalation
-In order to install Odyssey using github, clone current project:
-
-    $ git clone https://github.com/Ph0enixKM/Odyssey.git
-
-After that you should see a folder called "Odyssey". Open it up using the following command:
-
-    $ cd Odyssey
-
-It's time to install all dependencies using NPM (If you don't have Node.js installed, you can grab it in the following site: https://nodejs.org/en/)
-
-    $ npm install
-    $ npm install -g electron-forge yarn
-
-All of the dependencies should be installed. Now we can open up Odyssey.
-
-## Execution
-To execute Odyssey you can just use npm script command:
-
-    $ npm start
-
-Now you should see Electron in action.
-After couple of seconds an Odyssey window should appear.
-
-## Features to add
-- better scaling images
-- margin resizers
+In order to see full website, [click here](https://odysseyapp.herokuapp.com)

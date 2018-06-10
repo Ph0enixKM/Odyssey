@@ -1,6 +1,8 @@
 // Global Variables:
 (function(){
   Object.assign(window,{
+    version : '1.4.0',
+
     fonts  : undefined,
     fontSizes  : undefined,
     textField  : undefined,
@@ -48,13 +50,28 @@ const { remote } = require('electron')
 const PIXI = require('pixi.js')
 const { ipcRenderer } = require('electron')
 const fs = require('fs')
-const cargodb = require('cargodb');
-const path = require('path');
+const cargodb = require('cargodb')
+const path = require('path')
+const {shell} = require('electron')
+
 
 
 window.qs = document.querySelectorAll.bind(document)
 const storage = new cargodb('storage')
 PopUp.summon("Witaj z powrotem!")
+
+// Check for updates
+fetch('https://api.github.com/repos/ph0enixkm/odyssey/releases/latest')
+.then(res => res.json())
+.then(json => {
+  if (json.tag_name != version)
+    PopUp.summon(`Jest dostępna nowa wersja Odysei!
+        <b onclick='return updateVersion()'>Pobierz</b>`, 15000)
+})
+function updateVersion() {
+  shell.openExternal('https://odysseyapp.herokuapp.com')
+}
+
 
 window.BASE_FILE = {
   title: undefined,
@@ -260,6 +277,12 @@ let caretLastDoubleClick = e => {
 
 // Presets & initialisation
 document.addEventListener('DOMContentLoaded', function () {
+
+  // Set up version
+  qs('.menubar .bar v')[0].innerHTML = (version != null)
+    ? version
+    : qs('.menubar .bar v')[0].innerHTML
+
   // If scroll past end enabled in settings
   if (SETTINGS.scrollPastEnd) {
     qs('.iframe #down')[0].innerHTML += `<div id="dummy"></div>`

@@ -50,7 +50,7 @@
         document.body.appendChild(this.base)
       }
 
-      summon(text) {
+      summon(text, duration) {
         let instance = document.createElement('li')
         instance.className = 'popup-lib'
         setTimeout(()=>{
@@ -73,7 +73,7 @@
                 +'%)'
             }
           },300)
-        },5000)
+        },(duration || 5000))
       }
     }
 
