@@ -1087,13 +1087,13 @@ let prev = false
     let html = textField.contentDocument.documentElement
 
     if (content.offsetHeight > (html.offsetHeight)) {
-      if (content.offsetHeight - html.offsetHeight > 5000) decreaseBounds(50000)
-      else if (content.offsetHeight - html.offsetHeight > 1000) decreaseBounds(5000)
-      else if (content.offsetHeight - html.offsetHeight > 500) decreaseBounds(1500)
-      else if (content.offsetHeight - html.offsetHeight > 100) decreaseBounds(300)
-      else if (content.offsetHeight - html.offsetHeight > 57) decreaseBounds(150)
-      else if (content.offsetHeight - html.offsetHeight > 18) decreaseBounds(5)
-      else decreaseBounds(1)
+      // if (content.offsetHeight - html.offsetHeight > 5000) decreaseBounds(50000)
+      // else if (content.offsetHeight - html.offsetHeight > 1000) decreaseBounds(5000)
+      // else if (content.offsetHeight - html.offsetHeight > 500) decreaseBounds(1500)
+      // else if (content.offsetHeight - html.offsetHeight > 100) decreaseBounds(300)
+      // else if (content.offsetHeight - html.offsetHeight > 57) decreaseBounds(150)
+      // else if (content.offsetHeight - html.offsetHeight > 18) decreaseBounds(5)
+      /* else */ decreaseBounds(1) // First deal with images
     }
     else if (prevBounds && !merge.invoked) {
       autosaveF()
@@ -1120,6 +1120,17 @@ let prev = false
     function decreaseBounds(number) {
       if (!prevBounds) str = content.innerHTML
       prevBounds = true
+      // Check if we're dealing with image
+      if(str[str.length-1] == '>') {
+        let obj = /<img[\s\S][^<>]*?>$/gi.exec(str)
+        if (obj != null) {
+          restOf = str
+            .slice(str.length-1-obj[0].length,str.length-1) + '>' + restOf
+          str = str.slice(0,-obj[0].length)
+          content.innerHTML = str
+          return null
+        }
+      }
       restOf = str
         .slice(str.length-1-number,str.length-1) + restOf
       str = str.slice(0,-number)

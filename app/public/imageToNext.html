@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <article>
+      Lorem ipsum dolor sit amet, mea assentior expetendis ei, consul labitur eu mei, usu an velit audiam deseruisse. Qui ne corpora invenire recteque, te est platonem intellegebat definitiones. In vis aliquam delenit vivendum, ex mei mutat harum petentium. Vivendo facilisi adipisci ut his. Pro ne omittam rationibus, te autem harum graecis vim. Et accumsan definiebas efficiantur duo, pri no paulo aperiam.
+
+Usu ei choro utroque oportere, cu pro dicta labore, mucius comprehensam pri id. Timeam maiorum torquatos nam no. Illum molestiae mea ex, ea vis aeque argumentum. Vel eu minim labores accusata. Scripta pertinacia in sea.
+
+Cum ei possim persecuti deseruisse. Mel erant aliquam at. Mei causae laboramus at, vix ei timeam persequeris, iusto impedit eum no. Ad falli altera iriure usu, evertitur forensibus sit an. Brute nostrum mei et, altera accusata nam no.
+
+Mei ex ferri laoreet, sed justo melius ad. Ea duo ferri graeco, ex sit semper interpretaris. At elitr efficiantur sit, mel omnesque concludaturque cu, oratio convenire imperdiet cum te. Iudico contentiones at ius, ius id civibus detracto consulatu.
+
+Option dignissim te quo. Eu dicta prodesset vel, ei sint etiam ullamcorper pri. Cu vix tacimates scripserit disputando. Causae invenire laboramus id his, est ut augue theophrastus, vim in consul epicurei euripidis. Ad verterem partiendo duo.
+<span><img src="arts/logo.png" width="100"></span></article>
+
+    <script>
+      let article = document.querySelector('article')
+      let str = article.innerHTML
+      if(str[str.length-1] == '>') {
+        let obj = /<img[\s\S][^<>]*?>$/gi.exec(str)
+        if (obj != null) {
+          /*add to restOf */console.log(obj[0]);
+          console.log(str.slice(0,-obj[0].length));
+        }
+      }
+    </script>
+  </body>
+</html>
