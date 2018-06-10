@@ -1087,12 +1087,22 @@ let prev = false
     let html = textField.contentDocument.documentElement
 
     if (content.offsetHeight > (html.offsetHeight)) {
-      decreaseBounds(1)
+      if (content.offsetHeight - html.offsetHeight > 5000) decreaseBounds(50000)
+      else if (content.offsetHeight - html.offsetHeight > 1000) decreaseBounds(5000)
+      else if (content.offsetHeight - html.offsetHeight > 500) decreaseBounds(1500)
+      else if (content.offsetHeight - html.offsetHeight > 100) decreaseBounds(300)
+      else if (content.offsetHeight - html.offsetHeight > 57) decreaseBounds(150)
+      else if (content.offsetHeight - html.offsetHeight > 18) decreaseBounds(5)
+      else decreaseBounds(1)
     }
     else if (prevBounds && !merge.invoked) {
       autosaveF()
       prevBounds = false
       setTimeout(() => {
+        // In case od bad HTML cut
+        if (restOf[0] == '>')
+          restOf = restOf.slice(1,restOf.length)
+
         pages.splice(curPage + 1, 0, restOf)
 
         if (!merge.invoked) turnRight()
@@ -1119,7 +1129,7 @@ let prev = false
 
 
   function fontSizeReader (elem) {
-    switch (elem) {
+    switch (elem.toString()) {
       case '7':
         space = 57
         fontSizes.value = 7
@@ -1157,25 +1167,25 @@ let prev = false
 
   function fontSizeTextToNumber (name) {
     switch (name) {
-      case 'xx-small':
+      case 'x-small':
         return 1
         break
-      case 'x-small':
+      case 'small':
         return 2
         break
-      case 'small':
+      case 'medium':
         return 3
         break
-      case 'medium':
+      case 'large':
         return 4
         break
-      case 'large':
+      case 'x-large':
         return 5
         break
-      case 'x-large':
+      case 'xx-large':
         return 6
         break
-      case 'xx-large':
+      case '-webkit-xxx-large':
         return 7
         break
       default:
@@ -1209,42 +1219,12 @@ let prev = false
   }
 
   function caretSize () {
-    try {
     // The following variable can be null.
-      var selEl = textField.contentWindow.getSelection().anchorNode.parentElement
+    let selection = textField.contentWindow.getSelection().anchorNode
+    if (selection != null) {
+      var selEl = selection.parentElement
       fonts.value = fontIterator(selEl)
-
-    // TagNames must be CAPITAL // TODO: Clean it up and make size to be a INPUT number
-      // if (selEl.tagName == 'FONT') {
-      //   fontSizeReader(selEl.size)
-      // } else if (selEl.tagName == 'B' || selEl.tagName == 'U' ||
-      //         selEl.tagName == 'I' || selEl.tagName == 'SPAN') {
-      //   if (selEl.parentNode.tagName == 'FONT') {
-      //     fontSizeReader(selEl.parentNode.size)
-      //   } else if (selEl.parentNode.tagName == 'B' ||
-      //            selEl.parentNode.tagName == 'U' ||
-      //            selEl.parentNode.tagName == 'I' ||
-      //            selEl.parentNode.tagName == 'SPAN') {
-      //     fontSizeReader(selEl.parentNode.parentNode.size)
-      //   }
-      // } else {
-      //   space = 18
-      //   fontSizes.value = 3
-      //   fonts.value = 'Lato'
-      // }
-      // console.log(sizeIterator(selEl));
       fontSizeReader(sizeIterator(selEl))
-    } catch (e) {
-    // Do not do anything
     }
   }
-
-// Pasting text
-  textField.contentWindow.addEventListener('paste', e => {
-    // Prevent from default pasting text
-    // e.preventDefault()
-    // // Take text from clipboard and execute command to paste the text
-    // var normalizedText = textField.contentWindow.event.clipboardData.getData('text/plain')
-    // textField.contentDocument.execCommand('insertHTML', false, normalizedText)
-  })
 })

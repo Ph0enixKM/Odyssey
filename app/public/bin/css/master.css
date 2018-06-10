@@ -212,7 +212,7 @@ button, input, select, option {
   user-select: none;
   position: relative;
   transition: 150ms;
-  box-shadow: 0 0 64px #333;
+  box-shadow: 0 0 25px #1a1a1a;
   margin: 100px 0 70px 0;
   background-color: #444;
   color: #aaa;
