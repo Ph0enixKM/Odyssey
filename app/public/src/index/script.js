@@ -478,7 +478,7 @@ document.addEventListener('DOMContentLoaded', function () {
   let scrollDif = 0
   document.getElementsByClassName('iframe')[0].addEventListener('scroll', () => {
     cs.transition = '0ms'
-    insert.sizer.style.opacity = 0
+    design.sizer.style.opacity = 0
     if (bodyContent.scrollTop != scrollDif) {
       scrollDif = bodyContent.scrollTop - scrollDif
     }
@@ -487,7 +487,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     scrolling = setTimeout(() => {
       cs.transition = '200ms'
-      insert.sizer.style.opacity = 1
+      design.sizer.style.opacity = 1
     }, 66)
   }, false)
 
@@ -715,15 +715,15 @@ document.addEventListener('DOMContentLoaded', function () {
       document.querySelector('#ctx-menu').innerText = 'Narzędzia'
       document.querySelector('#view').style.display = 'none'
       document.querySelector('#tools').style.display = 'inline-block'
-      document.querySelector('#insert').style.display = 'none'
+      document.querySelector('#design').style.display = 'none'
       document.querySelector('#pages').style.display = 'none'
       document.querySelector('#project').style.display = 'none'
       ctxMenuIndex = 0
     })
     ctxMenu.childNodes[3].addEventListener('click', () => {
-      document.querySelector('#ctx-menu').innerText = 'Wstawianie'
+      document.querySelector('#ctx-menu').innerText = 'Projektowanie'
       document.querySelector('#view').style.display = 'none'
-      document.querySelector('#insert').style.display = 'inline-block'
+      document.querySelector('#design').style.display = 'inline-block'
       document.querySelector('#tools').style.display = 'none'
       document.querySelector('#pages').style.display = 'none'
       document.querySelector('#project').style.display = 'none'
@@ -732,7 +732,7 @@ document.addEventListener('DOMContentLoaded', function () {
     ctxMenu.childNodes[5].addEventListener('click', () => {
       document.querySelector('#ctx-menu').innerText = 'Widok'
       document.querySelector('#view').style.display = 'inline-block'
-      document.querySelector('#insert').style.display = 'none'
+      document.querySelector('#design').style.display = 'none'
       document.querySelector('#tools').style.display = 'none'
       document.querySelector('#pages').style.display = 'none'
       document.querySelector('#project').style.display = 'none'
@@ -741,7 +741,7 @@ document.addEventListener('DOMContentLoaded', function () {
     ctxMenu.childNodes[7].addEventListener('click', () => {
       document.querySelector('#ctx-menu').innerText = 'Strony'
       document.querySelector('#view').style.display = 'none'
-      document.querySelector('#insert').style.display = 'none'
+      document.querySelector('#design').style.display = 'none'
       document.querySelector('#tools').style.display = 'none'
       document.querySelector('#pages').style.display = 'inline-block'
       document.querySelector('#project').style.display = 'none'
@@ -750,7 +750,7 @@ document.addEventListener('DOMContentLoaded', function () {
     ctxMenu.childNodes[9].addEventListener('click', () => {
       document.querySelector('#ctx-menu').innerText = 'Projekt'
       document.querySelector('#view').style.display = 'none'
-      document.querySelector('#insert').style.display = 'none'
+      document.querySelector('#design').style.display = 'none'
       document.querySelector('#tools').style.display = 'none'
       document.querySelector('#pages').style.display = 'none'
       document.querySelector('#project').style.display = 'inline-block'
