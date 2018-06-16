@@ -121,11 +121,13 @@ textField.contentDocument.documentElement.addEventListener('click', e => design.
 
 design.clearSel = e => {
   let el = e.target
+  let caret = document.querySelector('.caret')
   if (el.getAttribute('seed') == null) {
     if (design.seed != undefined) {
       deselect()
     }
     design.seed = undefined
+    caret.style.visibility = 'visible'
   }
   else if (el.getAttribute('seed') != design.seed) {
     if (design.seed != undefined) {
@@ -155,5 +157,8 @@ design.clearSel = e => {
       tower.style.display = `inline-block`
     }
     design.seed = seed
+    textField.contentDocument.body.blur()
+    window.focus()
+    caret.style.visibility = 'hidden'
   }
 }

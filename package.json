@@ -25,7 +25,7 @@
     "novelists",
     "poets"
   ],
-  "author": "Paweł Karaś (Phoenix)",
+  "author": "Phoenix Arts",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Ph0enixKM/Odyssey/issues"
@@ -50,7 +50,9 @@
         "icon": "app/assets/icons/logo.ico"
       },
       "electronWinstallerConfig": {
-        "name": "Odyssey"
+        "name": "Odyssey",
+        "loadingGif": "./app/public/arts/loading.gif",
+        "setupIcon": "./app/assets/icons/logo.ico"
       },
       "electronInstallerDebian": {},
       "electronInstallerRedhat": {},
