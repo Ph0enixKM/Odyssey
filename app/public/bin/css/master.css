@@ -224,23 +224,6 @@ button, input, select, option {
   background-color: #333;
 }
 
-.iframe #sizer {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  border-radius: 10px;
-  background-color: orange;
-  background-image: url("../../arts/arrowDiagonalS.png");
-  background-position: center;
-  background-size: cover;
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  transition: 200ms;
-  cursor: nw-resize;
-  box-shadow: 0 0 10px #222;
-}
-
 .iframe .move {
   flex: 1;
   color: #aaa;
@@ -330,6 +313,17 @@ button, input, select, option {
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.8);
+}
+
+.tower {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background-color: orange;
+  position: absolute;
+  border-radius: 3px;
+  z-index: 5;
+  display: none;
 }
 
 .caret {

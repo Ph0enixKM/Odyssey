@@ -66,7 +66,7 @@ fetch('https://api.github.com/repos/ph0enixkm/odyssey/releases/latest')
 .then(json => {
   if (json.tag_name != version)
     PopUp.summon(`Jest dostępna nowa wersja Odysei!
-        <b onclick='return updateVersion()'>Pobierz</b>`, 15000)
+        <a onclick='return updateVersion()'>Pobierz</a>`, 15000)
 })
 function updateVersion() {
   shell.openExternal('https://odysseyapp.herokuapp.com')
@@ -475,21 +475,6 @@ document.addEventListener('DOMContentLoaded', function () {
   function BASE_FILE_UPDATE (key, val) {
     BASE_FILE[key] = val
   }
-  let scrollDif = 0
-  document.getElementsByClassName('iframe')[0].addEventListener('scroll', () => {
-    cs.transition = '0ms'
-    design.sizer.style.opacity = 0
-    if (bodyContent.scrollTop != scrollDif) {
-      scrollDif = bodyContent.scrollTop - scrollDif
-    }
-
-    clearTimeout(scrolling)
-
-    scrolling = setTimeout(() => {
-      cs.transition = '200ms'
-      design.sizer.style.opacity = 1
-    }, 66)
-  }, false)
 
 // Caret Key Mapping
   function mapKeys (dock) {
@@ -619,10 +604,6 @@ document.addEventListener('DOMContentLoaded', function () {
         border: 1px transparent solid;
         transition: 200ms;
         cursor: default;
-      }
-      .image:hover{
-        filter: grayscale(0) brightness(100%);
-        border: 1px orange solid;
       }
     </style>
     <link href="bin/css/toolbar.css" rel="stylesheet">

@@ -34,6 +34,19 @@
           padding: 0;
           margin: 0;
         }
+        .popup-lib a{
+          padding: 5px;
+          margin: 5px;
+          display: inline-block;
+          background-color: rgba(150, 80, 0, 0.6);
+          color: white;
+          cursor: pointer;
+          transition: 300ms;
+          border-radius: 5px;
+        }
+        .popup-lib a:hover{
+          background-color: rgba(150, 80, 0, 1);
+        }
       </style>
     `
 
