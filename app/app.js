@@ -166,7 +166,7 @@ function run () {
           case '.pdf':
             (function () {
               //Instatiate new printing process
-              let pdfWin = new BrowserWindow({width: 794, height: 1122, show: true, parent: win})
+              let pdfWin = new BrowserWindow({width: 794, height: 1122, show: false, parent: win})
               pdfWin.setMenu(null)
               pdfWin.loadURL("file://" + __dirname+'/public/print.html')
               // printWin.toggleDevTools()
@@ -217,7 +217,7 @@ function run () {
   win.setBackgroundColor('#222')
 
   ipcMain.on('print', (e, src, silent) => {
-    silent = silent == undefined ? false : true
+    silent = silent == undefined ? true : false
     //Instatiate new printing process
     let printWin = new BrowserWindow({width: 794, height: 1122, show: true, parent: win})
     printWin.setMenu(null)

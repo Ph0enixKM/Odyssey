@@ -14,26 +14,18 @@ window.addEventListener('keydown', e => {
 ipcRenderer.on('print-request', (event, src, silent) => {
     let i = 0
     let win = remote.getCurrentWindow()
-    // document.head.innerHTML +=
-    let style = document.createElement('style')
-    // FIXME: Change paddings to real element inside
-    style.innerHTML = `
-    article{
-      padding-top: ${src.margins.top}px;
-      padding-bottom: ${src.margins.bottom}px;
-      padding-left: ${src.margins.left}px;
-      padding-right: ${src.margins.right}px;
-    }
-    `
-    console.log(style.innerHTML);
-    document.head.appendChild(style)
 
     for (let page of src.pages) {
-      document.body.innerHTML += `
-        <article>
-          ${page}
-        </article>
-      `
+      let article = document.createElement('article')
+      document.body.appendChild(article)
+      let html = document.createElement('div')
+      html.style.position = 'relative'
+      html.style.width = article.offsetWidth - (src.margins.left + src.margins.right) + 'px'
+      html.style.height = article.offsetWidth - (src.margins.top + src.margins.bottom) + 'px'
+      html.style.top = src.margins.top + 'px'
+      html.style.left = src.margins.left + 'px'
+      html.innerHTML = page
+      article.appendChild(html)
     }
     setTimeout(()=>{
       win.webContents.print({silent})
@@ -44,11 +36,17 @@ ipcRenderer.on('pdf-request', (event, src, path) => {
     let i = 0
     let win = remote.getCurrentWindow()
     for (let page of JSON.parse(src).book) {
-      document.body.innerHTML += `
-        <article>
-          ${page[1]}
-        </article>
-      `
+      let obj = JSON.parse(src)
+      let article = document.createElement('article')
+      document.body.appendChild(article)
+      let html = document.createElement('div')
+      html.style.position = 'relative'
+      html.style.width = article.offsetWidth - (obj.config.margins.left + obj.config.margins.right) + 'px'
+      html.style.height = article.offsetWidth - (obj.config.margins.top + obj.config.margins.bottom) + 'px'
+      html.style.top = obj.config.margins.top + 'px'
+      html.style.left = obj.config.margins.left + 'px'
+      html.innerHTML = page[1]
+      article.appendChild(html)
     }
     setTimeout(()=>{
       win.webContents.printToPDF({}, function (error, data) {
