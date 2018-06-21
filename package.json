@@ -11,7 +11,8 @@
     "build-unix": "electron-forge package Odyssey --platform=linux --arch=x64 --asar=true",
     "build-unix32": "electron-forge package Odyssey --platform=linux --arch=ia32 --asar=true",
     "make": "electron-forge make",
-    "publish": "electron-forge publish"
+    "publish": "electron-forge publish",
+    "installer": "node install.js"
   },
   "repository": {
     "type": "git",
@@ -50,9 +51,7 @@
         "icon": "app/assets/icons/logo.ico"
       },
       "electronWinstallerConfig": {
-        "name": "Odyssey",
-        "loadingGif": "./app/public/arts/loading.gif",
-        "setupIcon": "./app/assets/icons/logo.ico"
+        "name": "Odyssey"
       },
       "electronInstallerDebian": {},
       "electronInstallerRedhat": {},
@@ -62,7 +61,8 @@
       },
       "windowsStoreConfig": {
         "packageName": "",
-        "name": "Odyssey"
+        "name": "Odyssey",
+        "setupIcon": "./app/assets/icons/logo.ico"
       }
     }
   },
@@ -73,6 +73,7 @@
     "electron-compile": "^6.4.2",
     "electron-spellchecker": "^1.1.2",
     "electron-squirrel-startup": "^1.0.0",
+    "electron-winstaller" : "^2.6.4",
     "html-docx-js": "^0.3.1",
     "mammoth": "^1.4.5",
     "pixi.js": "^4.7.0"

@@ -6,9 +6,12 @@ window.design = {
   context : function() {return this.canvas.getContext("2d")},
   findImages : new Function(),
   towers : [],
+  tower : undefined,
   seed : undefined,
   clearSel : new Function(),
   updateTowers : new Function(),
+  mouse : {x : null, y : null},
+  imgSize : []
 }
 
 design.addImageBtn.addEventListener("click",()=>{
@@ -80,8 +83,39 @@ design.findImages = () => {
     tower.setAttribute('seed', img.getAttribute('seed'))
     document.body.appendChild(tower)
     design.towers.push(tower)
+    tower.addEventListener('mousedown', () => towerDown ({pose, img}))
+    tower.addEventListener('mousemove', e => towerActive(e, true))
+    tower.addEventListener('mouseup', () => towerInactive())
+  }
+
+  function towerDown (query) {
+    let seed = query.img.getAttribute('seed')
+    let { pose } = query
+    design.imgSize = [query.img.width, query.img.height]
+    design.tower = document.querySelector(`.tower.${pose}[seed='${seed}']`)
   }
 }
+
+function towerInactive () {
+  design.tower = undefined
+}
+
+function towerActive (event, offset) {
+  let scrollTop = document.querySelector('.iframe').scrollTop
+  if (design.tower == null) {
+    design.mouse.x = null
+    design.mouse.y = null
+    return false
+  } else if (offset) {
+    design.mouse.x = event.x - textField.offsetLeft
+    design.mouse.y = event.y - textField.offsetTop + scrollTop
+    return true
+  }
+  design.mouse.x = event.x
+  design.mouse.y = event.y
+}
+textField.contentWindow.addEventListener('mousemove', e => towerActive(e))
+textField.contentWindow.addEventListener('mouseup', () => towerInactive())
 
 design.updateTowers = () => {
   let towers = document.querySelectorAll('.tower')
@@ -91,23 +125,73 @@ design.updateTowers = () => {
     let seed = tower.getAttribute('seed')
     let img = textField.contentDocument.querySelector(`img[seed='${seed}']`)
     let pose = tower.classList.item(1)
+    let moving = (design.mouse.x != null && design.mouse.y != null && design.tower != null)
+      ? true
+      : false
+    let top
+    let left
+    let cPose = (moving) ? design.tower.classList.item(1) : null
+    let cSeed = (moving) ? design.tower.getAttribute('seed') : null
+    // console.log(Array.from(document.querySelectorAll('.tower.nw')).map(item => {
+    //   return item.style.top
+    // }))
+    if (img == null) {
+      design.findImages()
+      return false
+    }
 
     switch (pose) {
       case 'nw':
-        tower.style.top = img.offsetTop + parseInt(html.style.top) + textField.offsetTop - 5 - scrollTop + 'px'
-        tower.style.left = img.offsetLeft + parseInt(html.style.left) + textField.offsetLeft - 5 + 'px'
+        top = img.offsetTop + parseInt(html.style.top) + textField.offsetTop - 5 - scrollTop
+        left = img.offsetLeft + parseInt(html.style.left) + textField.offsetLeft - 5
+        tower.style.top = top + 'px'
+        tower.style.left = left + 'px'
+        imageResize({pose, cPose, seed, cSeed, img, moving, html})
         break
       case 'sw':
-        tower.style.top = img.offsetTop + parseInt(html.style.top) + textField.offsetTop + img.offsetHeight - 5 - scrollTop + 'px'
-        tower.style.left = img.offsetLeft + parseInt(html.style.left) + textField.offsetLeft - 5 + 'px'
+        top = img.offsetTop + parseInt(html.style.top) + textField.offsetTop + img.offsetHeight - 5 - scrollTop
+        left = img.offsetLeft + parseInt(html.style.left) + textField.offsetLeft - 5
+        tower.style.top = (!moving || cPose != pose || cSeed != seed) ? top + 'px' : design.mouse.y + textField.offsetTop - 5 - scrollTop + 'px'
+        tower.style.left = left + 'px'
+        imageResize({pose, cPose, seed, cSeed, img, moving, html})
         break
       case 'ne':
-        tower.style.top = img.offsetTop + parseInt(html.style.top) + textField.offsetTop - 5 - scrollTop + 'px'
-        tower.style.left = img.offsetLeft + parseInt(html.style.left) + textField.offsetLeft + img.offsetWidth - 5 + 'px'
+        top = img.offsetTop + parseInt(html.style.top) + textField.offsetTop - 5 - scrollTop
+        left = img.offsetLeft + parseInt(html.style.left) + textField.offsetLeft + img.offsetWidth - 5
+        tower.style.top = top + 'px'
+        tower.style.left = (!moving || cPose != pose || cSeed != seed) ? left + 'px' : design.mouse.x + textField.offsetLeft - 5 + 'px'
+        imageResize({pose, cPose, seed, cSeed, img, moving, html})
         break
       case 'se':
-        tower.style.top = img.offsetTop + parseInt(html.style.top) + textField.offsetTop + img.offsetHeight - 5 - scrollTop + 'px'
-        tower.style.left = img.offsetLeft + parseInt(html.style.left) + textField.offsetLeft + img.offsetWidth - 5 + 'px'
+        top = img.offsetTop + parseInt(html.style.top) + textField.offsetTop + img.offsetHeight - 5 - scrollTop
+        left = img.offsetLeft + parseInt(html.style.left) + textField.offsetLeft + img.offsetWidth - 5
+        tower.style.top = (!moving || cPose != pose || cSeed != seed) ? top + 'px' : design.mouse.y + textField.offsetTop - 5 - scrollTop + 'px'
+        tower.style.left = (!moving || cPose != pose || cSeed != seed) ? left + 'px' : design.mouse.x + textField.offsetLeft - 5 + 'px'
+        imageResize({pose, cPose, seed, cSeed, img, moving, html})
+        break
+    }
+  }
+}
+
+function imageResize (query) {
+  let { moving, cPose, pose, cSeed, seed, img, html } = query
+  if (moving && cPose == pose && cSeed == seed) {
+    switch (pose) {
+      case 'nw':
+        img.width = (img.offsetLeft + design.imgSize[0] + parseInt(html.style.left) - design.mouse.x)
+        img.height = (img.offsetTop + design.imgSize[1] + parseInt(html.style.top) - design.mouse.y)
+        break
+      case 'sw':
+        img.width = (img.offsetLeft + design.imgSize[0] + parseInt(html.style.left) - design.mouse.x)
+        img.height = -(img.offsetTop + parseInt(html.style.top) - design.mouse.y)
+        break
+      case 'ne':
+        img.width = -(img.offsetLeft + parseInt(html.style.left) - design.mouse.x)
+        img.height = (img.offsetTop + design.imgSize[1] + parseInt(html.style.top) - design.mouse.y)
+        break
+      case 'se':
+        img.width = -(img.offsetLeft + parseInt(html.style.left) - design.mouse.x)
+        img.height = -(img.offsetTop + parseInt(html.style.top) - design.mouse.y)
         break
     }
   }
@@ -139,12 +223,16 @@ design.clearSel = e => {
   }
 
   function deselect () {
-    let img = textField.contentDocument.querySelector(`img[seed='${design.seed}']`)
-    let towers = document.body.querySelectorAll(`.tower[seed='${design.seed}']`)
-    img.style.border = `none`
-    img.style.filter = `grayscale(100%) brightness(70%)`
-    for (let tower of towers) {
-      tower.style.display = `none`
+    try {
+      let img = textField.contentDocument.querySelector(`img[seed='${design.seed}']`)
+      let towers = document.body.querySelectorAll(`.tower[seed='${design.seed}']`)
+      img.style.border = `none`
+      img.style.filter = `grayscale(100%) brightness(70%)`
+      for (let tower of towers) {
+        tower.style.display = `none`
+      }
+    } catch (e) {
+      caret.style.visibility = 'visible'
     }
   }
 

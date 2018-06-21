@@ -5,10 +5,45 @@ const os = require('os')
 const path = require('path')
 const html2docx = require('html-docx-js')
 const mammoth = require('mammoth')
+const childProcess = require('child_process')
 
 let win
+let squirrel = false
+
+function installing () {
+  // Installer Handling
+
+  if (process.argv[1] == '--squirrel-uninstall') {
+    squirrel = true
+    dialog.showMessageBox({
+      type : 'info',
+      buttons : ['Okay!'],
+      title : 'Odyssey Uninstallation Process',
+      message : 'Odyssey has been uninstalled successfully!'
+    }, () => {
+      childProcess.exec('assoc .odyss=')
+      childProcess.exec(`ftype odyssfile=`)
+      app.quit()
+    })
+  } else if (process.argv[1] == '--squirrel-install') {
+    // Create File Associations
+    childProcess.exec('assoc .odyss=odyssfile')
+    childProcess.exec(`ftype odyssfile=${__dirname+'/Odyssey.exe'}`)
+    squirrel = true
+  }
+}
 
 app.on('ready', () => {
+  installing()
+  if (!squirrel) run()
+})
+
+app.on('window-all-closed', () => {
+  if (process.platform != 'darwin') app.quit()
+})
+
+
+function run () {
   let {width, height} = electron.screen.getPrimaryDisplay().workAreaSize
 
   /**
@@ -195,9 +230,9 @@ app.on('ready', () => {
 
   ipcMain.on('check-if-opened-with-file', e => {
     if (process.platform == 'win32' && process.argv.length >= 2) {
-      var openFilePath = process.argv[1]
+      let openFilePath = process.argv[1]
       // If it's opened in emulator
-      if (openFilePath != '.') {
+      if (openFilePath != '.' && openFilePath != '--squirrel-firstrun') {
 
         fs.readFile(openFilePath, 'utf-8', (err, data) => {
           if (err) console.log(err)
@@ -218,8 +253,4 @@ app.on('ready', () => {
     win = null
     app.quit()
   })
-})
-
-app.on('window-all-closed', () => {
-  if (process.platform != 'darwin') app.quit()
-})
+}

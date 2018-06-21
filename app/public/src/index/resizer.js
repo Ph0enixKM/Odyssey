@@ -59,7 +59,6 @@ resizer.apply = () => {
   html.style.width = pageDefaults.width - (margins.left + margins.right) + 'px'
   html.style.left = margins.left + 'px'
 
-  // TODO: Update BASE_FILE config
   BASE_FILE.config.margins = margins
 
   resizer.update()

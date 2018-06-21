@@ -168,6 +168,7 @@ function turnLeft () {
 
         curPage--
         textField.contentDocument.body.innerHTML = (pages[curPage] == undefined) ? '' : pages[curPage]
+        design.findImages()
 
       // Logic Section
 
@@ -205,6 +206,8 @@ function turnRight () {
 
       sbWords.innerHTML = (textField.contentDocument.body.textContent.length == 1) ? 0 :
         textField.contentDocument.body.textContent.split(' ').length
+
+      design.findImages()
 
       // Logic Section
 
@@ -409,7 +412,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
       }
     } finally {
-      qs('.bar span')[0].textContent = (name == null)
+      qs('.bar span')[0].textContent = (name == null || (name[0] == '-'))
         ? qs('.bar span')[0].textContent
         : name
 
@@ -421,6 +424,7 @@ document.addEventListener('DOMContentLoaded', function () {
       textField.contentDocument.body.innerHTML = (pages[curPage] == undefined) ? '' : pages[curPage]
       pages[curPage] = textField.contentDocument.body.innerHTML
       sbChapter.innerHTML = BASE_FILE.book[curChapter][0]
+      design.findImages()
 
       qs('input#keys')[0].value = BASE_FILE.keywords.join(' ')
       qs('#all-keys p')[0].innerHTML = BASE_FILE.keywords.length
@@ -602,7 +606,7 @@ document.addEventListener('DOMContentLoaded', function () {
       .image{
         filter: grayscale(100%) brightness(70%);
         border: 1px transparent solid;
-        transition: 200ms;
+        transition: filter 200ms, border 200ms;
         cursor: default;
       }
     </style>
@@ -1090,6 +1094,7 @@ let prev = false
         else { // Turn Page seemlessly
           curPage++
           textField.contentDocument.body.innerHTML = (pages[curPage] == undefined) ? '' : pages[curPage]
+          design.findImages()
         }
         restOf = ''
       },100)
