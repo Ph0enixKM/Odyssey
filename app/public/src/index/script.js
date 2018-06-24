@@ -53,7 +53,7 @@ const fs = require('fs')
 const cargodb = require('cargodb')
 const path = require('path')
 const {shell} = require('electron')
-
+const brain = require('brainjs')
 
 
 window.qs = document.querySelectorAll.bind(document)
@@ -764,22 +764,64 @@ document.addEventListener('DOMContentLoaded', function () {
     id('justify-center').addEventListener('click', () => command('justifyCenter'))
     id('justify-right').addEventListener('click', () => command('justifyRight'))
     id('justify-full').addEventListener('click', () => command('justifyFull'))
+
     let bg = new CP(id('bg-text'), 'mousedown')
     let fg = new CP(id('fg-text'))
+
+    let net = new brain.NeuralNetwork()
+
+    net.train([
+      {input: { r: 0.03, g: 0.7, b: 0.5 }, output: { black: 1 }},
+      {input: { r: 0.16, g: 0.09, b: 0.2 }, output: { white: 1 }},
+      {input: { r: 0.5, g: 0.5, b: 1.0 }, output: { white: 1 }},
+      {input: { r: 0.5, g: 0.5, b: 1.0 }, output: { white: 1 }},
+      {input: { r: 0, g: 0, b: 0 }, output: { black: 1 }},
+      {input: { r: 0.35, g: 0.37, b: 0.1 }, output: { black: 1 }},
+      {input: { r: 0.42, g: 0.25, b: 0.25 }, output: { black: 1 }},
+      {input: { r: 0.80, g: 0.62, b: 0.62 }, output: { white: 1 }},
+      {input: { r: 0.27, g: 0.30, b: 0.54 }, output: { black: 1 }},
+      {input: { r: 0.26, g: 0.27, b: 0.33 }, output: { black: 1 }},
+      {input: { r: 0, g: 0.16, b: 0.99 }, output: { black: 1 }},
+      {input: { r: 0.33, g: 0.09, b: 0.2 }, output: { black: 1 }},
+      {input: { r: 0.42, g: 0.02, b: 0.2 }, output: { black: 1 }},
+      {input: { r: 0.3, g: 0.93, b: 0.45 }, output: { white: 1 }},
+      {input: { r: 1, g: 0, b: 0 }, output: { white: 1 }},
+      {input: { r: 0, g: 1, b: 1 }, output: { white: 1 }},
+      {input: { r: 1, g: 0, b: 0.75 }, output: { white: 1 }},
+      {input: { r: 0, g: 1, b: 0 }, output: { white: 1 }},
+      {input: { r: 0.19, g: 0.05, b: 0.05 }, output: { black: 1 }},
+      {input: { r: 0.12, g: 0.11, b: 0.11 }, output: { black: 1 }},
+      {input: { r: 0.44, g: 0.52, b: 0.67 }, output: { black: 1 }}
+    ])
+
     fg.on('change', color => {
       command('foreColor', '#' + color)
       id('fg-text').style.backgroundColor = '#' + color
+      let rgb = CP.HEX2RGB(color)
+      let res = net.run({r: rgb[0]/255, g:rgb[1]/255, b:rgb[2]/255})
+      id('fg-text').style.backgroundImage = (res.black > res.white)
+        ? 'url(arts/fg.png)'
+        : 'url(arts/fgDark.png)'
     })
     bg.on('change', color => {
       command('backColor', '#' + color)
       id('bg-text').style.backgroundColor = '#' + color
+      let rgb = CP.HEX2RGB(color)
+      let res = net.run({r: rgb[0]/255, g:rgb[1]/255, b:rgb[2]/255})
+      id('bg-text').style.backgroundImage = (res.black > res.white)
+        ? 'url(arts/bg.png)'
+        : 'url(arts/bgDark.png)'
     })
+
     fg.set('#ccc')
+    id('fg-text').style.backgroundImage = 'url(arts/fgDark.png)'
     bg.set('#444')
+
     id('fg-text').addEventListener('contextmenu', e => {
       fg.set('#ccc')
       id('fg-text').style.backgroundColor = '#ccc'
       command('foreColor', '#ccc')
+      id('fg-text').style.backgroundImage = 'url(arts/fgDark.png)'
     })
     id('bg-text').addEventListener('contextmenu', e => {
       bg.set('#444')
