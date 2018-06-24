@@ -933,7 +933,7 @@ disabled[disabled="false"] {
   background-color: #555;
 }
 
-.toolbar #design #bg {
+.toolbar #design #bg-text {
   display: inline-block;
   width: 28px;
   height: 39px;
@@ -946,13 +946,14 @@ disabled[disabled="false"] {
   background-size: contain;
   background-repeat: no-repeat;
   cursor: pointer;
+  box-shadow: 0 0 20px #2a2a2a inset;
 }
 
-.toolbar #design #bg:hover {
+.toolbar #design #bg-text:hover {
   background-color: #555;
 }
 
-.toolbar #design #fg {
+.toolbar #design #fg-text {
   display: inline-block;
   width: 28px;
   height: 39px;
@@ -965,9 +966,10 @@ disabled[disabled="false"] {
   background-size: contain;
   background-repeat: no-repeat;
   cursor: pointer;
+  box-shadow: 0 0 20px #2a2a2a inset;
 }
 
-.toolbar #design #fg:hover {
+.toolbar #design #fg-text:hover {
   background-color: #555;
 }
 

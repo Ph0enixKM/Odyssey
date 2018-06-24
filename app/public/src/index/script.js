@@ -126,8 +126,9 @@ let settingsEl = {
   spell: qs('.choose-spell select')[0],
 }
 
-function command (com) {
-  textField.contentDocument.execCommand(com, false, null)
+function command (com, arg) {
+  arg = (arg == undefined) ? null : arg
+  textField.contentDocument.execCommand(com, false, arg)
 }
 
 function font () {
@@ -139,6 +140,7 @@ function fontSize () {
   let fontSizeVal = fontSizes.options[fontSizes.selectedIndex].value
   textField.contentDocument.execCommand('fontSize', false, parseInt(fontSizeVal))
 }
+
 
 function turnLeft () {
   if (textField.style.opacity == 1) { // Has the page turned on?
@@ -762,6 +764,28 @@ document.addEventListener('DOMContentLoaded', function () {
     id('justify-center').addEventListener('click', () => command('justifyCenter'))
     id('justify-right').addEventListener('click', () => command('justifyRight'))
     id('justify-full').addEventListener('click', () => command('justifyFull'))
+    let bg = new CP(id('bg-text'), 'mousedown')
+    let fg = new CP(id('fg-text'))
+    fg.on('change', color => {
+      command('foreColor', '#' + color)
+      id('fg-text').style.backgroundColor = '#' + color
+    })
+    bg.on('change', color => {
+      command('backColor', '#' + color)
+      id('bg-text').style.backgroundColor = '#' + color
+    })
+    fg.set('#ccc')
+    bg.set('#444')
+    id('fg-text').addEventListener('contextmenu', e => {
+      fg.set('#ccc')
+      id('fg-text').style.backgroundColor = '#ccc'
+      command('foreColor', '#ccc')
+    })
+    id('bg-text').addEventListener('contextmenu', e => {
+      bg.set('#444')
+      id('bg-text').style.backgroundColor = 'transparent'
+      command('backColor', 'transparent')
+    })
   })()
 
     fadeAll()
