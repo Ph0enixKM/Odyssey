@@ -116,7 +116,12 @@ fv.on = () => {
     doc.setAttribute('index', index)
     // Tutaj ukryty jest zwnj w pustym stringu XD
     doc.innerHTML = `
-      ${(data == undefined || data.length <= 0 || data == '‌') ? '<emp>(pusta strona)</emp>' : data}
+      ${(data == undefined || data.length <= 0 || data == '‌')
+        ? (function(){
+          if (lang === 'PL') return '<emp>(pusta strona)</emp>'
+          if (lang === 'EN') return '<emp>(empty page)</emp>'
+        })()
+        : data}
     <br><br>
       <h1 style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); ">
         ${index}
@@ -294,8 +299,12 @@ move.on = () => {
       doc.index = data.index
       doc.innerHTML = `
         ${(data.childNodes[0].textContent == undefined ||
-           data.childNodes[0].textContent.trim().length <= 1) ?
-          '<emp>(pusta strona)</emp>' : data.childNodes[0].textContent}
+           data.childNodes[0].textContent.trim().length <= 1)
+           ? (function(){
+             if (lang === 'PL') return '<emp>(pusta strona)</emp>'
+             if (lang === 'EN') return '<emp>(empty page)</emp>'
+           })()
+           : data.childNodes[0].textContent}
       <br><br>
         <h1 style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);">
           ${doc.index}
@@ -555,7 +564,8 @@ chapter.addF = () => {
     chapter.off()
 
     // Append new Element
-    BASE_FILE.book.push(['Nowy Rozdział', [] ])
+    if (lang === 'PL') BASE_FILE.book.push(['Nowy Rozdział', [] ])
+    if (lang === 'EN') BASE_FILE.book.push(['New Chapter', [] ])
 
     chapter.on()
     let last = chapter.docs.childNodes[chapter.docs.childNodes.length - 2]
@@ -588,7 +598,8 @@ mergeSel.btn.addEventListener('click', () => {
   merge.loading.style.display = 'inline-block'
   merge.loading.style.opacity = 0
   merge.gif.style.transform = 'rotate(30deg) scale(0)'
-  merge.innerMsg.innerHTML = 'Scalanie Wybranych Stron'
+  if (lang === 'PL') merge.innerMsg.innerHTML = 'Scalanie Wybranych Stron'
+  if (lang === 'EN') merge.innerMsg.innerHTML = 'Merging Selected Pages'
 
   // Turn off Full View
   fv.bg.style.opacity = 0

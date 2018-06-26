@@ -39,7 +39,8 @@
     prevCheck : false,
     restOf : '',
     str  : '',
-    prevBounds : null
+    prevBounds : null,
+    lang : 'PL'
   })
 })()
 
@@ -54,19 +55,31 @@ const cargodb = require('cargodb')
 const path = require('path')
 const {shell} = require('electron')
 const brain = require('brainjs')
+const osLocale = require('os-locale')
 
 
 window.qs = document.querySelectorAll.bind(document)
 const storage = new cargodb('storage')
-PopUp.summon("Witaj z powrotem!")
+osLocale().then(locale => {
+  if (locale != 'pl_PL') lang = 'EN'
+
+  if (lang === 'PL') PopUp.summon("Witaj z powrotem!")
+  if (lang === 'EN') PopUp.summon("Welcome back!")
+
+
 
 // Check for updates
 fetch('https://api.github.com/repos/ph0enixkm/odyssey/releases/latest')
 .then(res => res.json())
 .then(json => {
-  if (json.tag_name != version)
+  if (json.tag_name != version) {
+    if (lang === 'PL')
     PopUp.summon(`Jest dostępna nowa wersja Odysei!
         <a onclick='return updateVersion()'>Pobierz</a>`, 15000)
+    if (lang === 'EN')
+    PopUp.summon(`A new version of the Odyssey is available!
+        <a onclick='return updateVersion()'>Download</a>`, 15000)
+    }
 })
 function updateVersion() {
   shell.openExternal('https://odysseyapp.herokuapp.com')
@@ -109,6 +122,7 @@ window.SETTINGS = {
   scrollPastEnd: false,
   spell: 'pl-PL',
 }
+window.SETTINGS.spell = (lang === 'EN') ? 'en-US' : 'pl-PL'
 
 // If it's first time opened the app
 if (localStorage.getItem('settings') == null) {
@@ -124,6 +138,63 @@ let settingsEl = {
   scrollPastEnd: qs('.scroll-past-end input')[0],
   scrollPastEndLabel: qs('.scroll-past-end label')[0],
   spell: qs('.choose-spell select')[0],
+}
+
+function translate (lang) {
+  let get = document.querySelector.bind(document)
+  if (lang === 'EN'){
+    get('.bar t').innerHTML = 'Odyssey'
+    get('.bar span').innerHTML = '&lt;Untitled&gt;'
+    get('#ctx-menu').title = 'Change mode'
+    get('#ctx-menu').innerHTML = 'Tools'
+    get('#bold').title = 'Bold'
+    get('#italic').title = 'Italic'
+    get('#underline').title = 'Underline'
+    get('select[font-size]').title = 'Font size'
+    get('.justify').title = 'Text placement'
+    get('#design #image').title = 'Insert image'
+    get('#design #fg-text').title = 'Text color'
+    get('#design #bg-text').title = 'Text background color'
+    get('#view #full-view').title = 'Full view'
+    get('#pages #merge-all').title = 'Merge all pages'
+    get('#pages #print').title = 'Print'
+    get('#pages #print-view').title = 'Print preview'
+    get('#project #title').title = 'Title'
+    get('#project #keys').title = 'Keywords (space separated)'
+    get('#project #author').title = 'Author'
+    get('#project #title').placeholder = '<Untitled>'
+    get('#project #keys').placeholder = '<No Keys>'
+    get('#project #author').placeholder = '<No Author>'
+    get('.menu #reload').title = 'Renovate Document'
+    get('.menu #open-file').title = 'Open File'
+    get('.menu #save-file').title = 'Save File As'
+    get('.menu #quick-save').title = 'Save File'
+    get('.menu #settings').title = 'Settings'
+    get('.menu[ctx] button[tools]').innerHTML = 'Tools'
+    get('.menu[ctx] button[design]').innerHTML = 'Design'
+    get('.menu[ctx] button[view]').innerHTML = 'View'
+    get('.menu[ctx] button[pages]').innerHTML = 'Pages'
+    get('.menu[ctx] button[project]').innerHTML = 'Project'
+    get('.full-view .fv-tools p').innerHTML = 'Full view'
+    get('.full-view .fv-tools span#trash').title = 'Delete pages'
+    get('.full-view .fv-tools disabled#move').title = 'You have to select a sequence of pages in succession'
+    get('.full-view .fv-tools disabled#merge').title = 'You have to select a sequence of pages in succession'
+    get('.full-view .fv-tools span#chapter-view').title = 'All chapter view'
+    get('.full-view .fv-tools span#move-btn').title = 'Chain editor'
+    get('.full-view .fv-tools span#merge-sel').title = 'Merge selected pages'
+    get('.full-view .fv-tools #move-bg p').innerHTML = 'Chain editor'
+    get('.full-view .fv-tools #chapter-bg p').innerHTML = 'Chapters'
+    get('.full-view .fv-tools #chapter-bg input').title = 'Chapter name'
+    get('.full-view .fv-tools #chapter-bg #trash').title = 'Delete chapter'
+    get('#compiling p').innerHTML = 'Processing'
+    get('.settings .general').innerHTML = 'General'
+    get('.settings .themes').innerHTML = 'Theme'
+    get('.settings #options h1').innerHTML = 'General'
+    get('.settings #options .autosave span').innerHTML = 'Autosave backup'
+    get('.settings #options .img-quality span').innerHTML = 'JPG image quality'
+    get('.settings #options .scroll-past-end span').innerHTML = 'Scroll past end'
+    get('.settings #options .choose-spell span').innerHTML = 'Choose dictionary language'
+  }
 }
 
 function command (com, arg) {
@@ -280,8 +351,12 @@ let caretLastDoubleClick = e => {
     }
 }
 
+
+
 // Presets & initialisation
 document.addEventListener('DOMContentLoaded', function () {
+
+  if (lang === 'EN') translate('EN')
 
   // Set up version
   qs('.menubar .bar v')[0].innerHTML = (version != null)
@@ -361,20 +436,35 @@ document.addEventListener('DOMContentLoaded', function () {
     qs('.bar span')[0].textContent = (name == null)
       ? qs('.bar span')[0].textContent
       : name
+    if (lang === 'PL')
     PopUp.summon('Zapisano Dokument')
+    if (lang === 'EN')
+    PopUp.summon('Document Saved')
   })
   qs('.menu button#quick-save')[0].addEventListener('click', () => {
-    let path = qs('.menubar .bar span')[0].innerHTML == '&lt;Brak tytułu&gt;'
-      ? false
-      : qs('.menubar .bar span')[0].innerHTML
+    let path
+    if (lang === 'PL')
+      path = qs('.menubar .bar span')[0].innerHTML == '&lt;Brak tytułu&gt;'
+        ? false
+        : qs('.menubar .bar span')[0].innerHTML
+    if (lang === 'EN')
+      path = qs('.menubar .bar span')[0].innerHTML == '&lt;Untitled&gt;'
+        ? false
+        : qs('.menubar .bar span')[0].innerHTML
     ipcRenderer.send('quick-save',[path, JSON.stringify(BASE_FILE)])
   })
   menu.children[0].addEventListener('click',()=>{
     BASE_FILE = JSON.parse(JSON.stringify(clearTemplate))
     pages = []
     textField.contentDocument.body.innerHTML = ''
-    qs('.menubar .bar span')[0].innerHTML = '&lt;Brak tytułu&gt;'
-    PopUp.summon('Odnowiono miejsce pracy')
+    if (lang === 'PL') {
+      qs('.menubar .bar span')[0].innerHTML = '&lt;Brak tytułu&gt;'
+      PopUp.summon('Odnowiono miejsce pracy')
+    }
+    if (lang === 'EN') {
+      qs('.menubar .bar span')[0].innerHTML = '&lt;Untitled&gt;'
+      PopUp.summon('Workplace has been renovated')
+    }
     qs('input#keys')[0].value = ''
     qs('#all-keys p')[0].innerHTML = 0
     qs('input#title')[0].value = ''
@@ -385,7 +475,6 @@ document.addEventListener('DOMContentLoaded', function () {
     try {
       BASE_FILE = JSON.parse(source)
       if (!BASE_FILE.config || !BASE_FILE.config.margins) {
-        console.log('changed');
         BASE_FILE.config = {
           margins : {
             top : 70,
@@ -446,12 +535,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
   textField.contentWindow.addEventListener('keydown', e => {
     if (e.ctrlKey && e.code == 'KeyS') {
-      PopUp.summon('Nie można zapisać, ponieważ jesteś w trybie pisania.'+
-      ' Wyjdź najpierw z trybu pisania klikając ESC')
+      if (lang === 'PL')
+        PopUp.summon('Nie można zapisać, ponieważ jesteś w trybie pisania.'+
+        ' Wyjdź najpierw z trybu pisania klikając ESC')
+      if (lang === 'EN')
+      PopUp.summon('You can not save because you are in writing mode.'+
+      ' Exit writing mode by clicking ESC')
     }
     if (e.ctrlKey && e.code == 'KeyO') {
-      PopUp.summon('Nie można otworzyć pliku, ponieważ jesteś w trybie pisania.'+
-      ' Wyjdź najpierw z trybu pisania klikając ESC')
+      if (lang === 'PL')
+        PopUp.summon('Nie można otworzyć pliku, ponieważ jesteś w trybie pisania.'+
+        ' Wyjdź najpierw z trybu pisania klikając ESC')
+      if (lang === 'EN')
+        PopUp.summon('You can not open file because you are in writing mode.'+
+        ' Exit writing mode by clicking ESC')
     }
   })
 
@@ -511,9 +608,9 @@ document.addEventListener('DOMContentLoaded', function () {
       case 39: // Right
         mapKeys('right')
         break
-      case 123:
-        var win = remote.getCurrentWindow()
-        win.toggleDevTools()
+      // case 123:
+      //   var win = remote.getCurrentWindow()
+      //   win.toggleDevTools()
     }
   })
   textField.contentWindow.addEventListener('mousedown', e => {
@@ -585,7 +682,6 @@ document.addEventListener('DOMContentLoaded', function () {
         color: #eee;
         */
         background-color: rgba(255,150,0,0.3);
-        color: #eee;
       }
       *:not(font):not(b):not(u):not(i):not(div):not(span){
         color: #ccc;
@@ -699,7 +795,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.querySelector('#tools').style.display = 'inline-block'
     ctxMenu.childNodes[1].addEventListener('click', () => {
-      document.querySelector('#ctx-menu').innerText = 'Narzędzia'
+      if (lang === 'PL') document.querySelector('#ctx-menu').innerText = 'Narzędzia'
+      if (lang === 'EN') document.querySelector('#ctx-menu').innerText = 'Tools'
       document.querySelector('#view').style.display = 'none'
       document.querySelector('#tools').style.display = 'inline-block'
       document.querySelector('#design').style.display = 'none'
@@ -708,7 +805,8 @@ document.addEventListener('DOMContentLoaded', function () {
       ctxMenuIndex = 0
     })
     ctxMenu.childNodes[3].addEventListener('click', () => {
-      document.querySelector('#ctx-menu').innerText = 'Projektowanie'
+      if (lang === 'PL') document.querySelector('#ctx-menu').innerText = 'Projektowanie'
+      if (lang === 'EN') document.querySelector('#ctx-menu').innerText = 'Design'
       document.querySelector('#view').style.display = 'none'
       document.querySelector('#design').style.display = 'inline-block'
       document.querySelector('#tools').style.display = 'none'
@@ -717,7 +815,8 @@ document.addEventListener('DOMContentLoaded', function () {
       ctxMenuIndex = 1
     })
     ctxMenu.childNodes[5].addEventListener('click', () => {
-      document.querySelector('#ctx-menu').innerText = 'Widok'
+      if (lang === 'PL') document.querySelector('#ctx-menu').innerText = 'Widok'
+      if (lang === 'EN') document.querySelector('#ctx-menu').innerText = 'View'
       document.querySelector('#view').style.display = 'inline-block'
       document.querySelector('#design').style.display = 'none'
       document.querySelector('#tools').style.display = 'none'
@@ -726,7 +825,8 @@ document.addEventListener('DOMContentLoaded', function () {
       ctxMenuIndex = 2
     })
     ctxMenu.childNodes[7].addEventListener('click', () => {
-      document.querySelector('#ctx-menu').innerText = 'Strony'
+      if (lang === 'PL') document.querySelector('#ctx-menu').innerText = 'Strony'
+      if (lang === 'EN') document.querySelector('#ctx-menu').innerText = 'Pages'
       document.querySelector('#view').style.display = 'none'
       document.querySelector('#design').style.display = 'none'
       document.querySelector('#tools').style.display = 'none'
@@ -735,7 +835,8 @@ document.addEventListener('DOMContentLoaded', function () {
       ctxMenuIndex = 3
     })
     ctxMenu.childNodes[9].addEventListener('click', () => {
-      document.querySelector('#ctx-menu').innerText = 'Projekt'
+      if (lang === 'PL') document.querySelector('#ctx-menu').innerText = 'Projekt'
+      if (lang === 'EN') document.querySelector('#ctx-menu').innerText = 'Project'
       document.querySelector('#view').style.display = 'none'
       document.querySelector('#design').style.display = 'none'
       document.querySelector('#tools').style.display = 'none'
@@ -983,11 +1084,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function settingsUpdate () {
   // Autosave
-    settingsEl.autosaveLabel.title = settingsEl.autosave.checked == true ? 'Włączony' : 'Wyłączony'
+    if (lang === 'PL') settingsEl.autosaveLabel.title = settingsEl.autosave.checked == true ? 'Włączony' : 'Wyłączony'
+    if (lang === 'EN') settingsEl.autosaveLabel.title = settingsEl.autosave.checked == true ? 'On' : 'Off'
   // Image Quality
     settingsEl.imageQuality.title = Math.round(settingsEl.imageQuality.value * 100) + '%'
   // Scroll Past End
-    settingsEl.scrollPastEndLabel.title = settingsEl.scrollPastEnd.checked == true ? 'Włączony' : 'Wyłączony'
+    if (lang === 'PL') settingsEl.scrollPastEndLabel.title = settingsEl.scrollPastEnd.checked == true ? 'Włączony' : 'Wyłączony'
+    if (lang === 'EN') settingsEl.scrollPastEndLabel.title = settingsEl.scrollPastEnd.checked == true ? 'On' : 'Off'
   }
 
   settingsEl.autosave.addEventListener('change', () => {
@@ -1291,3 +1394,5 @@ let prev = false
     }
   }
 })
+
+}) // End of osLocale query

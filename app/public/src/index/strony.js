@@ -12,7 +12,8 @@ merge.btn.addEventListener("click",()=>{
   merge.loading.style.display = "inline-block"
   merge.loading.style.opacity = 0
   merge.gif.style.transform = "rotate(30deg) scale(0)"
-  merge.innerMsg.innerHTML = "Scalanie Wszystkich Stron"
+  if (lang === 'PL') merge.innerMsg.innerHTML = "Scalanie Wszystkich Stron"
+  if (lang === 'EN') merge.innerMsg.innerHTML = "Merging All Pages"
   //Merging
   let all = ""
   pages.map(item => {

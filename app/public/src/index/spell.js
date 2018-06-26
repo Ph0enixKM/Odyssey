@@ -3,9 +3,10 @@ import {SpellCheckHandler, ContextMenuListener, ContextMenuBuilder} from 'electr
 window.spellCheckHandler = new SpellCheckHandler();
 window.spellCheckHandler.attachToInput();
 
-window.spellCheckHandler.switchLanguage('pl-PL');
+if (lang === 'PL') window.spellCheckHandler.switchLanguage('pl-PL')
+if (lang === 'EN') window.spellCheckHandler.switchLanguage('en-US')
 
-let contextMenuBuilder = new ContextMenuBuilder(window.spellCheckHandler);
+let contextMenuBuilder = new ContextMenuBuilder(window.spellCheckHandler)
 
 let contextMenuListener = new ContextMenuListener((info) => {
   // Display only inside editor

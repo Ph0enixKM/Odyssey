@@ -23,7 +23,8 @@ ipcRenderer.on("selected-image",(event, arr)=>{
   merge.loading.style.display = "inline-block"
   merge.loading.style.opacity = 0
   merge.gif.style.transform = "rotate(30deg) scale(0)"
-  merge.innerMsg.innerHTML = "Optymalizowanie zdjęcia"
+  if (lang === 'PL') merge.innerMsg.innerHTML = "Optymalizowanie zdjęcia"
+  if (lang === 'EN') merge.innerMsg.innerHTML = "Optimizing image"
   merge.loading.style.opacity = 1
   merge.gif.style.transform = "rotate(0deg) scale(1)"
   setTimeout(()=>{
@@ -132,9 +133,6 @@ design.updateTowers = () => {
     let left
     let cPose = (moving) ? design.tower.classList.item(1) : null
     let cSeed = (moving) ? design.tower.getAttribute('seed') : null
-    // console.log(Array.from(document.querySelectorAll('.tower.nw')).map(item => {
-    //   return item.style.top
-    // }))
     if (img == null) {
       design.findImages()
       return false

@@ -139,6 +139,7 @@ function run () {
             (function(){
               // Write to MS Word
               // FIXME: Margins
+              let given = JSON.parse(source)
               let docx = html2docx.asBlob(`
                 <!DOCTYPE html>
                 <html>
@@ -146,7 +147,6 @@ function run () {
                   <body>
                     ${
                       (function(){
-                        let given = JSON.parse(source)
                         let content = ''
                         for (let page of given.book) {
                           content += ( page[1] + "<br>" )
@@ -156,7 +156,12 @@ function run () {
                     }
                   </body>
                 </html>
-              `, { /* margins */ })
+              `, {
+                top : given.config.margins.top,
+                bottom : given.config.margins.bottom,
+                left : given.config.margins.left,
+                right : given.config.margins.right
+               })
               fs.writeFile(file, docx, err => {
                 if (err) throw err
                 e.sender.send('saved-file', null)
@@ -211,7 +216,7 @@ function run () {
     icon:  __dirname + '/assets/icons/logo.png',
     opacity: 1
   })
-  // win.toggleDevTools()
+  win.toggleDevTools()
   win.setMenu(null)
   win.loadURL("file://" + __dirname+'/public/index.html')
   win.setBackgroundColor('#222')

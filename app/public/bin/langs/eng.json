@@ -32,7 +32,7 @@
   },
   "toolMenu" : {
     "tools" : "Tools",
-    "insert" : "Insert",
+    "insert" : "Design",
     "view" : "View",
     "pages" : "Pages",
     "project" : "Project"
@@ -43,7 +43,7 @@
     "chainEditor" : "Chain editor",
     "chapters" : "Chapters",
     "chapterName" : "Chapter name",
-    "deleteChapter" : "Delete chapter",
+    "deleteChapter" : "Delete chapter"
   },
   "settings" : {
     "general" : "General",
@@ -55,6 +55,5 @@
     "scrollPastEnd" : "Scroll past end",
     "chooseDictLang" : "Choose dictionary language"
   },
-  "processing" : "Processing",
-
+  "processing" : "Processing"
 }

@@ -56,7 +56,7 @@
           <option disabled>───────────────</option>
           <option l selected>Lato</option>
         </select>
-        <select title="Wielkość Fonta">
+        <select title="Wielkość Fonta" font-size>
           <option value="1">12px</option>
           <option value="2">16px</option>
           <option value="3" selected>18px</option>
@@ -88,12 +88,12 @@
         <div id="print-view" title="Podgląd wydruku"><div class="toggle"></div></div>
       </div>
       <div id="project">
-        <input id="title" type="text" title="Tytuł utworu" placeholder="<Brak tytułu>">
+        <input id="title" type="text" title="Tytuł" placeholder="<Brak tytułu>">
         <div id="all-keys">
           <input id="keys" type="text" title="Słowa kluczowe (oddzielone spacją)" placeholder="<Brak kluczy>">
           <p title="Liczba kluczy">0</p>
         </div>
-        <input id="author" type="text" title="Autor utworu" placeholder="<Brak autora>">
+        <input id="author" type="text" title="Autor" placeholder="<Brak autora>">
       </div>
 
     </div>
@@ -108,12 +108,12 @@
     </div>
 
 
-    <div class="menu">
-      <button>Narzędzia</button>
-      <button>Projektowanie</button>
-      <button>Widok</button>
-      <button>Strony</button>
-      <button>Projekt</button>
+    <div class="menu" ctx>
+      <button tools>Narzędzia</button>
+      <button design>Projektowanie</button>
+      <button view>Widok</button>
+      <button pages>Strony</button>
+      <button project>Projekt</button>
     </div>
 
 
@@ -256,10 +256,10 @@
       </div>
     </div>
 
-    <script src="src/libs/tippy.all.min.js"></script>
     <script src="src/libs/popup.js"></script>
-    <script src="src/libs/color-picker.js"></script>
     <script src="src/index/script.js"></script>
+    <script src="src/libs/tippy.all.min.js"></script>
+    <script src="src/libs/color-picker.js"></script>
     <script src="src/index/widok.js"></script>
     <script src="src/index/strony.js"></script>
     <script src="src/index/design.js"></script>
