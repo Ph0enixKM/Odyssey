@@ -64,9 +64,24 @@ resizer.apply = () => {
   resizer.update()
 }
 // On load Stuff
-window.onload = () => {
+if (document.readyState === 'complete') {
+  pageDefaults = {
+    width : textField.contentDocument.documentElement.offsetWidth,
+    height : textField.contentDocument.documentElement.offsetHeight
+  }
+
   resizer.update()
   resizer.apply()
+} else {
+  window.addEventListener('DOMContentLoaded', () => {
+    pageDefaults = {
+      width : textField.contentDocument.documentElement.offsetWidth,
+      height : textField.contentDocument.documentElement.offsetHeight
+    }
+
+    resizer.update()
+    resizer.apply()
+  })
 }
 
 textField.addEventListener('mousemove', e => {

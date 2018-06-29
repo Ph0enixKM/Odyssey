@@ -195,7 +195,7 @@ fv.off = () => {
 }
 
 // MOVE SECTION
-const moveModule = require('./src/index/move.js')
+const moveModule = require('./move.js')
 
 window.move = {
   btn: qs('#move-btn')[0],

@@ -57,30 +57,47 @@ const {shell} = require('electron')
 const brain = require('brainjs')
 const osLocale = require('os-locale')
 
+window.addEventListener('DOMContentLoaded', () => {
+  // Electron compiling bug
+  if (document.body.childNodes[0].tagName != "DIV" ) {
+    document.body.childNodes[0].remove()
+  }
+})
 
 window.qs = document.querySelectorAll.bind(document)
 const storage = new cargodb('storage')
-osLocale().then(locale => {
-  if (locale != 'pl_PL') lang = 'EN'
 
-  if (lang === 'PL') PopUp.summon("Witaj z powrotem!")
-  if (lang === 'EN') PopUp.summon("Welcome back!")
+if (remote.app.getLocale() != 'pl') lang = 'EN'
+
+if (lang === 'PL') PopUp.summon("Witaj z powrotem!")
+if (lang === 'EN') PopUp.summon("Welcome back!")
 
 
+function versionValue (version) {
+  let ver = version.split('.')
+  let sum = 0
+  let arg = ver.length -1
+  for (let iter of ver) {
+    sum += Number(iter) * (10 ** arg)
+    arg--
+  }
+  return sum
+}
 
 // Check for updates
 fetch('https://api.github.com/repos/ph0enixkm/odyssey/releases/latest')
 .then(res => res.json())
 .then(json => {
-  if (json.tag_name != version) {
+  if (versionValue(json.tag_name) > versionValue(version)) {
     if (lang === 'PL')
     PopUp.summon(`Jest dostępna nowa wersja Odysei!
         <a onclick='return updateVersion()'>Pobierz</a>`, 15000)
     if (lang === 'EN')
     PopUp.summon(`A new version of the Odyssey is available!
         <a onclick='return updateVersion()'>Download</a>`, 15000)
-    }
+  }
 })
+
 function updateVersion() {
   shell.openExternal('https://odysseyapp.herokuapp.com')
 }
@@ -351,13 +368,17 @@ let caretLastDoubleClick = e => {
     }
 }
 
+// Scripts included
+require('./src/index/design.js')
+require('./src/index/widok.js')
+require('./src/index/input.js')
+require('./src/index/resizer.js')
+require('./src/index/spell.js')
+require('./src/index/strony.js')
 
-
-// Presets & initialisation
-document.addEventListener('DOMContentLoaded', function () {
+let loaded = () => {
 
   if (lang === 'EN') translate('EN')
-
   // Set up version
   qs('.menubar .bar v')[0].innerHTML = (version != null)
     ? version
@@ -366,16 +387,6 @@ document.addEventListener('DOMContentLoaded', function () {
   // If scroll past end enabled in settings
   if (SETTINGS.scrollPastEnd) {
     qs('.iframe #down')[0].innerHTML += `<div id="dummy"></div>`
-  }
-
-  // Electron compiling bug
-  if (document.body.childNodes[0].tagName != "DIV" ) {
-    document.body.childNodes[0].remove()
-  }
-
-  pageDefaults = {
-    width : textField.contentDocument.documentElement.offsetWidth,
-    height : textField.contentDocument.documentElement.offsetHeight
   }
 
   // Vars
@@ -930,7 +941,6 @@ document.addEventListener('DOMContentLoaded', function () {
       command('backColor', 'transparent')
     })
   })()
-
     fadeAll()
     menuBar()
     menuF()
@@ -1393,6 +1403,10 @@ let prev = false
       fontSizeReader(sizeIterator(selEl))
     }
   }
-})
+}
 
-}) // End of osLocale query
+// Presets & initialisation
+if (document.readyState === 'complete')
+  loaded()
+else
+  document.addEventListener('DOMContentLoaded', loaded)

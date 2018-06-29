@@ -27,6 +27,9 @@ ipcRenderer.on('print-request', (event, src, silent) => {
       html.innerHTML = page
       article.appendChild(html)
     }
+    for (let img of document.querySelectorAll('img')) {
+      img.style.filter = 'none'
+    }
     setTimeout(()=>{
       win.webContents.print({silent})
     },10)
@@ -47,6 +50,9 @@ ipcRenderer.on('pdf-request', (event, src, path) => {
       html.style.left = obj.config.margins.left + 'px'
       html.innerHTML = page[1]
       article.appendChild(html)
+    }
+    for (let img of document.querySelectorAll('img')) {
+      img.style.filter = 'none'
     }
     setTimeout(()=>{
       win.webContents.printToPDF({}, function (error, data) {

@@ -73,6 +73,9 @@ printReq.printView.addEventListener('click',()=>{
     textField.contentDocument.body.style.color = 'black'
     document.body.style.background = 'radial-gradient(#ccc,#222)'
     qs('.caret')[0].style.visibility = 'hidden'
+    for (let img of textField.contentDocument.querySelectorAll('img')) {
+      img.style.filter = 'none'
+    }
 
     // Turn off Spell Checker
     textField.contentDocument.body.setAttribute("contenteditable",false)
@@ -85,6 +88,9 @@ printReq.printView.addEventListener('click',()=>{
     textField.contentDocument.body.style.color = '#aaa'
     document.body.style.background = 'radial-gradient(#333,#222)'
     qs('.caret')[0].style.visibility = 'visible'
+    for (let img of textField.contentDocument.querySelectorAll('img')) {
+      img.style.filter = 'grayscale(100%) brightness(70%)'
+    }
 
     // Turn off Spell Checker
     textField.contentDocument.body.setAttribute("contenteditable",true)

@@ -12,7 +12,10 @@ let squirrel = false
 
 function installing () {
   // Installer Handling
-
+  const appFolder = path.resolve(process.execPath, '..')
+  const rootAtomFolder = path.resolve(appFolder, '..')
+  const updateDotExe = path.resolve(path.join(rootAtomFolder, 'Update.exe'))
+  
   if (process.argv[1] == '--squirrel-uninstall') {
     squirrel = true
     dialog.showMessageBox({
@@ -23,6 +26,7 @@ function installing () {
     }, () => {
       childProcess.exec('assoc .odyss=')
       childProcess.exec(`ftype odyssfile=`)
+      childProcess.exec(`${updateDotExe} --removeShortcut Odyssey`)
       app.quit()
     })
   } else if (process.argv[1] == '--squirrel-install') {
@@ -30,6 +34,7 @@ function installing () {
     childProcess.exec('assoc .odyss=odyssfile')
     childProcess.exec(`ftype odyssfile=${__dirname+'/Odyssey.exe'}`)
     squirrel = true
+    childProcess.exec(`${updateDotExe} --createShortcut Odyssey`)
   }
 }
 
@@ -216,7 +221,7 @@ function run () {
     icon:  __dirname + '/assets/icons/logo.png',
     opacity: 1
   })
-  win.toggleDevTools()
+  // win.toggleDevTools()
   win.setMenu(null)
   win.loadURL("file://" + __dirname+'/public/index.html')
   win.setBackgroundColor('#222')
@@ -224,7 +229,7 @@ function run () {
   ipcMain.on('print', (e, src, silent) => {
     silent = silent == undefined ? true : false
     //Instatiate new printing process
-    let printWin = new BrowserWindow({width: 794, height: 1122, show: true, parent: win})
+    let printWin = new BrowserWindow({width: 794, height: 1122, show: false, parent: win})
     printWin.setMenu(null)
     printWin.loadURL("file://" + __dirname+'/public/print.html')
     // printWin.toggleDevTools()
