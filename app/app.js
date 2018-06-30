@@ -15,7 +15,7 @@ function installing () {
   const appFolder = path.resolve(process.execPath, '..')
   const rootAtomFolder = path.resolve(appFolder, '..')
   const updateDotExe = path.resolve(path.join(rootAtomFolder, 'Update.exe'))
-  
+
   if (process.argv[1] == '--squirrel-uninstall') {
     squirrel = true
     dialog.showMessageBox({
@@ -26,7 +26,7 @@ function installing () {
     }, () => {
       childProcess.exec('assoc .odyss=')
       childProcess.exec(`ftype odyssfile=`)
-      childProcess.exec(`${updateDotExe} --removeShortcut Odyssey`)
+      childProcess.exec(`${updateDotExe} --removeShortcut Odyssey.exe`)
       app.quit()
     })
   } else if (process.argv[1] == '--squirrel-install') {
@@ -34,7 +34,7 @@ function installing () {
     childProcess.exec('assoc .odyss=odyssfile')
     childProcess.exec(`ftype odyssfile=${__dirname+'/Odyssey.exe'}`)
     squirrel = true
-    childProcess.exec(`${updateDotExe} --createShortcut Odyssey`)
+    childProcess.exec(`${updateDotExe} --createShortcut Odyssey.exe`)
   }
 }
 
