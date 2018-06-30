@@ -20,7 +20,7 @@
     "url": "https://github.com/Ph0enixKM/odyssey-website/issues"
   },
   "homepage": "https://github.com/Ph0enixKM/odyssey-website#readme",
-  "dependencies" : {
+  "dependencies": {
     "express": "^4.16.0",
     "nodemon": "*"
   }
