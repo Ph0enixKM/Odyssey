@@ -1163,6 +1163,32 @@ disabled[disabled="false"] {
   background-color: #555;
 }
 
+.toolbar input[font-size] {
+  padding: 10px;
+  background-color: #2a2a2a;
+  color: white;
+  border: 1px solid #444;
+  transition: 300ms;
+  cursor: text;
+  width: 50px;
+  text-align: center;
+}
+
+.toolbar input[font-size]:hover {
+  background-color: #555;
+}
+
+.toolbar input[font-size]::selection {
+  background-color: rgba(255, 150, 0, 0.5);
+  color: #fff;
+}
+
+.toolbar input[type="number"]::-webkit-outer-spin-button,
+.toolbar input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 .toolbar option[a] {
   font-family: Arial, sans-serif;
 }

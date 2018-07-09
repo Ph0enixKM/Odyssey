@@ -4,7 +4,6 @@
     version : '1.4.0',
 
     fonts  : undefined,
-    fontSizes  : undefined,
     textField  : undefined,
     rest  : undefined,
     pages  : undefined,
@@ -167,7 +166,7 @@ function translate (lang) {
     get('#bold').title = 'Bold'
     get('#italic').title = 'Italic'
     get('#underline').title = 'Underline'
-    get('select[font-size]').title = 'Font size'
+    get('input[font-size]').title = 'Font size'
     get('.justify').title = 'Text placement'
     get('#design #image').title = 'Insert image'
     get('#design #fg-text').title = 'Text color'
@@ -222,11 +221,6 @@ function command (com, arg) {
 function font () {
   let fontVal = fonts.options[fonts.selectedIndex].value
   textField.contentDocument.execCommand('fontname', false, fontVal)
-}
-
-function fontSize () {
-  let fontSizeVal = fontSizes.options[fontSizes.selectedIndex].value
-  textField.contentDocument.execCommand('fontSize', false, parseInt(fontSizeVal))
 }
 
 
@@ -391,7 +385,6 @@ let loaded = () => {
 
   // Vars
   fonts = document.getElementsByTagName('select')[0]
-  fontSizes = document.getElementsByTagName('select')[1]
   textField = document.getElementsByTagName('iframe')[0]
 
   bodyContent = document.getElementsByClassName('iframe')[0]
@@ -419,6 +412,54 @@ let loaded = () => {
       textField.contentDocument.body.blur()
       window.focus()
     }
+  })
+
+
+  function getHTMLOfSelection () {
+    let range
+    let selection = textField.contentWindow.getSelection()
+    if (selection.rangeCount > 0) {
+      range = selection.getRangeAt(0)
+      let clonedSelection = range.cloneContents()
+      let div = document.createElement('div')
+      div.appendChild(clonedSelection)
+      let html = div.innerHTML
+      div.remove()
+      return html
+    }
+    else {
+      return ''
+    }
+  }
+
+  function setSizeOfHTML(HTMLstring, size) {
+    let obj = document.createElement('SPAN')
+    obj.setAttribute('inserted', 'true')
+    obj.style.fontSize = size + 'px'
+    obj.innerHTML = HTMLstring
+    let result = obj.outerHTML
+    obj.remove()
+    return result
+  }
+
+  function fontSizeIter(el, size) {
+    let children = el.children
+    if (children.length == 0) return null
+    for (let child of children) {
+      child.style.fontSize = size + 'px'
+      fontSizeIter(child, size)
+    }
+  }
+
+  let fontnew = qs('input[font-size]')[0]
+
+  fontnew.addEventListener('change', () => {
+    if (fontnew.value > 500) return null
+    let content = getHTMLOfSelection()
+    command('insertHTML', setSizeOfHTML(content, fontnew.value))
+    let obj = textField.contentDocument.querySelector('span[inserted="true"]')
+    obj.setAttribute('inserted', 'false')
+    fontSizeIter(obj, fontnew.value)
   })
 
   window.addEventListener('keydown', e => {
@@ -619,9 +660,9 @@ let loaded = () => {
       case 39: // Right
         mapKeys('right')
         break
-      // case 123:
-      //   var win = remote.getCurrentWindow()
-      //   win.toggleDevTools()
+      case 123:
+        var win = remote.getCurrentWindow()
+        win.toggleDevTools()
     }
   })
   textField.contentWindow.addEventListener('mousedown', e => {
@@ -1305,68 +1346,15 @@ let prev = false
 
 
   function fontSizeReader (elem) {
-    switch (elem.toString()) {
-      case '7':
-        space = 57
-        fontSizes.value = 7
-        break
-      case '6':
-        space = 39
-        fontSizes.value = 6
-        break
-      case '5':
-        space = 29
-        fontSizes.value = 5
-        break
-      case '4':
-        space = 22
-        fontSizes.value = 4
-        break
-      case '3':
-        space = 18
-        fontSizes.value = 3
-        break
-      case '2':
-        space = 16
-        fontSizes.value = 2
-        break
-      case '1':
-        space = 12
-        fontSizes.value = 1
-        break
-      default:
-        space = 18
-        fontSizes.value = 3
-        break
-    }
-  }
+    let val = elem.toString()
+    let valNum = val.slice(0, val.length - 2)
 
-  function fontSizeTextToNumber (name) {
-    switch (name) {
-      case 'x-small':
-        return 1
-        break
-      case 'small':
-        return 2
-        break
-      case 'medium':
-        return 3
-        break
-      case 'large':
-        return 4
-        break
-      case 'x-large':
-        return 5
-        break
-      case 'xx-large':
-        return 6
-        break
-      case '-webkit-xxx-large':
-        return 7
-        break
-      default:
-        return name
-        break
+    if ( Number(valNum) ) {
+      space = valNum
+      fontnew.value = valNum
+    } else {
+      space = 18
+      fontnew.value = 18
     }
   }
 
@@ -1384,11 +1372,11 @@ let prev = false
 
   function sizeIterator (selEl) {
     if (selEl == null || (selEl.tagName && selEl.tagName == "BODY")){
-      return 3
+      return 18
     } else if (selEl.size && selEl.size != undefined) {
       return selEl.size
     } else if (selEl.style.fontSize && selEl.style.fontSize != '') {
-      return fontSizeTextToNumber(selEl.style.fontSize)
+      return selEl.style.fontSize
     } else {
       return fontIterator(selEl.parentElement)
     }
@@ -1400,6 +1388,8 @@ let prev = false
     if (selection != null) {
       var selEl = selection.parentElement
       fonts.value = fontIterator(selEl)
+      // console.log(sizeIterator(selEl))
+      if (document.activeElement == fontnew) return null
       fontSizeReader(sizeIterator(selEl))
     }
   }

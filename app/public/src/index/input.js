@@ -106,6 +106,7 @@ input.keydown = e => {
 
       if (qs('#tools')[0].style.display == 'inline-block') {
         if (input.digits[i]) {
+          if (document.activeElement == qs('input[font-size]')[0]) return null
           qs('#tools')[0].children[(i-1) % 10].click()
           input.digits[i] = false
         }
