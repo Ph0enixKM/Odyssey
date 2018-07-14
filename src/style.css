@@ -118,7 +118,8 @@ side img#contact {
   z-index: 0;
   background-size: cover;
   background-position: center center;
-  background-image: url("../images/odyssey.png");
+  background-image: url("../images/bg.png");
+  animation: intro 2s;
 }
 
 #cont #content {
@@ -209,4 +210,13 @@ header p {
 @font-face {
   font-family: Havana;
   src: url("havana.ttf");
+}
+
+@keyframes intro {
+  0% {
+    filter: blur(100px) grayscale(100%);
+  }
+  100% {
+    filter: blur(0px);
+  }
 }
