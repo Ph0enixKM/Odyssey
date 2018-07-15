@@ -11,7 +11,6 @@ const english = () => {
     if (key != 0) ver += item + ' '
   })
   qs('#download').innerHTML = 'Version ' + ver
-  html('#download[onclick] span','Download')
   html('#title[uno]','Come to the dark side, the dark layout will not strain your eyes')
   html('#title[dos]','Manipulate pages as if they were pieces of paper')
   html('#title[tres]','Enjoy your own text editor, for which you do not have to pay anything')
