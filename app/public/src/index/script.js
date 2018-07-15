@@ -606,9 +606,9 @@ let loaded = () => {
       case 39: // Right
         mapKeys('right')
         break
-      case 123:
-        var win = remote.getCurrentWindow()
-        win.toggleDevTools()
+      // case 123:
+      //   var win = remote.getCurrentWindow()
+      //   win.toggleDevTools()
     }
   })
   textField.contentWindow.addEventListener('mousedown', e => {
