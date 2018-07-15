@@ -4,6 +4,20 @@ body
   overflow-x: hidden
   user-select: none
 
+  &::-webkit-scrollbar-track
+  	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3)
+  	border-radius: 10px
+  	background-color: #222
+
+  &::-webkit-scrollbar
+    width: 12px
+    background-color: transparent
+
+  &::-webkit-scrollbar-thumb
+    border-radius: 10px
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3)
+    background-color: #555
+
 d
   color: #111
 d1
@@ -102,6 +116,8 @@ side
       margin: 30px 30px 0 30px
       padding: 10px
       border-bottom: 4px #222 dashed
+      &.orange
+        border-bottom: 4px orange dashed !important
     d2#download
       font-size: 40px
     button#download
@@ -151,6 +167,43 @@ header
     color: #aaa
     margin: 15px 0 15px 0
     user-select: none
+
+#gradient
+  width: 100vw
+  height: 10vh
+  background: linear-gradient(transparent, #222)
+  position: absolute
+  display: inline-block
+  bottom: 0px
+#arrow
+  content: ""
+  width: 10vh
+  height: 10vh
+  background-image: url('../images/arrow.png')
+  background-size: cover
+  background-position: center
+  display: inline-block
+  position: absolute
+  bottom: 0px
+  left: 50%
+  filter: drop-shadow(0 0 10px black)
+  cursor: pointer
+  transform-origin: center
+  transform: translate(-50%, -10px)
+  transition: transform 300ms
+  &:hover
+    transform: translate(-50%, 0)
+#jumbotron
+  position: absolute
+  top: 125px
+  right: 50px
+  font-size: 70px
+  font-family: Havana
+  color: #ccc
+  text-shadow: 0 0 10px black
+  background-color: #222
+  padding: 25px
+  box-shadow: 0 0 25px #222
 
 
 @font-face
