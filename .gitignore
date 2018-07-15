@@ -2,3 +2,4 @@ node_modules/
 *.rar
 notImportant/
 out/
+release-builds/
