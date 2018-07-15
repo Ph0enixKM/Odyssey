@@ -1,4 +1,4 @@
-import {SpellCheckHandler, ContextMenuListener, ContextMenuBuilder} from 'electron-spellchecker';
+const {SpellCheckHandler, ContextMenuListener, ContextMenuBuilder} = require('electron-spellchecker');
 
 window.spellCheckHandler = new SpellCheckHandler();
 window.spellCheckHandler.attachToInput();
