@@ -117,7 +117,19 @@ side
       padding: 10px
       border-bottom: 4px #222 dashed
       &.orange
-        border-bottom: 4px orange dashed !important
+        font-size: 50px
+        font-family: Silent
+        border-bottom: 4px rgb(255, 150, 0) dashed !important
+      &[uno],&[dos],&[tres]
+        // text-transform: uppercase
+        margin-bottom: 15px
+        border-bottom: none
+        background-color: #333
+        padding: 15px
+        border-radius: 10px
+        font-family: Silent
+        font-size: 50px
+        // box-shadow: -150px 0 #2a2a2a, 150px 0 #2a2a2a
     d2#download
       font-size: 40px
     button#download
@@ -141,7 +153,6 @@ side
         height: 25px
       &:hover
         box-shadow: 10px 0 #2a2a2a, -10px 0 #2a2a2a, 0 5px 20px #111, 10px 5px 20px #111, -10px 5px 20px #111
-
 
 header
   background-color: #2a2a2a
@@ -198,7 +209,7 @@ header
   top: 125px
   right: 50px
   font-size: 70px
-  font-family: Havana
+  font-family: Silent
   color: #ccc
   text-shadow: 0 0 10px black
   background-color: #222
@@ -213,6 +224,10 @@ header
 @font-face
   font-family: Havana
   src: url('havana.ttf')
+
+@font-face
+  font-family: Silent
+  src: url('silent.otf')
 
 @keyframes intro
   0%

@@ -160,7 +160,19 @@ side img#contact {
 }
 
 #cont #content d1#title.orange {
-  border-bottom: 4px orange dashed !important;
+  font-size: 50px;
+  font-family: Silent;
+  border-bottom: 4px #ff9600 dashed !important;
+}
+
+#cont #content d1#title[uno], #cont #content d1#title[dos], #cont #content d1#title[tres] {
+  margin-bottom: 15px;
+  border-bottom: none;
+  background-color: #333;
+  padding: 15px;
+  border-radius: 10px;
+  font-family: Silent;
+  font-size: 50px;
 }
 
 #cont #content d2#download {
@@ -260,7 +272,7 @@ header p {
   top: 125px;
   right: 50px;
   font-size: 70px;
-  font-family: Havana;
+  font-family: Silent;
   color: #ccc;
   text-shadow: 0 0 10px black;
   background-color: #222;
@@ -276,6 +288,11 @@ header p {
 @font-face {
   font-family: Havana;
   src: url("havana.ttf");
+}
+
+@font-face {
+  font-family: Silent;
+  src: url("silent.otf");
 }
 
 @keyframes intro {
