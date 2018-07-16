@@ -1,7 +1,7 @@
 window.onload = () => {
   if (navigator.language != 'pl-PL') {
+    english()
   }
-  english()
   let arrow = document.querySelector('#arrow')
   arrow.addEventListener('click', () => {
     let el = document.querySelector('#bg')
