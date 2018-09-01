@@ -21,7 +21,7 @@
   -webkit-box-shadow:1px 5px 10px rgba(0,0,0,.5);
   -moz-box-shadow:1px 5px 10px rgba(0,0,0,.5);
   box-shadow:1px 5px 10px rgba(0,0,0,.5);
-  width:calc(11.5em + 3px); /* TODO */
+  width:calc(11.5em + 3px);
 }
 .color-picker-container *,
 .color-picker-container *::before,
@@ -41,7 +41,7 @@
   height:10em;
   float:right;
   cursor:ns-resize;
-  background:transparent url('color-picker-h.png') no-repeat 50% 50%;
+  /* background:transparent url('color-picker-h.png') no-repeat 50% 50%; */
   background-image:-webkit-linear-gradient(to top,#f00 0%,#ff0 17%,#0f0 33%,#0ff 50%,#00f 67%,#f0f 83%,#f00 100%);
   background-image:-moz-linear-gradient(to top,#f00 0%,#ff0 17%,#0f0 33%,#0ff 50%,#00f 67%,#f0f 83%,#f00 100%);
   background-image:linear-gradient(to top,#f00 0%,#ff0 17%,#0f0 33%,#0ff 50%,#00f 67%,#f0f 83%,#f00 100%);
@@ -78,7 +78,7 @@
   height:10em;
   float:left;
   margin-right:1px;
-  background:transparent url('color-picker-sv.png') no-repeat 50% 50%;
+  /* background:transparent url('color-picker-sv.png') no-repeat 50% 50%; */
   background-image:-webkit-linear-gradient(to top,#000,rgba(0,0,0,0)),linear-gradient(to right,#fff,rgba(255,255,255,0));
   background-image:-moz-linear-gradient(to top,#000,rgba(0,0,0,0)),linear-gradient(to right,#fff,rgba(255,255,255,0));
   background-image:linear-gradient(to top,#000,rgba(0,0,0,0)),linear-gradient(to right,#fff,rgba(255,255,255,0));

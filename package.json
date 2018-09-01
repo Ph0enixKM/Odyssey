@@ -4,14 +4,15 @@
   "description": "Rich Text Editor designed for writers novelists and poets.",
   "main": "app/app.js",
   "scripts": {
-    "start": "electron-forge start",
+    "start": "sh configs/compile.sh",
+    "watch-sass": "nodemon -e sass -x \"node configs/sass.js\"",
     "build": "electron-forge package Odyssey --asar=true",
     "build-win": "electron-packager . --overwrite --platform=win32 --arch=x64 --icon=app/assets/icons/logo.icon --prune=true --out=release-builds",
     "build-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=app/assets/icons/logo.icns --prune=true --out=release-builds",
     "build-linux": "electron-packager . --overwrite --platform=linux --arch=x64 --icon=app/assets/icons/logo.png --prune=true --out=release-builds",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "installer": "node install.js"
+    "installer": "node configs/install.js"
   },
   "repository": {
     "type": "git",
@@ -82,6 +83,9 @@
   },
   "devDependencies": {
     "electron-forge": "^5.1.1",
-    "electron-prebuilt-compile": "1.8.4"
+    "electron-prebuilt-compile": "1.8.4",
+    "node-sass": "^4.9.3",
+    "typescript": "^3.0.1",
+    "typescript-compiler": "^1.4.1-2"
   }
 }

@@ -39,7 +39,7 @@
     restOf : '',
     str  : '',
     prevBounds : null,
-    lang : 'PL'
+    lang : 'EN'
   })
 })()
 
@@ -53,6 +53,7 @@ const fs = require('fs')
 const cargodb = require('cargodb')
 const path = require('path')
 const {shell} = require('electron')
+console.log(process.cwd())
 const brain = require('brainjs')
 const osLocale = require('os-locale')
 
@@ -82,6 +83,11 @@ function versionValue (version) {
   }
   return sum
 }
+
+const themesEnum = Object.freeze({
+  FLAME: 0,
+  FUTURE : 1,
+})
 
 // Check for updates
 fetch('https://api.github.com/repos/ph0enixkm/odyssey/releases/latest')
@@ -137,8 +143,10 @@ window.SETTINGS = {
   imageQuality: 0.5,
   scrollPastEnd: false,
   spell: 'pl-PL',
+  theme:  themesEnum.FLAME,
+  spell: (lang === 'EN') ? 'en-US' : 'pl-PL'
 }
-window.SETTINGS.spell = (lang === 'EN') ? 'en-US' : 'pl-PL'
+// window.SETTINGS.spell = (lang === 'EN') ? 'en-US' : 'pl-PL'
 
 // If it's first time opened the app
 if (localStorage.getItem('settings') == null) {
@@ -157,7 +165,7 @@ let settingsEl = {
 }
 
 function translate (lang) {
-  if (lang === 'EN') require('./src/index/langs/eng.js')()
+  if (lang === 'EN') require('./src/langs/eng.js')()
 }
 
 function command (com, arg) {
@@ -310,12 +318,12 @@ let caretLastDoubleClick = e => {
 }
 
 // Scripts included
-require('./src/index/design.js')
-require('./src/index/widok.js')
-require('./src/index/input.js')
-require('./src/index/resizer.js')
-require('./src/index/spell.js')
-require('./src/index/strony.js')
+require('./src/js/design.js')
+require('./src/js/widok.js')
+require('./src/js/input.js')
+require('./src/js/resizer.js')
+require('./src/js/spell.js')
+require('./src/js/strony.js')
 
 let loaded = () => {
   if (lang === 'EN') translate('EN')
@@ -532,7 +540,7 @@ let loaded = () => {
   space = 19
 
   textField.contentWindow.addEventListener('keydown', e => {
-    if (e.ctrlKey && e.code == 'KeyS') {
+    if (e.ctrlKey && e.code == 'KeyS' && !e.altKey) {
       if (lang === 'PL')
         PopUp.summon('Nie można zapisać, ponieważ jesteś w trybie pisania.'+
         ' Wyjdź najpierw z trybu pisania klikając ESC')
@@ -540,7 +548,7 @@ let loaded = () => {
       PopUp.summon('You can not save because you are in writing mode.'+
       ' Exit writing mode by clicking ESC')
     }
-    if (e.ctrlKey && e.code == 'KeyO') {
+    if (e.ctrlKey && e.code == 'KeyO' && !e.altKey) {
       if (lang === 'PL')
         PopUp.summon('Nie można otworzyć pliku, ponieważ jesteś w trybie pisania.'+
         ' Wyjdź najpierw z trybu pisania klikając ESC')
@@ -606,9 +614,9 @@ let loaded = () => {
       case 39: // Right
         mapKeys('right')
         break
-      // case 123:
-      //   var win = remote.getCurrentWindow()
-      //   win.toggleDevTools()
+      case 123:
+        var win = remote.getCurrentWindow()
+        win.toggleDevTools()
     }
   })
   textField.contentWindow.addEventListener('mousedown', e => {
@@ -858,7 +866,6 @@ let loaded = () => {
     id('italic').addEventListener('click', () => command('italic'))
     id('underline').addEventListener('click', () => command('underline'))
     tag('select')[0].addEventListener('change', () => font())
-    tag('select')[1].addEventListener('change', () => fontSize())
     id('justify-left').addEventListener('click', () => command('justifyLeft'))
     id('justify-center').addEventListener('click', () => command('justifyCenter'))
     id('justify-right').addEventListener('click', () => command('justifyRight'))

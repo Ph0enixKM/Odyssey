@@ -1,6 +1,10 @@
-# Odyssey
-
-![Odyssey Logo](https://github.com/Ph0enixKM/Odyssey/blob/dev/public/arts/logo-250.png)
+<div align="center">
+    <a href="https://odysseyapp.herokuapp.com">
+        <img width="600" height="250"src="https://github.com/Ph0enixKM/Odyssey/blob/dev/public/arts/logo-250.png">
+    </a>
+    <br>
+    <br>
+</div>
 
 ## Odyssey is a rich text editor for writers, novelists and poets.
 It provides more natural way of designing documents,books,poems

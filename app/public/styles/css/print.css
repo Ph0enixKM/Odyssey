@@ -8,10 +8,8 @@ article {
   border: 0;
   vertical-align: middle;
   font-family: Lato;
-  page-break-after: always;
-}
+  page-break-after: always; }
 
 @font-face {
   font-family: Lato;
-  src: url("../../arts/lato.ttf");
-}
+  src: url("../../arts/lato.ttf"); }

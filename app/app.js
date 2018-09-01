@@ -221,7 +221,7 @@ function run () {
     icon:  __dirname + '/assets/icons/logo.png',
     opacity: 1
   })
-  // win.toggleDevTools()
+  win.toggleDevTools()
   win.setMenu(null)
   win.loadURL("file://" + __dirname+'/public/index.html')
   win.setBackgroundColor('#222')

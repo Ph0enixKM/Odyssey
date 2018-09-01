@@ -1,0 +1,1008 @@
+// @import "variables.sass"
+$border : #222
+$overflow : #ffaa00
+
+.menu
+  display: none
+  user-select: none
+  opacity: 0
+  position: absolute
+  top: 0
+  left: 0
+  width: 100vw
+  height: 100vh
+  background-color: rgba(0,0,0,0.5)
+  transition: 300ms
+  z-index: 10
+  a
+    display: inline-block
+    vertical-align: middle
+    color: #aaa
+    background-color: #222
+    border: 1px solid #333
+    padding: 2vw
+    text-align: center
+    margin: 10px
+    border-radius: 10px
+    font-family: Lato
+    text-decoration: none
+    transition: 300ms
+    user-select: none
+    position: relative
+    top: 50%
+    transform: translate(0,-50%)
+    cursor: pointer
+    filter: brightness(0.8)
+    &:hover
+      background-color: #333
+    &#reload
+      transition: 300ms
+      background-image: url("../../arts/reload.png")
+      background-position: center
+      background-size: contain
+      background-repeat: no-repeat
+  button
+    display: inline-block
+    vertical-align: middle
+    color: #aaa
+    background-color: #222
+    border: 1px solid #333
+    padding: 2vw
+    text-align: center
+    margin: 10px
+    border-radius: 10px
+    font-family: Lato
+    text-decoration: none
+    transition: 300ms
+    user-select: none
+    position: relative
+    top: 50%
+    transform: translate(0,-50%)
+    cursor: pointer
+    filter: brightness(0.8)
+    &:hover
+      background-color: #333
+
+    &#settings
+      transition: 300ms
+      background-image: url("../../arts/settings.png")
+      background-position: center
+      background-size: contain
+      background-repeat: no-repeat
+    &#open-file
+      transition: 300ms
+      background-image: url("../../arts/open.png")
+      background-position: center
+      background-size: contain
+      background-repeat: no-repeat
+    &#save-file
+      transition: 300ms
+      background-image: url("../../arts/saveAs.png")
+      background-position: center
+      background-size: contain
+      background-repeat: no-repeat
+    &#quick-save
+      transition: 300ms
+      background-image: url("../../arts/save.png")
+      background-position: center
+      background-size: contain
+      background-repeat: no-repeat
+
+
+
+.sidebar
+  display: inline-block
+  position: absolute
+  top: 100vh
+  left: 0vw
+  padding: 20px
+  z-index: 5
+  transform: translate(0,-100%)
+  user-select: none
+  cursor: default
+  .chapter
+    display: inline-block
+    font-family: Lato
+    font-style: italic
+    color: #444
+    padding-right: 10px
+    transition: 200ms
+
+    &:hover
+      background-color: #ccc
+      padding: 5px
+      color: #222
+      &::before
+        content: "Rozdział: "
+        font-style: normal
+
+  .pages
+    display: inline-block
+    font-family: Lato
+    color: #444
+    padding-right: 10px
+    transition: 200ms
+
+    &:hover
+      background-color: #ccc
+      padding: 5px
+      color: #222
+      &::before
+        content: "Strona: "
+  .words
+    display: inline-block
+    font-family: Lato
+    color: #444
+    transition: 200ms
+    &:hover
+      background-color: #ccc
+      padding: 5px
+      color: #222
+      &::before
+        content: "Słowa: "
+  .letters
+    display: inline-block
+    font-family: Lato
+    color: #444
+    transition: 200ms
+    &:hover
+      background-color: #ccc
+      padding: 5px
+      color: #222
+      &::before
+        content: "Symbole: "
+
+
+.menubar
+  height: 30px
+  z-index: 20
+  background-color: #ddd
+  display: flex
+  user-select: none
+  & .bar
+    display: inline-block
+    flex: 1
+    height: 30px
+    background-color: #ddd
+    color: #222
+    font-family: Lato
+    vertical-align: middle
+    line-height: 30px
+    -webkit-app-region: drag
+    & span
+      color: #E75103
+      font-style: italic
+  & .minimize
+    display: inline-block
+    float: right
+    height: 30px
+    width: 50px
+    transition: 200ms
+    cursor: default
+    background-image: url("../../arts/minimize.png")
+    background-position: center
+    background-size: contain
+    background-repeat: no-repeat
+    background-color: #222
+    filter: invert(1)
+    &:hover
+      background-color: #333
+      // filter: brightness(1.1)
+
+  & .maximize
+    display: inline-block
+    float: right
+    height: 30px
+    width: 50px
+    color: #222
+    transition: 200ms
+    cursor: default
+    background-image: url("../../arts/maximize.png")
+    background-position: center
+    background-size: contain
+    background-repeat: no-repeat
+    background-color: #222
+    filter: invert(1)
+    &:hover
+      background-color: #333
+      // filter: brightness(1.1)
+
+  & .exit
+    display: inline-block
+    float: right
+    height: 30px
+    width: 50px
+    color: #222
+    transition: 200ms
+    cursor: default
+    background-image: url("../../arts/exit.png")
+    background-position: center
+    background-size: contain
+    background-repeat: no-repeat
+    background-color: #222
+    filter: invert(1)
+    &:hover
+      background-color: rgb(0,255,255)
+      // filter: invert(0)
+      // filter: brightness(1.1)
+
+.tippy-popper // Tippy Customisation
+  font-family: Lato
+
+canvas#move
+  position: absolute
+  z-index: 15
+  top: 0
+  left: 0
+  overflow-x: hidden
+  overflow-y: scroll
+  display: inline-block
+  transition: 0ms
+
+#shortcut
+  position: absolute
+  top: 100%
+  left: 100%
+  width: 300px
+  height: 100px
+  text-align: center
+  display: none
+  transform: translate(-100%,-100%)
+  color: rgba(255,255,255,0.3)
+  font-family: Lato
+  font-size: 25px
+  z-index: 15
+  transition: 200ms
+  opacity: 0
+
+.doc
+  position: relative
+  display: inline-block
+  z-index: 17
+  color: #aaa
+  background-color: #333
+  box-shadow: 0 0 25px black
+  width: 42mm
+  height: 60mm
+  margin: 25px 10px 25px 10px
+  padding: 14px
+  vertical-align: middle
+  font-family: Lato
+  font-size: 20px
+  user-select: none
+  cursor: pointer
+  transition: 300ms
+  word-wrap: break-word
+  border-radius: 0px
+  box-shadow: none
+  &:hover
+    background-color: #444
+  & emp
+    color: #777
+    font-style: italic
+
+.doc-chapter
+  position: relative
+  display: inline-block
+  z-index: 17
+  color: #aaa
+  background-color: #333
+  box-shadow: -5px -5px 0px #2a2a2a, -10px -10px 0px #222
+  width: 42mm
+  height: 60mm
+  margin: 25px 10px 25px 10px
+  padding: 14px
+  vertical-align: middle
+  font-family: Lato
+  font-size: 20px
+  user-select: none
+  cursor: pointer
+  transition: 300ms
+  word-wrap: break-word
+  border-radius: 0px
+  margin: 2vw 10vw 2vw 10vw
+  background-image: url("../../arts/chapterDoc.png")
+  background-size: 21mm 21mm
+  background-position: left top
+  background-repeat: no-repeat
+  &:hover
+    background-color: #444
+    box-shadow: -10px -10px 0px #3a3a3a, 10px 10px 0px #333
+  & emp
+    color: #777
+    font-style: italic
+  & p
+    display: inline-block
+    word-wrap: break-word
+    position: relative
+    max-width: 42mm
+    top: 50%
+    transform: translate(0,-50%)
+    border-right: none !important
+
+.doc-chapter-add
+  position: relative
+  display: inline-block
+  z-index: 17
+  border: 5px dashed #960
+  box-shadow: 0 0 25px 0 orange
+  width: 42mm
+  height: 60mm
+  margin: 25px 10px 25px 10px
+  padding: 14px
+  vertical-align: middle
+  font-family: Lato
+  font-size: 20px
+  user-select: none
+  opacity: 0.5
+  cursor: pointer
+  transition: 300ms
+  word-wrap: break-word
+  border-radius: 0px
+  margin: 2vw 10vw 2vw 10vw
+  &:hover
+    box-shadow: 0 0 50px 0 orange
+    opacity: 1
+    & p
+      // transform: translate(0, -50%) rotate(45deg)
+
+  & emp
+    color: #777
+    font-style: italic
+  & p
+    color: orange !important
+    font-size: 70px
+    transition: 300ms
+    padding: 0 !important
+    display: inline-block
+    word-wrap: break-word
+    position: relative
+    max-width: 42mm
+    top: 50%
+    transform: translate(0,-50%)
+    border-right: none !important
+    text-shadow: -1px 0 2px #960, 1px 0 2px #960, 0 1px 2px #960, 0 -1px 2px #960
+
+
+
+.doc-move
+  position: absolute
+  display: block
+  z-index: 17
+  color: #aaa
+  background-color: #333
+  box-shadow: 0 0 25px black
+  width: 42mm
+  height: 60mm
+  margin: 25px auto 25px auto
+  padding: 14px
+  vertical-align: middle
+  font-family: Lato
+  font-size: 20px
+  user-select: none
+  cursor: -webkit-grab
+  box-shadow: 0 0 50px black
+  word-wrap: break-word
+  border-radius: 0px
+  box-shadow: none
+  opacity: 0.7
+  &:hover
+    background-color: #444
+  &:active
+    cursor: -webkit-grabbing
+  & emp
+    color: #777
+    font-style: italic
+
+#project
+  display: none
+  vertical-align: middle
+  #title,#author
+    display: inline-block
+    background-color: #ddd
+    color: #222
+    padding: 5px
+    margin: 5px
+    border: 0px solid #ddd
+    transition: 300ms
+    border-radius: 30px
+    caret-color: #222
+    border-bottom: 1.5px solid #ccc 
+    &::selection
+      background-color: rgba(255,150,0,0.5)
+      color: #fff
+    &:hover
+      background-color: #ccc
+  #all-keys
+    background-color: #ddd
+    border-radius: 30px
+    display: inline-block
+    padding: 2px
+    p
+      display: inline-block
+      font-family: Lato
+      font-size: 12px
+      color: #222
+      user-select: none
+      cursor: default
+      padding-right: 5px
+    #keys
+      display: inline-block
+      background-color: #ddd
+      color: #222
+      padding: 5px
+      margin: 5px
+      border: 0px solid #ddd
+      transition: 300ms
+      border-radius: 30px
+      caret-color: #222
+      border-bottom: 1.5px solid #ccc
+      &::selection
+        background-color: rgba(255,150,0,0.5)
+        color: #fff
+      &:hover
+        background-color: #ccc
+
+
+#pages
+  display: none
+  vertical-align: middle
+  div
+    display: inline-block
+    width: 39px
+    height: 39px
+    margin: 5px
+    border: 1px solid #222
+    transition: 300ms
+    background-position: center
+    background-size: cover
+    cursor: pointer
+    vertical-align: middle
+    filter: invert(1)
+    &:hover
+      background-color: #333
+    &#merge-all
+      background-image: url("../../arts/merge.png")
+    &#print
+      background-image: url("../../arts/printer.png")
+    &#print-view
+      background-image: url("../../arts/printView.png")
+      .toggle
+        position: relative
+        left: 50%
+        display: inline-block
+        height: 41px
+        width: 0
+        transition: 300ms
+        border: none
+        transform: translate(50%,-6px)
+        background: radial-gradient(#333,#222)
+        box-shadow: 0 0 0px rgb(255,180,0)
+      .toggle-on
+        position: relative
+        left: 50%
+        display: inline-block
+        height: 41px
+        width: 10px
+        transition: 300ms
+        border: none
+        transform: translate(50%,-6px)
+        background: radial-gradient(rgb(255,180,0),rgb(200,130,0))
+        box-shadow: 0 0 10px rgb(255,180,0)
+
+.full-view
+  display: none
+  position: absolute
+  top: 30px
+  left: 0
+  background-color: rgba(255,255,255,0.5)
+  width: 100vw
+  height: 100vh
+  z-index: 15
+  transition: 300ms
+  opacity: 0
+  overflow-y: scroll
+  &::-webkit-scrollbar-track
+  	-webkit-box-shadow: inset 0 0 6px #ddd
+  	border-radius: 10px
+  	background-color: #ddd
+  &::-webkit-scrollbar
+    width: 12px
+    background-color: #ddd
+  &::-webkit-scrollbar-thumb
+    border-radius: 10px
+    -webkit-box-shadow: inset 0 0 6px #ddd
+    background-color: #ccc
+  .fv-tools
+    display: block
+    width: 100%
+    height: 50px
+    background-color: #ddd
+    box-shadow: 0 0 50px grey
+    user-select: none
+    article
+      background-color: #ddd !important
+      color: #222 !important
+    & p
+      display: inline-block
+      color: #222
+      margin: 0
+      padding: 0 10px 0 0
+      font-family: Lato
+      border-right: 2px dashed #ccc
+      vertical-align: middle
+
+    & span
+      display: inline-block
+      height: 50px
+      width: 50px
+      margin: 0
+      padding: 0
+      transition: 300ms
+      cursor: pointer
+      vertical-align: middle
+      filter: invert(1)
+      &#trash
+        background-image: url('../../arts/bin.png')
+        background-size: cover
+        background-position: center
+        &:hover
+          background-color: #933
+      &#move-btn
+        background-image: url('../../arts/chain.png')
+        background-size: cover
+        background-position: center
+        &:hover
+          background-color: #ccc
+      &#merge-sel
+        background-image: url("../../arts/mergeSel.png")
+        background-size: cover
+        background-position: center
+        &:hover
+          background-color: #ccc
+      &#chapter-view
+        background-image: url("../../arts/chapter.png")
+        background-size: cover
+        background-position: center
+        border-left: 2px #ccc dashed
+        &:hover
+          background-color: #ccc
+
+
+disabled[disabled="true"]
+  filter: brightness(0.3)
+disabled[disabled="false"]
+  filter: brightness(1)
+#move-bg
+  display: none
+  width: 100%
+  height: 100%
+  background-color: rgba(0,0,0,0.7)
+  position: absolute
+  top: 0
+  left: 0
+  z-index: 18
+  opacity: 0
+  overflow-y: scroll
+  overflow-x: hidden
+  cursor: default
+  transition: 300ms
+  &::-webkit-scrollbar-track
+  	-webkit-box-shadow: inset 0 0 6px #222
+  	border-radius: 10px
+  	background-color: #222
+  &::-webkit-scrollbar
+    width: 12px
+    background-color: #222
+  &::-webkit-scrollbar-thumb
+    border-radius: 10px
+    -webkit-box-shadow: inset 0 0 6px #222
+    background-color: #333
+  & #move-docs
+    height: 100% //It should be scroll height here
+    position: absolute
+    z-index: 16
+  & #move-tools
+    width: 100vw
+    position: fixed
+    z-index: 19
+    // height: 40px
+    background-color: #222
+    box-shadow: 0 0 20px #111
+    & p
+      vertical-align: middle
+      font-size: 20px
+    & #ok
+      vertical-align: middle
+      display: inline-block
+      width: 40px
+      height: 40px
+      background-image: url("../../arts/ok.png")
+      background-position: center
+      background-size: cover
+      transition: 300ms
+      cursor: pointer
+      &:hover
+        background-color: #363
+    & #cancel
+      vertical-align: middle
+      display: inline-block
+      width: 40px
+      height: 40px
+      background-image: url("../../arts/cancel.png")
+      background-position: center
+      background-size: cover
+      transition: 300ms
+      cursor: pointer
+      &:hover
+        background-color: #933
+  #docs
+    display: inline-block
+    position: absolute
+    top: 70px
+    left: 0
+    width: 100vw
+    height: 100vw
+    z-index: 16
+
+#chapter-bg
+  display: none
+  width: 100%
+  height: 100%
+  background-color: rgba(0,0,0,0.7)
+  position: absolute
+  top: 0
+  left: 0
+  z-index: 18
+  opacity: 0
+  overflow-y: scroll
+  overflow-x: hidden
+  cursor: default
+  transition: 300ms
+  &::-webkit-scrollbar-track
+  	-webkit-box-shadow: inset 0 0 6px #222
+  	border-radius: 10px
+  	background-color: #222
+  &::-webkit-scrollbar
+    width: 12px
+    background-color: #222
+  &::-webkit-scrollbar-thumb
+    border-radius: 10px
+    -webkit-box-shadow: inset 0 0 6px #222
+    background-color: #333
+  & #chapter-docs
+    height: 100% //It should be scroll height here
+    position: absolute
+    top: 40px
+    width: 100%
+    text-align: center
+    z-index: 16
+  & #chapter-tools
+    width: 100vw
+    position: fixed
+    z-index: 19
+    background-color: #222
+    box-shadow: 0 0 20px #111
+    & p
+      vertical-align: middle
+      font-size: 20px
+    & #edit-chapter
+      display: inline-block
+      transform: translate(0,-100px)
+      transition: 300ms
+      & input
+        vertical-align: middle
+        display: inline-block
+        background-color: #111
+        color: #aaa
+        padding: 5px
+        margin: 5px
+        border: 0px solid $border
+        transition: 300ms
+        border-radius: 30px
+        caret-color: #aaa
+        &::selection
+          background-color: rgba(255,150,0,0.5)
+          color: #fff
+        &:hover
+          background-color: #000
+      & #trash
+        display: inline-block
+        vertical-align: middle
+        height: 50px
+        width: 50px
+        margin: 0
+        padding: 0
+        transition: 300ms
+        cursor: pointer
+        background-image: url('../../arts/bin.png')
+        background-size: cover
+        background-position: center
+        &:hover
+          background-color: #933
+
+
+.toolbar
+  position: fixed
+  width: 100vw
+  top: 30px
+  background-color: #ddd
+  color: white
+  padding-top: 20px
+  padding-bottom: 20px
+  box-shadow: 0 10px 20px #888
+  z-index: 9
+  user-select: none
+  perspective: 500px
+
+  #design
+    display: none
+    vertical-align: middle
+    #image
+      display: inline-block
+      width: 39px
+      height: 39px
+      margin: 5px
+      padding: 0 10px 0 10px
+      border: 1px solid #222
+      transition: 300ms
+      background-image: url("../../arts/image.png")
+      background-position: center
+      background-size: contain
+      background-repeat: no-repeat
+      cursor: pointer
+      filter: invert(1)
+      &:hover
+        background-color: #333
+    #bg-text
+      display: inline-block
+      width: 28px
+      height: 39px
+      margin: 5px
+      padding: 0 5px 0 5px
+      border: 1px solid #ddd
+      transition: 300ms
+      background-image: url("../../arts/bg.png")
+      background-position: center
+      background-size: contain
+      background-repeat: no-repeat
+      cursor: pointer
+      // box-shadow: 0 0 20px #ddd inset
+      // filter: invert(1)
+      &:hover
+        background-color: #333
+    #fg-text
+      display: inline-block
+      width: 28px
+      height: 39px
+      margin: 5px
+      padding: 0 5px 0 5px
+      border: 1px solid #ddd
+      transition: 300ms
+      background-image: url("../../arts/fg.png")
+      background-position: center
+      background-size: contain
+      background-repeat: no-repeat
+      cursor: pointer
+      // box-shadow: 0 0 20px #ddd inset
+      // filter: invert(1)
+      &:hover
+        background-color: #333
+
+
+  #view
+    display: none
+    vertical-align: middle
+    #full-view
+      display: inline-block
+      width: 39px
+      height: 39px
+      margin: 5px
+      padding: 0 10px 0 10px
+      border: 1px solid $border
+      transition: 300ms
+      background-image: url("../../arts/fullView.png")
+      background-position: center
+      background-size: contain
+      background-repeat: no-repeat
+      cursor: pointer
+      filter: invert(1)
+      &:hover
+        background-color: #333
+    #chapter-view
+      display: inline-block
+      width: 39px
+      height: 39px
+      margin: 5px
+      border: 1px solid $border
+      transition: 300ms
+      background-position: center
+      background-size: cover
+      cursor: pointer
+      filter: invert(1)
+      &:hover
+        background-color: #333
+
+
+
+  #tools
+    display: inline-block
+    vertical-align: middle
+
+  .justify
+    margin-left: 10px
+    border-left: 2px dashed #ccc
+    display: inline-block
+    vertical-align: middle
+
+    #justify-left
+      display: inline-block
+      width: 28px
+      height: 28px
+      margin: 5px 5px 5px 10px
+      border: 1px solid $border
+      transition: 300ms
+      background-image: url("../../arts/alignLeft.png")
+      background-position: center
+      background-size: cover
+      cursor: pointer
+      filter: invert(1)
+      &:hover
+        background-color: #333
+
+    #justify-center
+      display: inline-block
+      width: 28px
+      height: 28px
+      margin: 5px
+      border: 1px solid $border
+      transition: 300ms
+      background-image: url("../../arts/alignCenter.png")
+      background-position: center
+      background-size: cover
+      cursor: pointer
+      filter: invert(1)
+      &:hover
+        background-color: #333
+
+    #justify-right
+      display: inline-block
+      width: 28px
+      height: 28px
+      margin: 5px
+      border: 1px solid $border
+      transition: 300ms
+      background-image: url("../../arts/alignRight.png")
+      background-position: center
+      background-size: cover
+      cursor: pointer
+      filter: invert(1)
+      &:hover
+        background-color: #333
+
+    #justify-full
+      display: inline-block
+      width: 28px
+      height: 28px
+      margin: 5px
+      border: 1px solid $border
+      transition: 300ms
+      background-image: url("../../arts/alignJustify.png")
+      background-position: center
+      background-size: cover
+      cursor: pointer
+      filter: invert(1)
+      &:hover
+        background-color: #333
+
+  p#ctx-menu
+    display: inline-block
+    font-family: Lato
+    padding-right: 10px
+    color: #222
+    cursor: pointer
+    transition: 300ms
+    transform-origin: left
+    padding: 5px
+    border: 1px solid transparent
+    &:hover
+      background-color: #ccc
+      border: 1px solid #ccc
+
+  div#logo
+    display: inline-block
+    background-image: url("../../arts/logo-light.png")
+    background-position: center
+    background-size: contain
+    width: 50px
+    height: 50px
+    vertical-align: middle
+    border-right: 2px dashed #ccc
+    margin-right: 5px
+    div
+      width: 100%
+      height: 100%
+      background-image: url("../../arts/logoHard-light.png")
+      background-position: center
+      background-size: cover
+      opacity: 0
+      transition: 300ms
+      cursor: pointer
+      &:hover
+        opacity: 1
+
+
+
+  span
+    margin: 10px
+    padding: 10px
+    // border: 1px solid #
+    color: #222
+    cursor: pointer
+    transition: 300ms
+    vertical-align: middle
+    // filter: invert(1)
+
+    &:hover
+      background-color: #ccc
+
+  select
+    padding: 10px
+    background-color: #ddd
+    color: #222
+    border: 1px solid #ddd
+    border-bottom: 1.5px solid #ccc
+    transition: 300ms
+    cursor: pointer
+    &:hover
+      background-color: #ccc
+
+  input[font-size]
+    padding: 10px
+    background-color: #ddd
+    color: #222
+    border: 1px solid #ddd
+    transition: 300ms
+    cursor: text
+    width: 50px
+    text-align: center
+    &:hover
+      background-color: #ccc
+    &::selection
+      background-color: rgba(255,150,0,0.5)
+      color: #fff
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button
+    -webkit-appearance: none
+    margin: 0
+
+  option
+
+    &[a]
+      font-family: Arial, sans-serif
+    &[b]
+      font-family: "Arial Black", sans-serif
+    &[c]
+      font-family: Courier, sans-serif
+    &[d]
+      font-family: "Comic Sans MS",sans-serif
+    &[e]
+      font-family: Impact, sans-serif
+    &[f]
+      font-family: "Lucida Sans Unicode", Lucida, sans-serif
+    &[g]
+      font-family: Tahoma, sans-serif
+    &[h]
+      font-family: "Times New Roman", sans-serif
+    &[i]
+      font-family: Georgia, sans-serif
+    &[j]
+      font-family: Helvetica, sans-serif
+    &[k]
+      font-family: Verdana, sans-serif
+    &[l]
+      font-family: Lato, sans-serif
+
+@font-face
+  font-family: Lato
+  src: url("../../arts/lato.ttf")
