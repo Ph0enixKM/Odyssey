@@ -1,6 +1,6 @@
 <div align="center">
     <a href="https://odysseyapp.herokuapp.com">
-        <img width="600" height="250"src="https://github.com/Ph0enixKM/Odyssey/blob/dev/public/arts/logo-250.png">
+        <img width="600" height="250"src="https://raw.githubusercontent.com/Ph0enixKM/Odyssey/master/app/public/arts/250-logo.png">
     </a>
     <br>
     <br>
