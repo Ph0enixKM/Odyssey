@@ -11,6 +11,6 @@ It provides more natural way of designing documents, books, poems
 and treats page as a piece of paper...
 Feel free to try out current stable version (1.4.0). Do not hesitate to report any kind of bug. This helps me developing Odyssey.
 
-[![Generic badge](https://img.shields.io/badge/Version-Stable-blue.svg)](https://shields.io/)
+[![Generic badge](https://img.shields.io/badge/Version-Stable-blue.svg)](https://odysseyapp.herokuapp.com)
 
 In order to see full website, [click here](https://odysseyapp.herokuapp.com)
