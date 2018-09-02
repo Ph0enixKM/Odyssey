@@ -6,12 +6,11 @@
     <br>
 </div>
 
-## Odyssey is a rich text editor for writers, novelists and poets.
-It provides more natural way of designing documents,books,poems
+## First integrated writing enviroment for novelists, poets and you.
+It provides more natural way of designing documents, books, poems
 and treats page as a piece of paper...
-Feel free to try out current stable version (1.3.7). Do not hesitate to report any kind of bug. This helps me to develop Odyssey
-in a good direction.
+Feel free to try out current stable version (1.4.0). Do not hesitate to report any kind of bug. This helps me developing Odyssey.
 
-**This version is marked as stable**
+[![Generic badge](https://img.shields.io/badge/Version-Stable-blue.svg)](https://shields.io/)
 
 In order to see full website, [click here](https://odysseyapp.herokuapp.com)
