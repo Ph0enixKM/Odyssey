@@ -4,6 +4,7 @@
   transition: 300ms
   z-index: 19
   .setting
+    position: relative
     width: 80vw
     height: 80vh
     background-color: #222
@@ -29,6 +30,7 @@
       background-color: #333
     .tools
       user-select: none
+      height: 80px
       & div:first-child
         border-top-left-radius: 10px
         border-bottom-left-radius: 10px
@@ -52,23 +54,66 @@
         &:hover
           background-color: #933
 
-    #options
+    #skins
+      width: calc(100% - 30px)
       display: block
-      height: 100%
+      color: white
+      height: auto
+      position: absolute
+      top: 80px
       background-color: #2a2a2a
-      border-radius: 10px
+      border-radius: 20px
       margin: 10px
       user-select: none
       cursor: default
+      padding: 10px
+      transition: 300ms transform
+      transform: translate(125%, 0)
       h1
         font-family: Lato
         color: #aaa
         padding-top: 20px
+        margin-top: 0
+      .theme
+        display: inline-block
+        margin-left: 2vw
+        margin-right: 2vw
+        p
+          font-family: Lato
+        img
+          border-radius: 50px
+          width: 300px
+          height: 300px
+          box-shadow: 0 0 10px black
+          cursor: pointer
+          transition: 300ms
+          &:hover
+            transform: scale(0.9)
+    #options
+      position: absolute
+      top: 80px
+      width: calc(100% - 10px)
+      display: block
+      height: auto
+      background-color: #2a2a2a
+      border-radius: 20px
+      margin: 10px
+      user-select: none
+      cursor: default
+      transition: 300ms transform
+      margin-right: 10px
+      h1
+        font-family: Lato
+        color: #aaa
+        padding-top: 20px
+        margin-top: 0
       div
         margin: 5px
         padding: 10px
         border-bottom: 2px solid #333
         display: flex
+        &:last-child
+          border-bottom: 0 solid transparent
         span
           flex: 1
           color: #aaa

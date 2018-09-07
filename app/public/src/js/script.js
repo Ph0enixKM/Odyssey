@@ -53,9 +53,7 @@ const fs = require('fs')
 const cargodb = require('cargodb')
 const path = require('path')
 const {shell} = require('electron')
-console.log(process.cwd())
 const brain = require('brainjs')
-const osLocale = require('os-locale')
 
 window.addEventListener('DOMContentLoaded', () => {
   // Electron compiling bug
@@ -149,7 +147,7 @@ window.SETTINGS = {
 // window.SETTINGS.spell = (lang === 'EN') ? 'en-US' : 'pl-PL'
 
 // If it's first time opened the app
-if (localStorage.getItem('settings') == null) {
+if (localStorage.getItem('settings') == null || localStorage.getItem('settings').length === 0) {
   localStorage.setItem('settings', JSON.stringify(SETTINGS))
 } else {
   SETTINGS = JSON.parse(localStorage.getItem('settings'))
@@ -565,6 +563,20 @@ let loaded = () => {
     setTimeout(() => {
       settings.style.opacity = 1
     }, 300)
+  })
+
+  qs('.settings .themes')[0].addEventListener('click', () => {
+    let skins = qs('.settings #skins')[0].style
+    let options = qs('.settings #options')[0].style
+    skins.transform = 'translate(0, 0)'
+    options.transform = 'translate(-125%, 0)'
+  })
+
+  qs('.settings .general')[0].addEventListener('click', () => {
+    let skins = qs('.settings #skins')[0].style
+    let options = qs('.settings #options')[0].style
+    skins.transform = 'translate(125%, 0)'
+    options.transform = 'translate(0, 0)'
   })
 
   qs('input#keys')[0].addEventListener('change', () => {
@@ -1238,6 +1250,8 @@ let prev = false
       cs.top = (parseInt(cs.top) - 18) + 'px'
     }
   }
+
+
 
   function restrictions () {
     let prevLetters = sbLetters
