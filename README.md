@@ -6,7 +6,7 @@
     <br>
 </div>
 
-## First Writing Platform enviroment for novelists, poets and you.
+## First Writing Platform for novelists, poets and you.
 It provides more natural way of designing documents, books, poems
 and treats page as a piece of paper...
 Feel free to try out current stable version (1.4.0). Do not hesitate to report any kind of bug. This helps me developing Odyssey.
